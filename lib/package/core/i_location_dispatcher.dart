@@ -1,0 +1,35 @@
+// Project imports:
+import 'package:wikitrack/package/core/i_lat_lng.dart';
+import 'package:wikitrack/package/infrastructure/location_dispatcher_impl.dart';
+
+typedef OnMarkerPosition = void Function(ILatLng latLng);
+
+abstract class ILocationDispatcher {
+  ILocationDispatcher({double threshold = 1.5});
+
+  factory ILocationDispatcher.queue({double threshold}) = LocationDispatcherImpl;
+
+  double get threshold;
+
+  bool get isEmpty;
+
+  bool get isNotEmpty;
+
+  ILatLng get popLast;
+
+  int get length;
+
+  List<ILatLng> get values;
+
+  ILatLng get last;
+
+  ILatLng get next;
+
+  ILatLng get peek;
+
+  void push(ILatLng latLng);
+
+  void dispose();
+
+  void clear();
+}

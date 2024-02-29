@@ -15,20 +15,30 @@ Widget CommonButton({String? title, Function()? onTap}) {
   );
 }
 
-Widget commonBorderButton({String? title, Function()? onTap, Color? borderColor, Color? color, Color? textColor}) {
+Widget commonBorderButton(
+    {String? title,
+    Function()? onTap,
+    Color? borderColor,
+    Color? color,
+    Widget? child,
+    double? height,
+    Color? textColor,
+    List<BoxShadow>? boxShadow}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      height: Get.height * 0.065,
+      height: height ?? Get.height * 0.065,
       width: Get.width,
       decoration: BoxDecoration(
           border: Border.all(color: borderColor ?? AppColors.primaryColor),
           color: color ?? AppColors.whiteColor,
+          boxShadow: boxShadow,
           borderRadius: BorderRadius.circular(8)),
-      child: Center(
-          child: Text(title!,
-              style: whiteMedium16TextStyle.copyWith(
-                  color: textColor ?? AppColors.primaryColor, fontWeight: FontWeight.w600))),
+      child: child ??
+          Center(
+              child: Text(title!,
+                  style: whiteMedium16TextStyle.copyWith(
+                      color: textColor ?? AppColors.primaryColor, fontWeight: FontWeight.w600))),
     ),
   );
 }

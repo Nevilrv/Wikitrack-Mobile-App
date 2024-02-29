@@ -4,15 +4,17 @@
 
 import 'dart:convert';
 
-GetStopListResModel getStopListResModelFromJson(String str) => GetStopListResModel.fromJson(json.decode(str));
+GetStopListResModel getStopListResModelFromJson(String str) =>
+    GetStopListResModel.fromJson(json.decode(str));
 
-String getStopListResModelToJson(GetStopListResModel data) => json.encode(data.toJson());
+String getStopListResModelToJson(GetStopListResModel data) =>
+    json.encode(data.toJson());
 
 class GetStopListResModel {
   int count;
   dynamic next;
   dynamic previous;
-  List<Result> results;
+  List<StopResult> results;
 
   GetStopListResModel({
     required this.count,
@@ -21,11 +23,13 @@ class GetStopListResModel {
     required this.results,
   });
 
-  factory GetStopListResModel.fromJson(Map<String, dynamic> json) => GetStopListResModel(
+  factory GetStopListResModel.fromJson(Map<String, dynamic> json) =>
+      GetStopListResModel(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
-        results: List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+        results: List<StopResult>.from(
+            json["results"].map((x) => StopResult.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -36,7 +40,7 @@ class GetStopListResModel {
       };
 }
 
-class Result {
+class StopResult {
   String id;
   String stopNo;
   String name;
@@ -44,7 +48,7 @@ class Result {
   String location;
   bool status;
 
-  Result({
+  StopResult({
     required this.id,
     required this.stopNo,
     required this.name,
@@ -53,11 +57,13 @@ class Result {
     required this.status,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory StopResult.fromJson(Map<String, dynamic> json) => StopResult(
         id: json["id"],
         stopNo: json["stop_no"],
         name: json["name"],
-        stopDisplay: json["stop_display"] == null ? null : StopDisplay.fromJson(json["stop_display"]),
+        stopDisplay: json["stop_display"] == null
+            ? null
+            : StopDisplay.fromJson(json["stop_display"]),
         location: json["location"],
         status: json["status"],
       );

@@ -1,13 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/preference_manager/preference_Manager.dart';
-import 'package:wikitrack/response_model/login_Response_model.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppImages.dart';
@@ -189,11 +185,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         "password": passwordController.text,
                                       };
 
-                                      log('body::::::::::::::::::::==========>>>>>>>>>>>${body}');
+                                      log('body::::::::::::::::::::==========>>>>>>>>>>>$body');
                                       await controller.loginApiCall(body: body);
                                     }
-
-                                    // Get.toNamed(Routes.homeScreen);
                                   },
                                 ),
                               ),
@@ -208,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.offAllNamed(Routes.forgotPassword);
+                                Get.toNamed(Routes.forgotPassword);
                               },
                               child: Text(AppStrings.forgotPassword, style: greyMedium14TextStyle),
                             ),

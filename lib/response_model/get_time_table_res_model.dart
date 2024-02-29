@@ -7,7 +7,8 @@ import 'dart:convert';
 GetTimeTableListResModel getTimeTableListResModelFromJson(String str) =>
     GetTimeTableListResModel.fromJson(json.decode(str));
 
-String getTimeTableListResModelToJson(GetTimeTableListResModel data) => json.encode(data.toJson());
+String getTimeTableListResModelToJson(GetTimeTableListResModel data) =>
+    json.encode(data.toJson());
 
 class GetTimeTableListResModel {
   int count;
@@ -22,11 +23,13 @@ class GetTimeTableListResModel {
     required this.results,
   });
 
-  factory GetTimeTableListResModel.fromJson(Map<String, dynamic> json) => GetTimeTableListResModel(
+  factory GetTimeTableListResModel.fromJson(Map<String, dynamic> json) =>
+      GetTimeTableListResModel(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
-        results: List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+        results:
+            List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,7 +57,8 @@ class Result {
         id: json["id"],
         route: Route.fromJson(json["route"]),
         status: json["status"],
-        timeSlot: List<TimeSlot>.from(json["time_slot"].map((x) => TimeSlot.fromJson(x))),
+        timeSlot: List<TimeSlot>.from(
+            json["time_slot"].map((x) => TimeSlot.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

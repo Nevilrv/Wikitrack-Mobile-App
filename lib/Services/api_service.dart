@@ -45,6 +45,7 @@ class APIService {
       } else {
         debugPrint("URL======>>>>> $url");
         final result = await http.post(Uri.parse(url), body: body);
+        debugPrint("result======>>>>> $result");
 
         Map<String, dynamic> mapResponse = jsonDecode(result.body);
 
@@ -52,7 +53,7 @@ class APIService {
 
         mapResponse.addAll(statusResponse);
         response = returnResponse(result.statusCode, jsonEncode(mapResponse));
-        log('response::::::::::::::::::::==========>>>>>>>>>>>${response}');
+        log('response::::::::::::::::::::==========>>>>>>>>>>>$response');
       }
     } on SocketException {
       throw FetchDataException('No Internet access');
@@ -67,19 +68,14 @@ class APIService {
         return jsonDecode(result);
       case 201:
         return jsonDecode(result);
-      // case 204:
-      //   return {
-      //     "status": "SUCCESS",
-      //     "message": "SuccessFully Query List Get",
-      //     "data": []
-      //   };
+
       case 400:
         return jsonDecode(result);
       case 401:
         throw UnauthorisedException('Unauthorised user');
       case 404:
         throw jsonDecode(result);
-      // throw ServerException('Server Error');
+
       case 500:
       default:
         throw FetchDataException('Internal Server Error');

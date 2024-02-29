@@ -19,4 +19,27 @@ class ApiRouts {
   static String getTimeTableList = "${baseUrl}vehicles/timetable/list/";
   static String routeList = "${baseUrl}vehicles/tms/routes/list/";
   static String dailyRouteTripList = "${baseUrl}vehicles/daily-route-trip/list/";
+  static String createStopSeq = "${baseUrl}vehicles/stopsequence/create/";
+  static String createStop = "${baseUrl}vehicles/stops/create/";
+  static String createRoutes = "${baseUrl}vehicles/routes/create/";
+
+  static String updateVehicle = "${baseUrl}vehicles/update/tms/vehicle/";
+
+  ///
+
+  // static String dailyTripRegister = "${baseUrl}vehicles/tms/vehicle/list/";
+  static String createTimeSlot = "${baseUrl}vehicles/routetrip/create/";
+
+  ///
+
+  static String createBusTimeSlot = "${baseUrl}vehicles/timeslot/create/";
+  static String createBusDaySlot = "${baseUrl}vehicles/dayslot/create/";
+  // http://139.59.37.47:3031/ccServer/location/getImeiToReg
+  ///location
+  static String getImeiToReg = "http://139.59.37.47:3031/ccServer/location/getImeiToReg";
+  static String getDailyRouteTripFilter = "${baseUrl}vehicles/daily-route-trip/list/?";
+  static String vehicleRouteTrip = "${baseUrl}vehicles/vehicle-route-trip/list/?reg_no=";
+  static String createStopTime = "${baseUrl}vehicles/stopactualtime/create/";
+  static String getTimeByRegNo = "${baseUrl}vehicles/stop-actual-time/list/?reg_no=";
+  static String getTimeByRouteNo = "${baseUrl}vehicles/stop-actual-time/list/?route_no=";
 }

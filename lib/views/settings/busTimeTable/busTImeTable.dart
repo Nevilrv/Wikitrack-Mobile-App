@@ -1,17 +1,19 @@
 import 'dart:developer';
-
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
-import 'package:wikitrack/common/commonDialogue.dart';
-import 'package:wikitrack/common/commontextfield.dart';
 import 'package:wikitrack/utils/AppColors.dart';
+import 'package:wikitrack/utils/AppDialog.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
-import 'package:wikitrack/utils/extension.dart';
+import 'package:wikitrack/views/settings/controller/setting_controller.dart';
+
+import '../../../common/common_snackbar.dart';
 
 class BusTimeTable extends StatefulWidget {
   const BusTimeTable({super.key});
@@ -21,269 +23,278 @@ class BusTimeTable extends StatefulWidget {
 }
 
 class _RountineTripManagementState extends State<BusTimeTable> {
-  List gridList = [
-    "05.15 PM",
-    "05.30 PM",
-    "05.45 PM",
-    "06.00 PM",
-    "06.15 PM",
-    "06.30 PM",
-  ];
+  SettingController settingController = Get.find();
+
   bool isSwitch = false;
   bool isSwitch1 = false;
-  List<DateTime?> dialogCalendarPickerValue = [
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() async {
+    await settingController.getRouteListViewModel();
+  }
+
+  List<DateTime?> temp = [
     DateTime(2024, 1, 1),
     DateTime(2024, 1, 13),
   ];
-
+  List<DateTime?> selectedDate = [
+    DateTime.now(),
+  ];
   @override
   Widget build(BuildContext context) {
     final height = Get.height;
     final width = Get.width;
-    return Scaffold(
-      backgroundColor: AppColors.whiteColor,
-      appBar: commonSubTitleAppBar(
-        title: AppStrings.routineTripManage,
-        subTitle: AppStrings.bmtc,
-        onTap: () {
-          Get.back();
-        },
-      ),
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          buildShowModalBottomSheet(context, height, width);
-        },
-        child: const CircleAvatar(
-          // radius: 20,
-          backgroundColor: AppColors.primaryColor,
-          child: Icon(
-            Icons.add,
-            color: AppColors.whiteColor,
-            size: 25,
+    return GetBuilder<SettingController>(builder: (controller) {
+      return Scaffold(
+          backgroundColor: AppColors.whiteColor,
+          appBar: commonSubTitleAppBar(
+            title: AppStrings.routineTripManage,
+            subTitle: AppStrings.bmtc,
+            onTap: () {
+              Get.back();
+            },
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-          child: Column(
-            children: [
-              SizedBox(
-                height: height * 0.03,
-              ),
-
-              commonBorderButton(
-                  title: AppStrings.selectRoute,
+          floatingActionButton: controller.busTimeTableData.isEmpty
+              ? const SizedBox()
+              : GestureDetector(
                   onTap: () {
-                    showDataAlert(
-                      context,
-                      text: AppStrings.selectRoute,
-                    );
-                  }),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              // 24.0.addHSpace(),
-              Row(
-                children: [
-                  Text(
-                    "314.0",
-                    style: blackMedium16TextStyle.copyWith(
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    height: height * 0.04,
-                    width: width * 0.13,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: CupertinoSwitch(
-                        activeColor: AppColors.iconBlueColor,
-                        // color of the round icon, which moves from right to left
-                        thumbColor: AppColors.whiteColor,
-                        // when the switch is off
-                        trackColor: AppColors.iconBlueColor,
-                        value: isSwitch,
-                        onChanged: (_) {
-                          setState(() {
-                            isSwitch = !isSwitch;
-                          });
-                        },
-                      ),
+                    buildShowModalBottomSheet(context, height, width);
+                  },
+                  child: const CircleAvatar(
+                    backgroundColor: AppColors.primaryColor,
+                    child: Icon(
+                      Icons.add,
+                      color: AppColors.whiteColor,
+                      size: 25,
                     ),
                   ),
-                  Text(
-                    "314.1",
-                    style: blackMedium16TextStyle.copyWith(
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Row(
+                ),
+          body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+              child: Column(
                 children: [
-                  Expanded(
-                      flex: 8,
-                      child: commonBorderButton(
-                          borderColor: AppColors.lightGreyColor,
-                          color: AppColors.lightGreyColor,
-                          title: AppStrings.sunday,
-                          textColor: AppColors.blackColor,
-                          onTap: () {})),
-                  Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: () {
-                        // _myTimePickerTheme(ThemeData().timePickerTheme);
-                        getTime(context: context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.primaryColor)),
-                        child: const Icon(
-                          Icons.add,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ),
+                  SizedBox(
+                    height: height * 0.03,
                   ),
-                ],
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Container(
-                child: GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: 6,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, mainAxisExtent: height * 0.065),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: AppColors.blackColor.withOpacity(0.1),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2))
-                            ],
-                            color: Colors.white,
-                          ),
-                          child: Center(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.access_time_rounded,
-                                  color: AppColors.textGreyColor,
-                                  size: height * 0.027),
-                              SizedBox(
-                                width: width * 0.005,
-                              ),
-                              Text(
-                                gridList[index],
-                                style: blackMedium14TextStyle,
-                              ),
-                            ],
-                          )),
-                        ),
+                  commonBorderButton(
+                    title: AppStrings.selectRoute,
+                    onTap: () {
+                      AppDialog().selectRouteDialog(
+                        controller: controller,
+                        from: 'bus_time_table',
+                        context,
+                        isTrip: false,
+                        title: AppStrings.selectRoute,
                       );
-                    }),
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      flex: 8,
-                      child: commonBorderButton(
-                          borderColor: AppColors.lightGreyColor,
-                          // color: AppColors.lightGreyColor,
-                          title: "MONDAY",
-                          textColor: AppColors.blackColor,
-                          onTap: () {})),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primaryColor)),
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
+                    },
                   ),
+                  SizedBox(
+                    height: height * 0.02,
+                  ),
+                  if (controller.selectedRouteId != null)
+                    Row(
+                      children: [
+                        Text(
+                          "Forward",
+                          style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: height * 0.04,
+                          width: width * 0.13,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: CupertinoSwitch(
+                              activeColor: AppColors.iconBlueColor,
+                              thumbColor: AppColors.whiteColor,
+                              trackColor: AppColors.iconBlueColor,
+                              value: controller.isForward,
+                              onChanged: (_) async {
+                                controller.changeIsForward();
+                                if (controller.selectedRouteId != null) {
+                                  controller.busTimeTableData.clear();
+                                  await controller.busTimeTableViewModel(
+                                    routeId: controller.searchDataResults
+                                        .where((element) => element.id == controller.selectedRouteId)
+                                        .first
+                                        .routeNo
+                                        .toString()
+                                        .replaceAll(" ", "%20"),
+                                    direction: controller.isForward ? "0" : "1",
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "Reverse",
+                          style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  SizedBox(height: height * 0.02),
+                  if (controller.selectedRouteId != null)
+                    Builder(
+                      builder: (context) {
+                        if (controller.getBusTimeTableResponse.status == Status.LOADING) {
+                          return const Center(
+                              child: CircularProgressIndicator(
+                            color: AppColors.primaryColor,
+                          )).paddingOnly(top: height * 0.3);
+                        } else if (controller.getBusTimeTableResponse.status == Status.ERROR) {
+                          return const Center(child: Text("Server Error")).paddingOnly(top: height * 0.3);
+                        } else if (controller.getBusTimeTableResponse.status == Status.COMPLETE) {
+                          return controller.busTimeTableData.isNotEmpty
+                              ? Column(
+                                  children: [
+                                    ListView.separated(
+                                      separatorBuilder: (context, index) {
+                                        return SizedBox(height: height * 0.02);
+                                      },
+                                      itemCount: controller.busTimeTableData.first.daySlot!.length,
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 12,
+                                                  child: commonBorderButton(
+                                                    borderColor: AppColors.lightGreyColor,
+                                                    color: AppColors.lightGreyColor,
+                                                    title: controller.busTimeTableData.first.daySlot![index].day,
+                                                    textColor: AppColors.blackColor,
+                                                    onTap: () {
+                                                      controller.isVisible(index);
+                                                    },
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                      await controller.selectTime(context);
+
+                                                      if (controller.selectedTime == null) {
+                                                        return;
+                                                      }
+
+                                                      await controller.createBusTimeSlotViewModel(body: {
+                                                        "dayslot": controller.busTimeTableData.first.daySlot?[index].id,
+                                                        "time":
+                                                            "${controller.selectedTime?.hour}:${controller.selectedTime?.minute}",
+                                                        "status": false
+                                                      });
+                                                      controller.selectedTime = null;
+                                                      controller.busTimeTableData.clear();
+                                                      await controller.busTimeTableViewModel(
+                                                        routeId: controller.searchDataResults
+                                                            .where(
+                                                                (element) => element.id == controller.selectedRouteId)
+                                                            .first
+                                                            .routeNo
+                                                            .toString()
+                                                            .replaceAll(" ", "%20"),
+                                                        direction: controller.isForward ? "0" : "1",
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(color: AppColors.primaryColor),
+                                                      ),
+                                                      child: const Icon(
+                                                        Icons.add,
+                                                        color: AppColors.primaryColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Visibility(
+                                              visible: controller.busTimeTableData.first.daySlot![index].isVisible,
+                                              child: controller.busTimeTableData.first.daySlot![index].timeSlot!.isEmpty
+                                                  ? const Center(child: Text("No Time Slot"))
+                                                      .paddingOnly(top: height * 0.02)
+                                                  : GridView.builder(
+                                                      padding: EdgeInsets.only(top: height * 0.02),
+                                                      shrinkWrap: true,
+                                                      physics: const NeverScrollableScrollPhysics(),
+                                                      itemCount: controller
+                                                          .busTimeTableData.first.daySlot![index].timeSlot?.length,
+                                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 3, mainAxisExtent: height * 0.065),
+                                                      itemBuilder: (context, iii) {
+                                                        DateTime time = DateFormat("HH:mm").parse(controller
+                                                            .busTimeTableData.first.daySlot![index].timeSlot![iii].time
+                                                            .toString());
+                                                        String formattedTime = DateFormat("HH:mm").format(time);
+
+                                                        return Padding(
+                                                          padding: const EdgeInsets.all(3.0),
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius.circular(8),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                    color: AppColors.blackColor.withOpacity(0.1),
+                                                                    blurRadius: 4,
+                                                                    offset: const Offset(0, 2))
+                                                              ],
+                                                              color: Colors.white,
+                                                            ),
+                                                            child: Center(
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  Icon(Icons.access_time_rounded,
+                                                                      color: AppColors.textGreyColor,
+                                                                      size: height * 0.027),
+                                                                  SizedBox(
+                                                                    width: width * 0.005,
+                                                                  ),
+                                                                  Text(
+                                                                    formattedTime,
+                                                                    style: blackMedium14TextStyle,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                )
+                              : const Center(child: Text("No Time Table Data")).paddingOnly(top: height * 0.3);
+                        } else {
+                          return const Center(child: Text("Something Went Wrong")).paddingOnly(top: height * 0.3);
+                        }
+                      },
+                    ),
                 ],
               ),
-              SizedBox(
-                height: height * 0.015,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      flex: 8,
-                      child: commonBorderButton(
-                          borderColor: AppColors.lightGreyColor,
-                          // color: AppColors.lightGreyColor,
-                          title: "TUESDAY",
-                          textColor: AppColors.blackColor,
-                          onTap: () {})),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primaryColor)),
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: height * 0.015,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      flex: 8,
-                      child: commonBorderButton(
-                          borderColor: AppColors.lightGreyColor,
-                          // color: AppColors.lightGreyColor,
-                          title: "SATURDAY",
-                          textColor: AppColors.blackColor,
-                          onTap: () {})),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primaryColor)),
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          ));
+    });
   }
 
-  Future<void> buildShowModalBottomSheet(
-      BuildContext context, double height, double width) {
+  Future<void> buildShowModalBottomSheet(BuildContext context, double height, double width) {
     final config = CalendarDatePicker2WithActionButtonsConfig(
       dayBorderRadius: BorderRadius.circular(8),
       gapBetweenCalendarAndButtons: 0,
@@ -324,14 +335,11 @@ class _RountineTripManagementState extends State<BusTimeTable> {
             width: 298,
             margin: const EdgeInsets.symmetric(horizontal: 22),
             height: 48,
-            decoration: BoxDecoration(
-                color: const Color(0xffB70013),
-                borderRadius: BorderRadius.circular(7)),
+            decoration: BoxDecoration(color: const Color(0xffB70013), borderRadius: BorderRadius.circular(7)),
             child: const Center(
               child: Text(
                 "Submit",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -339,8 +347,7 @@ class _RountineTripManagementState extends State<BusTimeTable> {
           Container(
             height: 4,
             width: 140,
-            decoration: BoxDecoration(
-                color: Colors.black, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
           ),
           const SizedBox(
             height: 3,
@@ -349,9 +356,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
       ),
       weekdayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       cancelButton: const SizedBox(),
-      dayTextStyle:
-          const TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
-      calendarType: CalendarDatePicker2Type.range,
+      dayTextStyle: const TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
+      calendarType: CalendarDatePicker2Type.single,
       selectedDayHighlightColor: Colors.red[800],
       closeDialogOnCancelTapped: true,
       firstDayOfWeek: 1,
@@ -367,14 +373,11 @@ class _RountineTripManagementState extends State<BusTimeTable> {
       centerAlignModePicker: true,
       customModePickerIcon: const SizedBox(),
       selectedDayTextStyle:
-          const TextStyle(color: Color(0xffB70013), fontWeight: FontWeight.w700)
-              .copyWith(color: Colors.white),
+          const TextStyle(color: Color(0xffB70013), fontWeight: FontWeight.w700).copyWith(color: Colors.white),
       dayTextStylePredicate: ({required date}) {
         TextStyle? textStyle;
-        if (date.weekday == DateTime.saturday ||
-            date.weekday == DateTime.sunday) {
-          textStyle =
-              TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w600);
+        if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
+          textStyle = TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w600);
         }
         if (DateUtils.isSameDay(date, DateTime(2021, 1, 25))) {
           textStyle = TextStyle(
@@ -399,84 +402,103 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                 child: IntrinsicHeight(
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Center(
-                              child: Container(
-                                height: height * 0.01,
-                                width: width * 0.09,
-                                decoration: BoxDecoration(
-                                    color:
-                                        AppColors.grey2Color.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(100)),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                              height: height * 0.01,
+                              width: width * 0.09,
+                              decoration: BoxDecoration(
+                                  color: AppColors.grey2Color.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(100)),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.02,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                AppStrings.byRoute,
+                                style: blackMedium14TextStyle.copyWith(fontWeight: FontWeight.w500),
                               ),
-                            ),
-                            SizedBox(
-                              height: height * 0.02,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  AppStrings.byRoute,
-                                  style: blackMedium14TextStyle.copyWith(
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Container(
-                                  height: height * 0.035,
-                                  width: width * 0.12,
-                                  child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: CupertinoSwitch(
-                                      activeColor: AppColors.iconBlueColor,
-                                      // color of the round icon, which moves from right to left
-                                      thumbColor: AppColors.whiteColor,
-                                      // when the switch is off
-                                      trackColor: AppColors.iconBlueColor,
-                                      value: isSwitch1,
-                                      onChanged: (_) {
-                                        setState(() {
-                                          isSwitch1 = !isSwitch1;
-                                        });
-                                      },
-                                    ),
+                              SizedBox(
+                                height: height * 0.035,
+                                width: width * 0.12,
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: CupertinoSwitch(
+                                    activeColor: AppColors.iconBlueColor,
+                                    thumbColor: AppColors.whiteColor,
+                                    trackColor: AppColors.iconBlueColor,
+                                    value: isSwitch1,
+                                    onChanged: (_) {
+                                      setState(() {
+                                        isSwitch1 = !isSwitch1;
+                                      });
+                                    },
                                   ),
                                 ),
-                                Text(
-                                  AppStrings.byRoute,
-                                  style: blackMedium14TextStyle.copyWith(
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: height * 0.02,
-                            ),
-                            CalendarDatePicker2(
-                              config: config,
-                              value: dialogCalendarPickerValue,
-                              onValueChanged: (dates) {
-                                if (dates.isNotEmpty) {
-                                  setState(() {
-                                    dialogCalendarPickerValue = dates;
-                                  });
+                              ),
+                              Text(
+                                AppStrings.byRoute,
+                                style: blackMedium14TextStyle.copyWith(fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: height * 0.02,
+                          ),
+                          CalendarDatePicker2(
+                            config: config,
+                            value: selectedDate,
+                            onValueChanged: (dates) {
+                              if (dates.isNotEmpty) {
+                                setState(() {
+                                  selectedDate = dates;
+                                });
+                              }
+                            },
+                          ),
+                          CommonButton(
+                              onTap: () async {
+                                await settingController.createBusDaySlotViewModel(
+                                  body: {
+                                    "timetable": "${settingController.busTimeTableData.first.id}",
+                                    "day": DateFormat("EEEE").format(selectedDate.first!),
+                                    "status": false
+                                  },
+                                );
+
+                                bool? value = settingController.busTimeTableData.first.daySlot?.any(
+                                  (element) =>
+                                      element.day.toString().toLowerCase() ==
+                                      DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
+                                );
+
+                                if (value == true) {
+                                  commonSnackBar(message: "Selected Day already exist. Please try with another one.");
+                                  return;
                                 }
+
+                                Navigator.pop(context);
+
+                                settingController.busTimeTableData.clear();
+                                await settingController.busTimeTableViewModel(
+                                  routeId: settingController.searchDataResults
+                                      .where((element) => element.id == settingController.selectedRouteId)
+                                      .first
+                                      .routeNo
+                                      .toString()
+                                      .replaceAll(" ", "%20"),
+                                  direction: settingController.isForward ? "0" : "1",
+                                );
                               },
-                            ),
-                            // SizedBox(
-                            //   height: height * 0.03,
-                            // ),
-                            CommonButton(
-                                onTap: () {
-                                  Get.back();
-                                },
-                                title: AppStrings.submit),
-                          ],
-                        ),
+                              title: AppStrings.submit),
+                        ],
                       ),
                     ),
                   ),
@@ -533,9 +555,7 @@ class _RountineTripManagementState extends State<BusTimeTable> {
       helpText: title ?? "Select time",
       builder: (context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-              colorScheme:
-                  const ColorScheme.light(primary: AppColors.primaryColor)),
+          data: ThemeData.light().copyWith(colorScheme: const ColorScheme.light(primary: AppColors.primaryColor)),
           child: MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
             child: child!,

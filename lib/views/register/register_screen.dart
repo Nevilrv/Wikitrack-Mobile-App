@@ -7,13 +7,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/common/commontextfield.dart';
-import 'package:wikitrack/preference_manager/preference_Manager.dart';
-import 'package:wikitrack/response_model/register_response_model.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppImages.dart';
@@ -219,7 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                       validator: (value) {
                         String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                        RegExp regExp = new RegExp(pattern);
+                        RegExp regExp = RegExp(pattern);
 
                         if (value!.isEmpty) {
                           return 'Please enter mobile number';
@@ -354,7 +351,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             TextSpan(
                               text: ' Login',
-                              recognizer: new TapGestureRecognizer()
+                              recognizer: TapGestureRecognizer()
                                 ..onTap = () => Get.toNamed(Routes.loginScreen),
                               style: textGreyMedium16TextStyle.copyWith(
                                   color: AppColors.primaryColor,

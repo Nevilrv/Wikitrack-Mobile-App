@@ -43,7 +43,15 @@ dependencies:
   flutter_dash: ^1.0.0
   calendar_date_picker2: ^0.5.3
   get_storage: ^2.1.1
-
+  google_maps_flutter: ^2.5.3
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  http: ^1.1.0
+  intl: ^0.19.0
+  socket_io_client: ^2.0.3+1
+  path_provider: ^2.1.2
+  google_map_marker_animation: ^0.0.1
+  flutter_polyline_points: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -68,7 +76,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/png/
     - assets/images/svg/
   #   - images/a_dot_ham.jpeg
 

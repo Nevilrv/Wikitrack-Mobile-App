@@ -17,7 +17,9 @@ AppBar commonAppBar({String? title, Function()? onTap}) {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.only(left: 10),
-          child: Center(child: SvgPicture.asset(AppImages.whiteLogo, height: height * 0.037, width: height * 0.037)),
+          child: Center(
+              child: SvgPicture.asset(AppImages.whiteLogo,
+                  height: height * 0.037, width: height * 0.037)),
         ),
       ),
       title: Text(
@@ -37,13 +39,19 @@ AppBar commonImageAppBar({Widget? image, Function()? onTap}) {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.only(left: 10),
-          child: Center(child: SvgPicture.asset(AppImages.whiteLogo, height: height * 0.037, width: height * 0.037)),
+          child: Center(
+              child: SvgPicture.asset(AppImages.whiteLogo,
+                  height: height * 0.037, width: height * 0.037)),
         ),
       ),
       title: image);
 }
 
-AppBar commonSubTitleAppBar({String? title, String? subTitle, Function()? onTap}) {
+AppBar commonSubTitleAppBar(
+    {String? title,
+    String? subTitle,
+    Function()? onTap,
+    List<Widget>? actions}) {
   final height = Get.height;
   final width = Get.width;
 
@@ -54,9 +62,12 @@ AppBar commonSubTitleAppBar({String? title, String? subTitle, Function()? onTap}
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.only(left: 10),
-          child: Center(child: SvgPicture.asset(AppImages.whiteLogo, height: height * 0.037, width: height * 0.037)),
+          child: Center(
+              child: SvgPicture.asset(AppImages.whiteLogo,
+                  height: height * 0.037, width: height * 0.037)),
         ),
       ),
+      actions: actions,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

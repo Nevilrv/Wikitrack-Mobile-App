@@ -1,7 +1,5 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:wikitrack/common/appbar.dart';
@@ -9,8 +7,6 @@ import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppRoutes.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
 import 'package:wikitrack/views/otp/controller/Otp_Controller.dart';
 
@@ -107,7 +103,8 @@ class _OTPScreenState extends State<OTPScreen> {
                 Pinput(
                   controller: pinController,
                   focusNode: focusNode,
-                  androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
+                  androidSmsAutofillMethod:
+                      AndroidSmsAutofillMethod.smsUserConsentApi,
                   listenForMultipleSmsOnAndroid: true,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   defaultPinTheme: defaultPinTheme,
@@ -168,7 +165,8 @@ class _OTPScreenState extends State<OTPScreen> {
                         AppStrings.resend,
                         style: controller.second == 120
                             ? primaryBold12TextStyle
-                            : primaryBold12TextStyle.copyWith(color: AppColors.primaryColor.withOpacity(0.1)),
+                            : primaryBold12TextStyle.copyWith(
+                                color: AppColors.primaryColor.withOpacity(0.1)),
                       ),
                     ),
                   ],
@@ -181,8 +179,11 @@ class _OTPScreenState extends State<OTPScreen> {
                         height: Get.height * 0.065,
                         width: Get.width,
                         decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                        child: Center(child: Text(AppStrings.submit, style: whiteMedium16TextStyle)),
+                            color: AppColors.primaryColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Center(
+                            child: Text(AppStrings.submit,
+                                style: whiteMedium16TextStyle)),
                       )
                     : CommonButton(
                         onTap: () {

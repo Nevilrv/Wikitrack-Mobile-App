@@ -39,22 +39,104 @@ class GetDailyRouteTripResModel {
 
 class Result {
   String id;
-  Timeslot timeslot;
+  Route route;
+  bool status;
+  List<DaySlot> daySlot;
+
+  Result({
+    required this.id,
+    required this.route,
+    required this.status,
+    required this.daySlot,
+  });
+
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
+        id: json["id"],
+        route: Route.fromJson(json["route"]),
+        status: json["status"],
+        daySlot: List<DaySlot>.from(json["day_slot"].map((x) => DaySlot.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "route": route.toJson(),
+        "status": status,
+        "day_slot": List<dynamic>.from(daySlot.map((x) => x.toJson())),
+      };
+}
+
+class DaySlot {
+  String id;
+  String day;
+  List<TimeSlot> timeSlot;
+  bool status;
+
+  DaySlot({
+    required this.id,
+    required this.day,
+    required this.timeSlot,
+    required this.status,
+  });
+
+  factory DaySlot.fromJson(Map<String, dynamic> json) => DaySlot(
+        id: json["id"],
+        day: json["day"],
+        timeSlot: List<TimeSlot>.from(json["time_slot"].map((x) => TimeSlot.fromJson(x))),
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "day": day,
+        "time_slot": List<dynamic>.from(timeSlot.map((x) => x.toJson())),
+        "status": status,
+      };
+}
+
+class TimeSlot {
+  String id;
+  List<DailyrouteTimeslot> dailyrouteTimeslot;
+  String time;
+  bool status;
+
+  TimeSlot({
+    required this.id,
+    required this.dailyrouteTimeslot,
+    required this.time,
+    required this.status,
+  });
+
+  factory TimeSlot.fromJson(Map<String, dynamic> json) => TimeSlot(
+        id: json["id"],
+        dailyrouteTimeslot:
+            List<DailyrouteTimeslot>.from(json["dailyroute_timeslot"].map((x) => DailyrouteTimeslot.fromJson(x))),
+        time: json["time"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "dailyroute_timeslot": List<dynamic>.from(dailyrouteTimeslot.map((x) => x.toJson())),
+        "time": time,
+        "status": status,
+      };
+}
+
+class DailyrouteTimeslot {
+  String id;
   Vehicle vehicle;
   bool status;
   List<ActualTime> actualTime;
 
-  Result({
+  DailyrouteTimeslot({
     required this.id,
-    required this.timeslot,
     required this.vehicle,
     required this.status,
     required this.actualTime,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory DailyrouteTimeslot.fromJson(Map<String, dynamic> json) => DailyrouteTimeslot(
         id: json["id"],
-        timeslot: Timeslot.fromJson(json["timeslot"]),
         vehicle: Vehicle.fromJson(json["vehicle"]),
         status: json["status"],
         actualTime: List<ActualTime>.from(json["actual_time"].map((x) => ActualTime.fromJson(x))),
@@ -62,7 +144,6 @@ class Result {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "timeslot": timeslot.toJson(),
         "vehicle": vehicle.toJson(),
         "status": status,
         "actual_time": List<dynamic>.from(actualTime.map((x) => x.toJson())),
@@ -95,60 +176,40 @@ class ActualTime {
 
 class StopSeq {
   String id;
+  String route;
   int priority;
   String travalTime;
-  bool status;
   String stopId;
+  String direction;
+  bool status;
 
   StopSeq({
     required this.id,
+    required this.route,
     required this.priority,
     required this.travalTime,
-    required this.status,
     required this.stopId,
+    required this.direction,
+    required this.status,
   });
 
   factory StopSeq.fromJson(Map<String, dynamic> json) => StopSeq(
         id: json["id"],
+        route: json["route"],
         priority: json["priority"],
         travalTime: json["traval_time"],
-        status: json["status"],
         stopId: json["stop_id"],
+        direction: json["direction"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "route": route,
         "priority": priority,
         "traval_time": travalTime,
-        "status": status,
         "stop_id": stopId,
-      };
-}
-
-class Timeslot {
-  String id;
-  String day;
-  String time;
-  bool status;
-
-  Timeslot({
-    required this.id,
-    required this.day,
-    required this.time,
-    required this.status,
-  });
-
-  factory Timeslot.fromJson(Map<String, dynamic> json) => Timeslot(
-        id: json["id"],
-        day: json["day"],
-        time: json["time"],
-        status: json["status"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "day": day,
-        "time": time,
+        "direction": direction,
         "status": status,
       };
 }
@@ -157,14 +218,16 @@ class Vehicle {
   String id;
   String chassisNo;
   String regNo;
-  String busDisplay;
-  dynamic gpsDevice;
+  String vehicleImg;
+  BusDisplay busDisplay;
+  BusDisplay gpsDevice;
   bool status;
 
   Vehicle({
     required this.id,
     required this.chassisNo,
     required this.regNo,
+    required this.vehicleImg,
     required this.busDisplay,
     required this.gpsDevice,
     required this.status,
@@ -174,8 +237,9 @@ class Vehicle {
         id: json["id"],
         chassisNo: json["chassis_no"],
         regNo: json["reg_no"],
-        busDisplay: json["bus_display"],
-        gpsDevice: json["gps_device"],
+        vehicleImg: json["vehicle_img"] ?? "",
+        busDisplay: BusDisplay.fromJson(json["bus_display"]),
+        gpsDevice: BusDisplay.fromJson(json["gps_device"]),
         status: json["status"],
       );
 
@@ -183,8 +247,65 @@ class Vehicle {
         "id": id,
         "chassis_no": chassisNo,
         "reg_no": regNo,
-        "bus_display": busDisplay,
-        "gps_device": gpsDevice,
+        "vehicle_img": vehicleImg ?? "",
+        "bus_display": busDisplay.toJson(),
+        "gps_device": gpsDevice.toJson(),
+        "status": status,
+      };
+}
+
+class BusDisplay {
+  String id;
+  String imei;
+  bool status;
+
+  BusDisplay({
+    required this.id,
+    required this.imei,
+    required this.status,
+  });
+
+  factory BusDisplay.fromJson(Map<String, dynamic> json) => BusDisplay(
+        id: json["id"],
+        imei: json["imei"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "imei": imei,
+        "status": status,
+      };
+}
+
+class Route {
+  String id;
+  String routeNo;
+  String name;
+  String direction;
+  bool status;
+
+  Route({
+    required this.id,
+    required this.routeNo,
+    required this.name,
+    required this.direction,
+    required this.status,
+  });
+
+  factory Route.fromJson(Map<String, dynamic> json) => Route(
+        id: json["id"],
+        routeNo: json["route_no"],
+        name: json["name"],
+        direction: json["direction"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "route_no": routeNo,
+        "name": name,
+        "direction": direction,
         "status": status,
       };
 }

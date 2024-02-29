@@ -31,8 +31,11 @@ class AppStrings {
   static const String travelTime = "Travel Time";
   static const String stopDevice = "Stop Device";
   static const String stopno = "Stop No.";
+  static const String routeno = "Route No.";
+  static const String routeName = "Route Name";
   static const String stopName = "Stop Name";
-  static const String lat = "lat";
+  static const String direction = "Direction";
+  static const String lat = "Select Location";
   static const String lang = "lang";
 
   static const String email = "Email";
@@ -70,4 +73,18 @@ class AppStrings {
       "Enter the email associated with your account and we’ll send you a code to forgot your password.";
   static const String add = "Add";
   static const String routineTripManage = "Bus Time-Table";
+
+  ///
+  static const String stopDisplay = "Stop Display";
+  static const String addNewVehicle = "Add New Vehicle";
+  static const String addVehicleImage = "Add Vehicle Image";
+  static const String gpsDevice = "GPS Device";
+  static const String busDisplayDevice = "Bus Display Device";
+  static const String vehicleRegistration = "Vehicle Registration No. / Route xyz";
+  static const String selectTrip = "Select Trip";
+  static const String byTime = "By Time";
+  static const String dailyTripReport = "Daily Trip Report";
+  static const String selectStop = "Select Stop";
+  static const String route = "Route";
+  static const String nextStop = "Next Stop";
 }

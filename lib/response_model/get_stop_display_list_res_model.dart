@@ -7,13 +7,14 @@ import 'dart:convert';
 GetStopDisplayListResModel getStopDisplayListResModelFromJson(String str) =>
     GetStopDisplayListResModel.fromJson(json.decode(str));
 
-String getStopDisplayListResModelToJson(GetStopDisplayListResModel data) => json.encode(data.toJson());
+String getStopDisplayListResModelToJson(GetStopDisplayListResModel data) =>
+    json.encode(data.toJson());
 
 class GetStopDisplayListResModel {
   int count;
   dynamic next;
   dynamic previous;
-  List<Result> results;
+  List<StopDisplayResult> results;
 
   GetStopDisplayListResModel({
     required this.count,
@@ -22,11 +23,13 @@ class GetStopDisplayListResModel {
     required this.results,
   });
 
-  factory GetStopDisplayListResModel.fromJson(Map<String, dynamic> json) => GetStopDisplayListResModel(
+  factory GetStopDisplayListResModel.fromJson(Map<String, dynamic> json) =>
+      GetStopDisplayListResModel(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
-        results: List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+        results: List<StopDisplayResult>.from(
+            json["results"].map((x) => StopDisplayResult.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,20 +40,21 @@ class GetStopDisplayListResModel {
       };
 }
 
-class Result {
+class StopDisplayResult {
   String id;
   String imei;
   String type;
   bool status;
 
-  Result({
+  StopDisplayResult({
     required this.id,
     required this.imei,
     required this.type,
     required this.status,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory StopDisplayResult.fromJson(Map<String, dynamic> json) =>
+      StopDisplayResult(
         id: json["id"],
         imei: json["imei"],
         type: json["type"],

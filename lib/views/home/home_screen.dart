@@ -8,6 +8,7 @@ import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppImages.dart';
 import 'package:wikitrack/utils/AppRoutes.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/views/reports/report_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               children: [
-                commonContainter(
+                commonContainer(
                   height,
                   width,
                   AppImages.vehicle,
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   width: width * 0.03,
                 ),
-                commonContainter(
+                commonContainer(
                   height,
                   width,
                   AppImages.stop,
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   width: width * 0.03,
                 ),
-                commonContainter(
+                commonContainer(
                   height,
                   width,
                   AppImages.routes,
@@ -85,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
               children: [
                 Row(
@@ -114,25 +115,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     children: [
-                      commonDrawerTile(height, AppStrings.busStopDisplay, AppImages.busStop, () {}),
+                      commonDrawerTile(height, AppStrings.busStopDisplay, AppImages.busStop, () {
+                        _key.currentState!.closeDrawer();
+                        Get.toNamed(Routes.busStopDisplayScreen);
+                      }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.busDisplay, AppImages.busDisplay, () {}),
+                      commonDrawerTile(height, AppStrings.busDisplay, AppImages.busDisplay, () {
+                        _key.currentState!.closeDrawer();
+                        Get.toNamed(Routes.busDisplayScreen);
+                      }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.liveMap, AppImages.liveMap, () {}),
+                      commonDrawerTile(height, AppStrings.liveMap, AppImages.liveMap, () {
+                        _key.currentState!.closeDrawer();
+                        Get.toNamed(Routes.liveMapScreen);
+                      }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.tripHistory, AppImages.tripHistory, () {}),
+                      commonDrawerTile(height, AppStrings.tripHistory, AppImages.tripHistory, () {
+                        _key.currentState!.closeDrawer();
+                        Get.toNamed(Routes.tripHistoryScreen);
+                      }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.reports, AppImages.report, () {}),
+                      commonDrawerTile(height, AppStrings.reports, AppImages.report, () {
+                        _key.currentState!.closeDrawer();
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return ReportScreen();
+                          },
+                        ));
+                        // Get.toNamed(Routes.reportScreen);
+                      }),
                       SizedBox(
                         height: height * 0.01,
                       ),
@@ -182,37 +203,43 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Expanded commonContainter(double height, double width, String image, String title, String count) {
+  Expanded commonContainer(double height, double width, String image, String title, String count) {
     return Expanded(
       child: Container(
         height: height * 0.09,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: AppColors.blackColor.withOpacity(0.1), blurRadius: 4, offset: Offset(0, 2))],
+          boxShadow: [
+            BoxShadow(color: AppColors.blackColor.withOpacity(0.1), blurRadius: 4, offset: const Offset(0, 2))
+          ],
           color: Colors.white,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(image, height: height * 0.025, width: height * 0.025),
-                  SizedBox(
-                    width: width * 0.02,
-                  ),
-                  Text(
-                    title,
-                    style: blackMedium14TextStyle,
-                  )
-                ],
-              ),
-              Text(
-                count,
-                style: primaryBold20TextStyle,
-              )
-            ],
+          padding: const EdgeInsets.all(6.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(image, height: height * 0.025, width: height * 0.025),
+                    SizedBox(
+                      width: width * 0.02,
+                    ),
+                    Text(
+                      title,
+                      style: blackMedium14TextStyle,
+                    )
+                  ],
+                ),
+                Text(
+                  count,
+                  style: primaryBold20TextStyle,
+                )
+              ],
+            ),
           ),
         ),
       ),

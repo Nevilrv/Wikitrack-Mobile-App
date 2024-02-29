@@ -2,6 +2,7 @@ class AppImages {
   static const String svgPath = "assets/images/svg/";
 
   static const String splashLogo = "${svgPath}redlogo.svg";
+
   static const String whiteLogo = "${svgPath}whitelogo.svg";
   static const String splashTitle = "${svgPath}splashTitle.svg";
   static const String homeLogo = "${svgPath}homeLogo.svg";
@@ -22,4 +23,13 @@ class AppImages {
   static const String arrawRight = "${svgPath}arraw-right.svg";
   static const String userProfile = "${svgPath}userProfile.svg";
   static const String time = "${svgPath}time.svg";
+
+  ///
+
+  static const String menuIcon = "${svgPath}menu_icon.svg";
+  static const String bus2 = "${svgPath}bus2.svg";
+
+  ///
+  static const String vehicleMap = "${svgPath}vehiclemap.png";
+  static const String busStopMap = "${svgPath}bus_stop.png";
 }
