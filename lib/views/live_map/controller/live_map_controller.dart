@@ -516,6 +516,7 @@ class LiveMapController extends GetxController {
 
   ///getRouteList
   List<RouteResult> searchDataResults = [];
+  List<RouteResult> searchDataResultsAll = [];
   List<RouteResult> tempList = [];
   List<StopSequence> stopSequence = [];
 
@@ -533,11 +534,23 @@ class LiveMapController extends GetxController {
 
     update();
     try {
-      GetRouteListResModel response = await SettingRepo().getRouteList();
+      GetRouteListResModel response = await SettingRepo().getRouteList('${ApiRouts.routeList}');
+      // searchDataResults.addAll(response.results!);
+      // tempList.addAll(response.results!);
+
+      response.results!.forEach((element) {
+        // searchDataResults.add(element);
+        bool hasThreeID = searchDataResults.any((mapTested) => mapTested.routeNo == element.routeNo);
+        if (hasThreeID == true) {
+        } else {
+          searchDataResults.add(element);
+          tempList.add(element);
+          // bool hasThreeID = searchDataResults.any((mapTested) => mapTested.routeNo == element.routeNo);
+        }
+        log("element.routeNo--------------> ${element.routeNo}  ${hasThreeID}");
+      });
       _getRouteListResponse = ApiResponse.complete(response);
       log("response==${jsonEncode(response)}");
-      searchDataResults.addAll(response.results!);
-      tempList.addAll(response.results!);
 
       update();
     } catch (e) {
@@ -546,6 +559,22 @@ class LiveMapController extends GetxController {
 
       update();
     }
+    update();
+  }
+
+  Future getRouteListByDirectionViewModel(String stopNo, String direction) async {
+    stopSequence.clear();
+    update();
+    try {
+      GetRouteListResModel response =
+          await SettingRepo().getRouteList('${ApiRouts.routeList}?route_no=$stopNo&direction=$direction');
+
+      if (response.results![0].stopSequence!.isNotEmpty) {
+        stopSequence.addAll(response.results![0].stopSequence!);
+      }
+      // searchDataResults.addAll(response.results!);
+      // tempList.addAll(response.results!);
+    } catch (e) {}
     update();
   }
 
@@ -646,9 +675,9 @@ class LiveMapController extends GetxController {
     if (geVehicleRouteTripResModel!.results!.isNotEmpty) {
       for (var element in geVehicleRouteTripResModel!.results!) {
         for (var element1 in element.dailyrouteVehicle!) {
-          if (element1.timeslot.dayslot.day == 'Monday') {
-            routeNo = element1.timeslot.dayslot.timetable.route.routeNo;
-            direction = element1.timeslot.dayslot.timetable.route.direction;
+          if (element1.timeslot!.dayslot!.day == 'Monday') {
+            routeNo = element1.timeslot!.dayslot!.timetable.route.routeNo;
+            direction = element1.timeslot!.dayslot!.timetable.route.direction;
           }
         }
       }

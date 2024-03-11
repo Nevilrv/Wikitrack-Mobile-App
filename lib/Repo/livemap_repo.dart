@@ -13,9 +13,9 @@ import '../response_model/get_vehicle_list_res_model.dart';
 
 class LiveMapRepo {
   ///getDailyRouteTrip
-  Future<dynamic> getDailyRouteTripFilter() async {
+  Future<dynamic> getDailyRouteTripFilter(String api) async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.getDailyRouteTripFilter, apitype: APIType.aGet);
+      var response = await APIService().getResponse(url: api, apitype: APIType.aGet);
       log('response getDailyRouteTripFilter ${response}');
 
       DailyTripRouteResModel dailyTripRouteResModel = DailyTripRouteResModel.fromJson(response);

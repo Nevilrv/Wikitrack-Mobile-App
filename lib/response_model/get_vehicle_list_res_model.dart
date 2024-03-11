@@ -133,53 +133,192 @@ class GpsDisplay {
 }
 
 class DailyrouteVehicle {
-  String id;
-  Timeslot timeslot;
-  bool status;
+  String? id;
+  DateTime? date;
+  Timeslot? timeslot;
+  List<ActualTime>? actualTime;
+  bool? status;
 
   DailyrouteVehicle({
-    required this.id,
-    required this.timeslot,
-    required this.status,
+    this.id,
+    this.date,
+    this.timeslot,
+    this.actualTime,
+    this.status,
   });
 
   factory DailyrouteVehicle.fromJson(Map<String, dynamic> json) => DailyrouteVehicle(
         id: json["id"],
-        timeslot: Timeslot.fromJson(json["timeslot"]),
+        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        timeslot: json["timeslot"] == null ? null : Timeslot.fromJson(json["timeslot"]),
+        actualTime: json["actual_time"] == null
+            ? []
+            : List<ActualTime>.from(json["actual_time"]!.map((x) => ActualTime.fromJson(x))),
         status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "timeslot": timeslot.toJson(),
+        "date":
+            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
+        "timeslot": timeslot?.toJson(),
+        "actual_time": actualTime == null ? [] : List<dynamic>.from(actualTime!.map((x) => x.toJson())),
+        "status": status,
+      };
+}
+
+class ActualTime {
+  String? id;
+  StopSeq? stopSeq;
+  String? time;
+
+  ActualTime({
+    this.id,
+    this.stopSeq,
+    this.time,
+  });
+
+  factory ActualTime.fromJson(Map<String, dynamic> json) => ActualTime(
+        id: json["id"],
+        stopSeq: json["stop_seq"] == null ? null : StopSeq.fromJson(json["stop_seq"]),
+        time: json["time"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "stop_seq": stopSeq?.toJson(),
+        "time": time,
+      };
+}
+
+class StopSeq {
+  String? id;
+  String? route;
+  int? priority;
+  String? travalTime;
+  StopId? stopId;
+  String? direction;
+  bool? status;
+
+  StopSeq({
+    this.id,
+    this.route,
+    this.priority,
+    this.travalTime,
+    this.stopId,
+    this.direction,
+    this.status,
+  });
+
+  factory StopSeq.fromJson(Map<String, dynamic> json) => StopSeq(
+        id: json["id"],
+        route: json["route"],
+        priority: json["priority"],
+        travalTime: json["traval_time"],
+        stopId: json["stop_id"] == null ? null : StopId.fromJson(json["stop_id"]),
+        direction: json["direction"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "route": route,
+        "priority": priority,
+        "traval_time": travalTime,
+        "stop_id": stopId?.toJson(),
+        "direction": direction,
+        "status": status,
+      };
+}
+
+class StopId {
+  String? id;
+  String? stopNo;
+  String? name;
+  StopDisplay? stopDisplay;
+  String? location;
+  bool? status;
+
+  StopId({
+    this.id,
+    this.stopNo,
+    this.name,
+    this.stopDisplay,
+    this.location,
+    this.status,
+  });
+
+  factory StopId.fromJson(Map<String, dynamic> json) => StopId(
+        id: json["id"],
+        stopNo: json["stop_no"],
+        name: json["name"],
+        stopDisplay: json["stop_display"] == null ? null : StopDisplay.fromJson(json["stop_display"]),
+        location: json["location"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "stop_no": stopNo,
+        "name": name,
+        "stop_display": stopDisplay?.toJson(),
+        "location": location,
+        "status": status,
+      };
+}
+
+class StopDisplay {
+  String? id;
+  String? imei;
+  String? type;
+  bool? status;
+
+  StopDisplay({
+    this.id,
+    this.imei,
+    this.type,
+    this.status,
+  });
+
+  factory StopDisplay.fromJson(Map<String, dynamic> json) => StopDisplay(
+        id: json["id"],
+        imei: json["imei"],
+        type: json["type"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "imei": imei,
+        "type": type,
         "status": status,
       };
 }
 
 class Timeslot {
-  String id;
-  String time;
-  Dayslot dayslot;
-  bool status;
+  String? id;
+  String? time;
+  Dayslot? dayslot;
+  bool? status;
 
   Timeslot({
-    required this.id,
-    required this.time,
-    required this.dayslot,
-    required this.status,
+    this.id,
+    this.time,
+    this.dayslot,
+    this.status,
   });
 
   factory Timeslot.fromJson(Map<String, dynamic> json) => Timeslot(
         id: json["id"],
         time: json["time"],
-        dayslot: Dayslot.fromJson(json["dayslot"]),
+        dayslot: json["dayslot"] == null ? null : Dayslot.fromJson(json["dayslot"]),
         status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "time": time,
-        "dayslot": dayslot.toJson(),
+        "dayslot": dayslot?.toJson(),
         "status": status,
       };
 }

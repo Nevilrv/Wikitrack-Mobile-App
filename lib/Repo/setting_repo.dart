@@ -21,16 +21,16 @@ import 'package:wikitrack/response_model/gps_imei_list_res_model.dart';
 class SettingRepo {
   ///getVehicleList
   Future<dynamic> getVehicleList() async {
-    // try {
-    var response = await APIService().getResponse(url: ApiRouts.vehicleList, apitype: APIType.aGet);
-    log('response $response');
+    try {
+      var response = await APIService().getResponse(url: ApiRouts.vehicleList, apitype: APIType.aGet);
+      log('response $response');
 
-    GetVehiclesListResModel getVehicleListResModel = GetVehiclesListResModel.fromJson(response);
+      GetVehiclesListResModel getVehicleListResModel = GetVehiclesListResModel.fromJson(response);
 
-    return getVehicleListResModel;
-    // } catch (e) {
-    //   log("GetVehicleListResModel-----ERROR===$e");
-    // }
+      return getVehicleListResModel;
+    } catch (e) {
+      log("GetVehicleListResModel-----ERROR===$e");
+    }
   }
 
   ///getVehicleList
@@ -104,9 +104,9 @@ class SettingRepo {
   }
 
   ///getRouteList
-  Future<dynamic> getRouteList() async {
+  Future<dynamic> getRouteList(String url) async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.routeList, apitype: APIType.aGet);
+      var response = await APIService().getResponse(url: url, apitype: APIType.aGet);
       log('response $response');
 
       GetRouteListResModel getRouteListResModel = GetRouteListResModel.fromJson(response);
@@ -301,9 +301,7 @@ class SettingRepo {
   Future<dynamic> dailyTripManagementRepo({String? routeId, String? direction, String? day}) async {
     try {
       var response = await APIService().getResponse(
-          url:
-              "http://134.209.145.234/api/v1/vehicles/daily-route-trip/list/?route_no=$routeId&direction=$direction&day=$day",
-          apitype: APIType.aGet);
+          url: "${ApiRouts.dailyRouteTripList}?route_no=$routeId&direction=$direction&day=$day", apitype: APIType.aGet);
       log('dailyRouteTripResponseModel  $response');
 
       DailyRouteTripResponseModel dailyRouteTripResponseModel = DailyRouteTripResponseModel.fromJson(response);

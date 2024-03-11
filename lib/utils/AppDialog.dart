@@ -30,8 +30,7 @@ class AppDialog {
                 style: const TextStyle(fontSize: 24.0),
               ),
               content: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -52,47 +51,76 @@ class AppDialog {
                         ),
                         const SizedBox(height: 10),
                         Expanded(
-                          child: ListView.separated(
-                            separatorBuilder: (context, index) {
-                              return const Divider(height: 0);
-                            },
+                          child: ListView.builder(
                             itemCount: controller.searchDataResults.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              return ListTile(
+                              return GestureDetector(
                                 onTap: () {
+                                  controller.setRouteId(controller.searchDataResults[index].id.toString());
+
                                   Get.back();
-                                  controller.setRouteId(controller
-                                      .searchDataResults[index].id
-                                      .toString());
+                                  setState123(() {});
+                                  controller.update();
                                 },
-                                title: Builder(builder: (context) {
-                                  return from == "bus_time_table"
-                                      ? Text(
-                                          (controller.searchDataResults[index]
-                                                      .routeNo
+                                child: from == "bus_time_table"
+                                    ? Column(
+                                        children: [
+                                          SizedBox(height: 15),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                                            child: Text(
+                                              (controller.searchDataResults[index].routeNo.toString().isEmpty
+                                                      ? "NA"
+                                                      : controller.searchDataResults[index].routeNo)
+                                                  .toString(),
+                                            ),
+                                          ),
+                                          SizedBox(height: 15),
+                                          Divider(height: 3)
+                                        ],
+                                      )
+                                    : from == "daily_trip_management"
+                                        ? Column(
+                                            children: [
+                                              SizedBox(height: 15),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                                child: Text(
+                                                  (controller.searchDataResults[index].name.toString().isEmpty
+                                                          ? "NA"
+                                                          : controller.searchDataResults[index].name)
                                                       .toString()
-                                                      .isEmpty
-                                                  ? "NA"
-                                                  : controller
-                                                      .searchDataResults[index]
-                                                      .routeNo)
-                                              .toString(),
-                                        )
-                                      : Text(
-                                          (controller.searchDataResults[index]
-                                                      .name
-                                                      .toString()
-                                                      .isEmpty
-                                                  ? "NA"
-                                                  : controller
-                                                      .searchDataResults[index]
-                                                      .name)
-                                              .toString()
-                                              .capitalizeFirst
-                                              .toString(),
-                                        );
-                                }),
+                                                      .capitalizeFirst
+                                                      .toString(),
+                                                ),
+                                              ),
+                                              SizedBox(height: 15),
+                                              Divider(height: 3)
+                                            ],
+                                          )
+                                        : controller.searchDataResults[index].direction == "1"
+                                            ? Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(height: 15),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                                                    child: Text(
+                                                      (controller.searchDataResults[index].name.toString().isEmpty
+                                                              ? "NA"
+                                                              : controller.searchDataResults[index].name)
+                                                          .toString()
+                                                          .capitalizeFirst
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 15),
+                                                  Divider(height: 3)
+                                                ],
+                                              )
+                                            : SizedBox(),
                               );
                             },
                           ),
@@ -134,6 +162,7 @@ class AppDialog {
             direction: controller.isForward ? "0" : "1",
           );
         }
+        controller.update();
       },
     );
   }
@@ -160,8 +189,7 @@ class AppDialog {
                 style: const TextStyle(fontSize: 24.0),
               ),
               content: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -192,15 +220,11 @@ class AppDialog {
                               return ListTile(
                                 onTap: () {
                                   Get.back();
-                                  controller.stop.text =
-                                      controller.stopResult[index].name;
-                                  controller.stopId =
-                                      controller.stopResult[index].id;
+                                  controller.stop.text = controller.stopResult[index].name;
+                                  controller.stopId = controller.stopResult[index].id;
                                 },
                                 title: Text(
-                                  (controller.stopResult[index].name.isEmpty
-                                          ? 'NA'
-                                          : controller.stopResult[index].name)
+                                  (controller.stopResult[index].name.isEmpty ? 'NA' : controller.stopResult[index].name)
                                       .toString()
                                       .capitalizeFirst
                                       .toString(),
@@ -243,8 +267,7 @@ class AppDialog {
                 style: const TextStyle(fontSize: 24.0),
               ),
               content: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -275,17 +298,13 @@ class AppDialog {
                               return ListTile(
                                 onTap: () {
                                   Get.back();
-                                  controller.stopDevice.text =
-                                      controller.stopDisplayResult[index].imei;
-                                  controller.stopDisplayId =
-                                      controller.stopDisplayResult[index].id;
+                                  controller.stopDevice.text = controller.stopDisplayResult[index].imei;
+                                  controller.stopDisplayId = controller.stopDisplayResult[index].id;
                                 },
                                 title: Text(
-                                  (controller.stopDisplayResult[index].imei
-                                              .isEmpty
+                                  (controller.stopDisplayResult[index].imei.isEmpty
                                           ? "NA"
-                                          : controller
-                                              .stopDisplayResult[index].imei)
+                                          : controller.stopDisplayResult[index].imei)
                                       .toString()
                                       .capitalizeFirst
                                       .toString(),

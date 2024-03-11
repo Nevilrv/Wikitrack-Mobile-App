@@ -52,8 +52,7 @@ class _RouteManagementState extends State<RouteManagement> {
           Get.back();
         },
       ),
-      floatingActionButton:
-          GetBuilder<SettingController>(builder: (controller) {
+      floatingActionButton: GetBuilder<SettingController>(builder: (controller) {
         return GestureDetector(
           onTap: () {
             addNewRouteFloating(context, height, width, controller: controller);
@@ -80,29 +79,32 @@ class _RouteManagementState extends State<RouteManagement> {
           List<RouteResult> results = [];
 
           for (var element in controller.searchDataResults) {
-            if (element.routeNo ==
-                controller.searchDataResults
-                    .where((ele) =>
-                        ele.id.toString() ==
-                        (controller.selectedRouteId ??
-                            controller.searchDataResults[0].id.toString()))
-                    .first
-                    .routeNo) {
-              results.add(element);
+            if (controller.searchDataResults.isNotEmpty) {
+              var d = controller.searchDataResults
+                  .where((ele) =>
+                      ele.id.toString() ==
+                      (controller.selectedRouteId ?? controller.searchDataResults[0].id.toString()))
+                  .first
+                  .routeNo;
+              if (d != "") {
+                if (element.routeNo == d) {
+                  results.add(element);
+                }
+              }
             }
           }
 
           return Stack(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       CommonButton(
                           onTap: () {
                             controller.searchResult("");
+                            // controller.searchDataResults.clear();
                             controller.searchController.clear();
                             AppDialog().selectRouteDialog(
                               controller: controller,
@@ -120,9 +122,7 @@ class _RouteManagementState extends State<RouteManagement> {
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                      color: AppColors.primaryColor,
-                                      width: 1.5)),
+                                  border: Border.all(color: AppColors.primaryColor, width: 1.5)),
                               child: const Padding(
                                 padding: EdgeInsets.symmetric(
                                   vertical: 10,
@@ -138,9 +138,7 @@ class _RouteManagementState extends State<RouteManagement> {
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                      color: AppColors.primaryColor,
-                                      width: 1.5)),
+                                  border: Border.all(color: AppColors.primaryColor, width: 1.5)),
                               child: const Padding(
                                 padding: EdgeInsets.symmetric(
                                   vertical: 10,
@@ -159,40 +157,32 @@ class _RouteManagementState extends State<RouteManagement> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          (results.isNotEmpty &&
-                                  results[0].stopSequence!.isNotEmpty)
+                          (results.isNotEmpty && results[0].stopSequence!.isNotEmpty)
                               ? Expanded(
                                   child: ListView.separated(
                                     separatorBuilder: (context, index) {
                                       return Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: width * 0.03),
+                                          padding: EdgeInsets.only(left: width * 0.03),
                                           child: const Dash(
                                               direction: Axis.vertical,
                                               length: 50,
                                               dashLength: 8,
-                                              dashColor:
-                                                  AppColors.textGreyColor,
+                                              dashColor: AppColors.textGreyColor,
                                               dashGap: 4),
                                         ),
                                       );
                                     },
-                                    itemCount:
-                                        results[0].stopSequence!.length + 1,
+                                    itemCount: results[0].stopSequence!.length + 1,
                                     shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      return (index ==
-                                              results[0].stopSequence!.length)
+                                      return (index == results[0].stopSequence!.length)
                                           ? GestureDetector(
                                               onTap: () async {
-                                                await settingController
-                                                    .getStopListViewModel();
-                                                await settingController
-                                                    .getStopDisplayListViewModel();
+                                                await settingController.getStopListViewModel();
+                                                await settingController.getStopDisplayListViewModel();
                                                 if (!mounted) return;
                                                 addNewStop(
                                                   priority: index,
@@ -200,50 +190,41 @@ class _RouteManagementState extends State<RouteManagement> {
                                                   height: height,
                                                   width: width,
                                                   controller: controller,
-                                                  direction: results[0]
-                                                      .direction
-                                                      .toString(),
-                                                  routId:
-                                                      results[0].id.toString(),
+                                                  direction: results[0].direction.toString(),
+                                                  routId: results[0].id.toString(),
                                                 );
                                               },
                                               child: Row(
                                                 children: [
                                                   const Icon(
-                                                    Icons
-                                                        .add_circle_outline_sharp,
-                                                    color:
-                                                        AppColors.primaryColor,
+                                                    Icons.add_circle_outline_sharp,
+                                                    color: AppColors.primaryColor,
                                                   ),
                                                   SizedBox(
                                                     width: Get.width * 0.02,
                                                   ),
                                                   Text(
                                                     AppStrings.addStop,
-                                                    style:
-                                                        blackMedium16TextStyle,
+                                                    style: blackMedium16TextStyle,
                                                   )
                                                 ],
                                               ),
                                             )
                                           : Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
                                                     const Icon(
                                                       Icons.circle_outlined,
-                                                      color: AppColors
-                                                          .primaryColor,
+                                                      color: AppColors.primaryColor,
                                                     ),
                                                     SizedBox(
                                                       width: Get.width * 0.02,
                                                     ),
                                                     Text(
                                                       "${results[0].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
-                                                      style:
-                                                          blackMedium16TextStyle,
+                                                      style: blackMedium16TextStyle,
                                                     )
                                                   ],
                                                 ),
@@ -254,12 +235,10 @@ class _RouteManagementState extends State<RouteManagement> {
                                 )
                               : Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding:
-                                            EdgeInsets.only(left: width * 0.03),
+                                        padding: EdgeInsets.only(left: width * 0.03),
                                         child: const Dash(
                                             direction: Axis.vertical,
                                             length: 50,
@@ -269,10 +248,8 @@ class _RouteManagementState extends State<RouteManagement> {
                                       ),
                                       GestureDetector(
                                         onTap: () async {
-                                          await settingController
-                                              .getStopListViewModel();
-                                          await settingController
-                                              .getStopDisplayListViewModel();
+                                          await settingController.getStopListViewModel();
+                                          await settingController.getStopDisplayListViewModel();
 
                                           if (!mounted) return;
 
@@ -282,8 +259,7 @@ class _RouteManagementState extends State<RouteManagement> {
                                             height: height,
                                             width: width,
                                             controller: controller,
-                                            direction:
-                                                results[0].direction.toString(),
+                                            direction: results[0].direction.toString(),
                                             routId: results[0].id.toString(),
                                           );
                                         },
@@ -306,40 +282,32 @@ class _RouteManagementState extends State<RouteManagement> {
                                     ],
                                   ),
                                 ),
-                          (results.length >= 2 &&
-                                  results[1].stopSequence!.isNotEmpty)
+                          (results.length >= 2 && results[1].stopSequence!.isNotEmpty)
                               ? Expanded(
                                   child: ListView.separated(
                                     separatorBuilder: (context, index) {
                                       return Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: width * 0.03),
+                                          padding: EdgeInsets.only(left: width * 0.03),
                                           child: const Dash(
                                               direction: Axis.vertical,
                                               length: 50,
                                               dashLength: 8,
-                                              dashColor:
-                                                  AppColors.textGreyColor,
+                                              dashColor: AppColors.textGreyColor,
                                               dashGap: 4),
                                         ),
                                       );
                                     },
-                                    itemCount:
-                                        results[1].stopSequence!.length + 1,
+                                    itemCount: results[1].stopSequence!.length + 1,
                                     shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      return (index ==
-                                              results[1].stopSequence!.length)
+                                      return (index == results[1].stopSequence!.length)
                                           ? GestureDetector(
                                               onTap: () async {
-                                                await settingController
-                                                    .getStopListViewModel();
-                                                await settingController
-                                                    .getStopDisplayListViewModel();
+                                                await settingController.getStopListViewModel();
+                                                await settingController.getStopDisplayListViewModel();
 
                                                 if (!mounted) return;
 
@@ -349,50 +317,41 @@ class _RouteManagementState extends State<RouteManagement> {
                                                   height: height,
                                                   width: width,
                                                   controller: controller,
-                                                  direction: results[1]
-                                                      .direction
-                                                      .toString(),
-                                                  routId:
-                                                      results[1].id.toString(),
+                                                  direction: results[1].direction.toString(),
+                                                  routId: results[1].id.toString(),
                                                 );
                                               },
                                               child: Row(
                                                 children: [
                                                   const Icon(
-                                                    Icons
-                                                        .add_circle_outline_sharp,
-                                                    color:
-                                                        AppColors.primaryColor,
+                                                    Icons.add_circle_outline_sharp,
+                                                    color: AppColors.primaryColor,
                                                   ),
                                                   SizedBox(
                                                     width: Get.width * 0.02,
                                                   ),
                                                   Text(
                                                     AppStrings.addStop,
-                                                    style:
-                                                        blackMedium16TextStyle,
+                                                    style: blackMedium16TextStyle,
                                                   )
                                                 ],
                                               ),
                                             )
                                           : Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
                                                     const Icon(
                                                       Icons.circle_outlined,
-                                                      color: AppColors
-                                                          .primaryColor,
+                                                      color: AppColors.primaryColor,
                                                     ),
                                                     SizedBox(
                                                       width: Get.width * 0.02,
                                                     ),
                                                     Text(
                                                       "${results[1].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
-                                                      style:
-                                                          blackMedium16TextStyle,
+                                                      style: blackMedium16TextStyle,
                                                     )
                                                   ],
                                                 ),
@@ -409,26 +368,21 @@ class _RouteManagementState extends State<RouteManagement> {
                                     )
                                   : Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(
-                                                left: width * 0.03),
+                                            padding: EdgeInsets.only(left: width * 0.03),
                                             child: const Dash(
                                                 direction: Axis.vertical,
                                                 length: 50,
                                                 dashLength: 8,
-                                                dashColor:
-                                                    AppColors.textGreyColor,
+                                                dashColor: AppColors.textGreyColor,
                                                 dashGap: 4),
                                           ),
                                           GestureDetector(
                                             onTap: () async {
-                                              await settingController
-                                                  .getStopListViewModel();
-                                              await settingController
-                                                  .getStopDisplayListViewModel();
+                                              await settingController.getStopListViewModel();
+                                              await settingController.getStopDisplayListViewModel();
 
                                               if (!mounted) return;
 
@@ -438,18 +392,14 @@ class _RouteManagementState extends State<RouteManagement> {
                                                 height: height,
                                                 width: width,
                                                 controller: controller,
-                                                direction: results[1]
-                                                    .direction
-                                                    .toString(),
-                                                routId:
-                                                    results[1].id.toString(),
+                                                direction: results[1].direction.toString(),
+                                                routId: results[1].id.toString(),
                                               );
                                             },
                                             child: Row(
                                               children: [
                                                 const Icon(
-                                                  Icons
-                                                      .add_circle_outline_sharp,
+                                                  Icons.add_circle_outline_sharp,
                                                   color: AppColors.primaryColor,
                                                 ),
                                                 SizedBox(
@@ -508,8 +458,7 @@ class _RouteManagementState extends State<RouteManagement> {
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          GetStopDisplayListResModel stopData =
-              controller.getStopDisplayListResponse.data;
+          GetStopDisplayListResModel stopData = controller.getStopDisplayListResponse.data;
           log('stopData===>>>${jsonEncode(stopData)}');
 
           return Padding(
@@ -520,8 +469,7 @@ class _RouteManagementState extends State<RouteManagement> {
               // height: height * 0.7,
               child: Center(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // mainAxisSize: MainAxisSize.min,
@@ -531,8 +479,7 @@ class _RouteManagementState extends State<RouteManagement> {
                           height: height * 0.01,
                           width: width * 0.09,
                           decoration: BoxDecoration(
-                              color: AppColors.grey2Color.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(100)),
+                              color: AppColors.grey2Color.withOpacity(0.5), borderRadius: BorderRadius.circular(100)),
                         ),
                       ),
                       SizedBox(
@@ -554,8 +501,7 @@ class _RouteManagementState extends State<RouteManagement> {
                       ),
                       commonTextField(
                         onTap: () {
-                          AppDialog().selectStopDialog(context,
-                              title: 'Select Stop', controller: controller);
+                          AppDialog().selectStopDialog(context, title: 'Select Stop', controller: controller);
                         },
                         hintMsg: 'Select Stop',
                         textColor: AppColors.blackColor,
@@ -574,8 +520,7 @@ class _RouteManagementState extends State<RouteManagement> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () async {
-                              addNewRouteFromAddStop(context, height, width,
-                                  controller: controller);
+                              addNewRouteFromAddStop(context, height, width, controller: controller);
                             },
                             child: Text(
                               AppStrings.addNewRoute,
@@ -638,24 +583,21 @@ class _RouteManagementState extends State<RouteManagement> {
                                 if (controller.stopId == "" ||
                                     controller.stop.text.isEmpty ||
                                     controller.travelTime.text.isEmpty) {
-                                  commonSnackBar(
-                                      message: "Please enter all the details");
+                                  commonSnackBar(message: "Please enter all the details");
                                   return;
                                 }
 
                                 var body = {
                                   "route": "$routId",
                                   "priority": (priority ?? 0) + 1,
-                                  "traval_time":
-                                      controller.travelTime.text.toString(),
+                                  "traval_time": controller.travelTime.text.toString(),
                                   "stop_id": controller.stopId.toString(),
                                   "status": true,
                                   "direction": "$direction"
                                 };
                                 log('body===body>>>$body');
 
-                                await controller.createStopSeqViewModel(
-                                    body: body);
+                                await controller.createStopSeqViewModel(body: body);
                                 controller.clearAddStopSeq();
                                 Get.back();
                                 getData();
@@ -676,12 +618,10 @@ class _RouteManagementState extends State<RouteManagement> {
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          if (settingController.getStopDisplayListResponse.status ==
-              Status.LOADING) {
+          if (settingController.getStopDisplayListResponse.status == Status.LOADING) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (settingController.getStopDisplayListResponse.status ==
-              Status.COMPLETE) {
+          if (settingController.getStopDisplayListResponse.status == Status.COMPLETE) {
             var data = settingController.getStopDisplayListResponse.data;
             log('data::::::::::::::::::::==========>>>>>>>>>>>$data');
             return Padding(
@@ -693,8 +633,7 @@ class _RouteManagementState extends State<RouteManagement> {
                   maxHeight: height * 0.75,
                 ),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -705,8 +644,7 @@ class _RouteManagementState extends State<RouteManagement> {
                             height: height * 0.01,
                             width: width * 0.09,
                             decoration: BoxDecoration(
-                                color: AppColors.grey2Color.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(100)),
+                                color: AppColors.grey2Color.withOpacity(0.5), borderRadius: BorderRadius.circular(100)),
                           ),
                         ),
                         SizedBox(
@@ -732,9 +670,8 @@ class _RouteManagementState extends State<RouteManagement> {
                           readOnly: true,
                           hintMsg: 'Select Stop Display',
                           onTap: () {
-                            AppDialog().selectStopDisplayDialog(context,
-                                title: 'Select Stop Display',
-                                controller: controller);
+                            AppDialog()
+                                .selectStopDisplayDialog(context, title: 'Select Stop Display', controller: controller);
                           },
                         ),
                         SizedBox(
@@ -784,8 +721,7 @@ class _RouteManagementState extends State<RouteManagement> {
                             Get.to(() => const MapScreen())?.then((value) {
                               if (value != null) {
                                 LatLng data = value;
-                                controller.latLangController.text =
-                                    "${data.latitude},${data.longitude}";
+                                controller.latLangController.text = "${data.latitude},${data.longitude}";
                               }
                               return;
                             });
@@ -803,17 +739,13 @@ class _RouteManagementState extends State<RouteManagement> {
                               )
                             : CommonButton(
                                 onTap: () async {
-                                  print(
-                                      'controller.stopDisplayId == ""===>>>${controller.stopDisplayId == ""}');
+                                  print('controller.stopDisplayId == ""===>>>${controller.stopDisplayId == ""}');
 
                                   if (controller.stopDisplayId == "" ||
                                       controller.stopNo.text.isEmpty ||
                                       controller.stopName.text.isEmpty ||
-                                      controller
-                                          .latLangController.text.isEmpty) {
-                                    commonSnackBar(
-                                        message:
-                                            "Please enter all the details");
+                                      controller.latLangController.text.isEmpty) {
+                                    commonSnackBar(message: "Please enter all the details");
                                     return;
                                   }
 
@@ -821,14 +753,12 @@ class _RouteManagementState extends State<RouteManagement> {
                                     "stop_no": controller.stopNo.text,
                                     "name": controller.stopName.text,
                                     "stop_display": controller.stopDisplayId,
-                                    "location":
-                                        controller.latLangController.text,
+                                    "location": controller.latLangController.text,
                                     "status": false
                                   };
                                   log('body===body>>>$body');
 
-                                  await controller.createStopViewModel(
-                                      body: body);
+                                  await controller.createStopViewModel(body: body);
                                   controller.clearAddNewStop();
                                   Get.back();
                                   getData();
@@ -845,8 +775,7 @@ class _RouteManagementState extends State<RouteManagement> {
         }).then((value) => controller.clearAddNewStop());
   }
 
-  Future<void> addNewRouteFloating(
-      BuildContext context, double height, double width,
+  Future<void> addNewRouteFloating(BuildContext context, double height, double width,
       {required SettingController controller}) {
     return showModalBottomSheet<void>(
       context: context,
@@ -861,8 +790,7 @@ class _RouteManagementState extends State<RouteManagement> {
             // height: height * 0.4,
             child: Center(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -873,8 +801,7 @@ class _RouteManagementState extends State<RouteManagement> {
                           height: height * 0.01,
                           width: width * 0.09,
                           decoration: BoxDecoration(
-                              color: AppColors.grey2Color.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(100)),
+                              color: AppColors.grey2Color.withOpacity(0.5), borderRadius: BorderRadius.circular(100)),
                         ),
                       ),
                       SizedBox(
@@ -932,23 +859,18 @@ class _RouteManagementState extends State<RouteManagement> {
                       ),
                       CommonButton(
                           onTap: () async {
-                            bool value = controller.searchDataResults.any(
-                                (element) =>
-                                    element.routeNo.toString() ==
-                                    controller.routeNo.text);
+                            bool value = controller.searchDataResults
+                                .any((element) => element.routeNo.toString() == controller.routeNo.text);
 
                             if (controller.routeNo.text.isEmpty ||
                                 controller.routeName.text.isEmpty ||
                                 controller.direction.text.isEmpty) {
-                              commonSnackBar(
-                                  message: "Please enter all the details");
+                              commonSnackBar(message: "Please enter all the details");
                               return;
                             }
 
                             if (value == true) {
-                              commonSnackBar(
-                                  message:
-                                      "Route number already exist. Please try with another route no.");
+                              commonSnackBar(message: "Route number already exist. Please try with another route no.");
                               return;
                             }
 

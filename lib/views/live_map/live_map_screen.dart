@@ -187,14 +187,16 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                           controller.searchDataResults[index].id
                                                                               .toString(),
                                                                         );
-                                                                        controller.stopSequence.clear();
-                                                                        controller.update();
-                                                                        if (controller.searchDataResults[index]
-                                                                            .stopSequence!.isNotEmpty) {
-                                                                          controller.stopSequence.addAll(controller
-                                                                              .searchDataResults[index]
-                                                                              .stopSequence as Iterable<StopSequence>);
-                                                                        }
+                                                                        // controller.stopSequence.clear();
+                                                                        // controller.update();
+                                                                        //
+                                                                        //
+                                                                        // if (controller.searchDataResults[index]
+                                                                        //     .stopSequence!.isNotEmpty) {
+                                                                        //   controller.stopSequence.addAll(controller
+                                                                        //       .searchDataResults[index]
+                                                                        //       .stopSequence as Iterable<StopSequence>);
+                                                                        // }
                                                                         setState123(() {});
                                                                         log("controller.stopSequence--------------> ${controller.stopSequence}");
                                                                       },
@@ -321,6 +323,10 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                             commonSnackBar(
                                                                                 message: 'Please select route');
                                                                           } else {
+                                                                            await controller
+                                                                                .getRouteListByDirectionViewModel(
+                                                                                    controller.selectedRouteId,
+                                                                                    controller.isForward ? '1' : '0');
                                                                             await controller.getDailyRouteTripViewModel(
                                                                                 setState123);
 
@@ -379,108 +385,97 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                             SizedBox(
                                                                                               height: h * 0.01,
                                                                                             ),
-                                                                                            Center(
-                                                                                              child:
-                                                                                                  SingleChildScrollView(
-                                                                                                scrollDirection:
-                                                                                                    Axis.horizontal,
-                                                                                                child: Row(
-                                                                                                  crossAxisAlignment:
-                                                                                                      CrossAxisAlignment
-                                                                                                          .end,
-                                                                                                  mainAxisAlignment:
-                                                                                                      MainAxisAlignment
-                                                                                                          .center,
-                                                                                                  children: List.generate(
-                                                                                                      controller
-                                                                                                              .stopSequence
-                                                                                                              .isEmpty
-                                                                                                          ? 0
-                                                                                                          : controller
-                                                                                                              .stopSequence
-                                                                                                              .length,
-                                                                                                      (index) {
-                                                                                                    return Column(
-                                                                                                      mainAxisAlignment:
-                                                                                                          MainAxisAlignment
-                                                                                                              .start,
-                                                                                                      crossAxisAlignment:
-                                                                                                          CrossAxisAlignment
-                                                                                                              .start,
-                                                                                                      children: [
-                                                                                                        Row(
-                                                                                                          children: List.generate(
-                                                                                                              controller
-                                                                                                                      .routeBusStopsData
-                                                                                                                      .isEmpty
-                                                                                                                  ? 0
-                                                                                                                  : controller.routeBusStopsData[controller.routeBusStopsData.indexWhere((element) =>
-                                                                                                                      element["stop_id"] ==
-                                                                                                                      controller.stopSequence[index].stopId?.id)]["count"],
-                                                                                                              (index1) {
-                                                                                                            return SvgPicture.asset(
-                                                                                                                AppImages
-                                                                                                                    .bus2);
-                                                                                                          }),
-                                                                                                        ),
-                                                                                                        Row(
-                                                                                                          children: [
-                                                                                                            CircleAvatar(
-                                                                                                              radius: w *
-                                                                                                                  0.023,
-                                                                                                              backgroundColor:
-                                                                                                                  AppColors
-                                                                                                                      .textGreyColor,
-                                                                                                            ),
-                                                                                                            controller.stopSequence.length ==
-                                                                                                                    index +
-                                                                                                                        1
-                                                                                                                ? const SizedBox()
-                                                                                                                : const Dash(
-                                                                                                                    direction: Axis
-                                                                                                                        .horizontal,
-                                                                                                                    length:
-                                                                                                                        10,
-                                                                                                                    dashLength:
-                                                                                                                        5,
-                                                                                                                    dashColor:
-                                                                                                                        AppColors.textGreyColor,
-                                                                                                                    dashGap: 5),
-                                                                                                          ],
-                                                                                                        ),
-                                                                                                        SizedBox(
-                                                                                                          height:
-                                                                                                              h * 0.005,
-                                                                                                        ),
-                                                                                                        Row(
-                                                                                                          children: [
-                                                                                                            SizedBox(
-                                                                                                              height: h *
-                                                                                                                  0.07,
-                                                                                                              child:
-                                                                                                                  RotatedBox(
-                                                                                                                quarterTurns:
-                                                                                                                    -1,
-                                                                                                                child: Text(
-                                                                                                                    maxLines:
-                                                                                                                        1,
-                                                                                                                    overflow:
-                                                                                                                        TextOverflow.ellipsis,
-                                                                                                                    '${controller.stopSequence[index].stopId!.name}',
-                                                                                                                    style: blackMedium14TextStyle),
+                                                                                            controller.stopSequence
+                                                                                                    .isEmpty
+                                                                                                ? Padding(
+                                                                                                    padding:
+                                                                                                        const EdgeInsets
+                                                                                                            .all(8.0),
+                                                                                                    child: Center(
+                                                                                                      child: Text(
+                                                                                                        "No stop found",
+                                                                                                        style:
+                                                                                                            blackMedium14TextStyle,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  )
+                                                                                                : Center(
+                                                                                                    child:
+                                                                                                        SingleChildScrollView(
+                                                                                                      scrollDirection:
+                                                                                                          Axis.horizontal,
+                                                                                                      child: Row(
+                                                                                                        crossAxisAlignment:
+                                                                                                            CrossAxisAlignment
+                                                                                                                .end,
+                                                                                                        mainAxisAlignment:
+                                                                                                            MainAxisAlignment
+                                                                                                                .center,
+                                                                                                        children: List.generate(
+                                                                                                            controller
+                                                                                                                    .stopSequence
+                                                                                                                    .isEmpty
+                                                                                                                ? 0
+                                                                                                                : controller
+                                                                                                                    .stopSequence
+                                                                                                                    .length,
+                                                                                                            (index) {
+                                                                                                          return Column(
+                                                                                                            mainAxisAlignment:
+                                                                                                                MainAxisAlignment
+                                                                                                                    .start,
+                                                                                                            crossAxisAlignment:
+                                                                                                                CrossAxisAlignment
+                                                                                                                    .start,
+                                                                                                            children: [
+                                                                                                              Row(
+                                                                                                                children: List.generate(
+                                                                                                                    controller.routeBusStopsData.isEmpty
+                                                                                                                        ? 0
+                                                                                                                        : controller.routeBusStopsData[controller.routeBusStopsData.indexWhere((element) => element["stop_id"] == controller.stopSequence[index].stopId?.id)]["count"],
+                                                                                                                    (index1) {
+                                                                                                                  return SvgPicture.asset(
+                                                                                                                      AppImages.bus2);
+                                                                                                                }),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            const SizedBox(
-                                                                                                                width:
-                                                                                                                    8)
-                                                                                                          ],
-                                                                                                        ),
-                                                                                                      ],
-                                                                                                    );
-                                                                                                  }),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
+                                                                                                              Row(
+                                                                                                                children: [
+                                                                                                                  CircleAvatar(
+                                                                                                                    radius:
+                                                                                                                        w * 0.023,
+                                                                                                                    backgroundColor:
+                                                                                                                        AppColors.textGreyColor,
+                                                                                                                  ),
+                                                                                                                  controller.stopSequence.length == index + 1
+                                                                                                                      ? const SizedBox()
+                                                                                                                      : const Dash(direction: Axis.horizontal, length: 10, dashLength: 5, dashColor: AppColors.textGreyColor, dashGap: 5),
+                                                                                                                ],
+                                                                                                              ),
+                                                                                                              SizedBox(
+                                                                                                                height: h *
+                                                                                                                    0.005,
+                                                                                                              ),
+                                                                                                              Row(
+                                                                                                                children: [
+                                                                                                                  SizedBox(
+                                                                                                                    height:
+                                                                                                                        h * 0.07,
+                                                                                                                    child:
+                                                                                                                        RotatedBox(
+                                                                                                                      quarterTurns: -1,
+                                                                                                                      child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, '${controller.stopSequence[index].stopId!.name}', style: blackMedium14TextStyle),
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  const SizedBox(
+                                                                                                                      width: 8)
+                                                                                                                ],
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          );
+                                                                                                        }),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
                                                                                             SizedBox(
                                                                                               height: h * 0.005,
                                                                                             ),
@@ -836,9 +831,9 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                   color: AppColors.primaryColor,
                 ))
               : GoogleMap(
-                  onTap: (argument) {
-                    Get.back(result: argument);
-                  },
+                  // onTap: (argument) {
+                  //   Get.back(result: argument);
+                  // },
                   markers: Set<Marker>.of(controller.markers),
                   initialCameraPosition: CameraPosition(
                     target: LatLng(controller.lat!, controller.long!),
