@@ -7,6 +7,7 @@ import 'package:wikitrack/utils/AppRoutes.dart';
 import 'package:wikitrack/views/bus_display/controller/bus_display_controller.dart';
 import 'package:wikitrack/views/bus_stop_display/controller/bus_stop_display_controller.dart';
 import 'package:wikitrack/views/forgotPassword/controller/forgot_password_controller.dart';
+import 'package:wikitrack/views/home/controller/home_controller.dart';
 import 'package:wikitrack/views/login/controller/login_controller.dart';
 import 'package:wikitrack/views/reports/controller/report_controller.dart';
 import 'package:wikitrack/views/splash/splash_screen.dart';
@@ -55,6 +56,7 @@ class ControllerBindings extends Bindings {
   void dependencies() {
     Get.lazyPut(() => LoginController(), fenix: true);
     Get.lazyPut(() => ForgotController(), fenix: true);
+    Get.lazyPut(() => HomeController(), fenix: true);
     Get.lazyPut(() => SettingController(), fenix: true);
     Get.lazyPut(() => LiveMapController(), fenix: true);
     Get.lazyPut(() => SocketController(), fenix: true);

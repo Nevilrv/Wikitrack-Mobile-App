@@ -73,7 +73,7 @@ class ReportController extends GetxController {
     } else {
       searchDataResults = [];
       for (var element in tempList) {
-        if (element.name.toString().toLowerCase().contains(value.toString().toLowerCase())) {
+        if (element.routeNo.toString().toLowerCase().contains(value.toString().toLowerCase())) {
           searchDataResults.add(element);
         }
       }

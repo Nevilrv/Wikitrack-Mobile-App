@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,17 +7,15 @@ import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/Repo/setting_repo.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/response_model/bus_display_res_model.dart' as busList;
+import 'package:wikitrack/response_model/create_time_table_id_res_model.dart';
 import 'package:wikitrack/response_model/dailt_route_trip_Response_model.dart';
-import 'package:wikitrack/response_model/dailytripregister_response_model.dart'
-    as bus;
+import 'package:wikitrack/response_model/dailytripregister_response_model.dart' as bus;
 import 'package:wikitrack/response_model/get_bus_time_table_res_model.dart';
 import 'package:wikitrack/response_model/get_route_list_res_model.dart';
 import 'package:wikitrack/response_model/get_stop_display_list_res_model.dart';
 import 'package:wikitrack/response_model/get_stop_list_res_model.dart';
-import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
-    as VehicleList;
-import 'package:wikitrack/response_model/gps_imei_list_res_model.dart'
-    as gpsList;
+import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart' as VehicleList;
+import 'package:wikitrack/response_model/gps_imei_list_res_model.dart' as gpsList;
 
 import '../../../Services/base_service.dart';
 
@@ -118,10 +117,7 @@ class SettingController extends GetxController {
     } else {
       busResult = [];
       for (var element in allBusResult) {
-        if (element.imei
-            .toString()
-            .toLowerCase()
-            .contains(value.toString().toLowerCase())) {
+        if (element.imei.toString().toLowerCase().contains(value.toString().toLowerCase())) {
           busResult.add(element);
         }
       }
@@ -136,10 +132,7 @@ class SettingController extends GetxController {
     } else {
       gpsDeviceResult = [];
       for (var element in allGpsDeviceResult) {
-        if (element.imei
-            .toString()
-            .toLowerCase()
-            .contains(value.toString().toLowerCase())) {
+        if (element.imei.toString().toLowerCase().contains(value.toString().toLowerCase())) {
           gpsDeviceResult.add(element);
         }
       }
@@ -155,10 +148,7 @@ class SettingController extends GetxController {
       searchData = [];
       for (var element in allData) {
         if (element.busDisplay != null) {
-          if (element.busDisplay!.imei
-              .toString()
-              .toLowerCase()
-              .contains(value.toString().toLowerCase())) {
+          if (element.busDisplay!.imei.toString().toLowerCase().contains(value.toString().toLowerCase())) {
             searchData.add(element);
           }
         }
@@ -173,10 +163,7 @@ class SettingController extends GetxController {
     } else {
       stopResult = [];
       for (var element in tempStopResult) {
-        if (element.name
-            .toString()
-            .toLowerCase()
-            .contains(value.toString().toLowerCase())) {
+        if (element.name.toString().toLowerCase().contains(value.toString().toLowerCase())) {
           stopResult.add(element);
         }
       }
@@ -190,10 +177,7 @@ class SettingController extends GetxController {
     } else {
       stopDisplayResult = [];
       for (var element in tempStopDisplayResult) {
-        if (element.imei
-            .toString()
-            .toLowerCase()
-            .contains(value.toString().toLowerCase())) {
+        if (element.imei.toString().toLowerCase().contains(value.toString().toLowerCase())) {
           stopDisplayResult.add(element);
         }
       }
@@ -207,8 +191,7 @@ class SettingController extends GetxController {
   List<RouteResult> searchDataResults = [];
   List<RouteResult> tempList = [];
 
-  ApiResponse _getRouteListResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getRouteListResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getRouteListResponse => _getRouteListResponse;
   Future getRouteListViewModel() async {
@@ -219,12 +202,22 @@ class SettingController extends GetxController {
 
     update();
     try {
-      GetRouteListResModel response =
-          await SettingRepo().getRouteList("${ApiRouts.routeList}");
+      GetRouteListResModel response = await SettingRepo().getRouteList("${ApiRouts.routeList}");
       _getRouteListResponse = ApiResponse.complete(response);
       log("response==$response");
-      searchDataResults.addAll(response.results!);
-      tempList.addAll(response.results!);
+      // searchDataResults.addAll(response.results!);
+      // tempList.addAll(response.results!);
+      response.results!.forEach((element) {
+        // searchDataResults.add(element);
+        bool hasThreeID = searchDataResults.any((mapTested) => mapTested.routeNo == element.routeNo);
+        if (hasThreeID == true) {
+        } else {
+          searchDataResults.add(element);
+          tempList.add(element);
+          // bool hasThreeID = searchDataResults.any((mapTested) => mapTested.routeNo == element.routeNo);
+        }
+        log("element.routeNo--------------> ${element.routeNo}  ${hasThreeID}");
+      });
       // response.results!.forEach((element) {
       //   if (element.direction == "1") {
       //     // searchDataResults.add(element);
@@ -248,11 +241,7 @@ class SettingController extends GetxController {
     } else {
       searchDataResults = [];
       for (var element in tempList) {
-        if (element.name
-                .toString()
-                .toLowerCase()
-                .contains(value.toString().toLowerCase()) &&
-            element.direction == "1") {
+        if (element.routeNo.toString().toLowerCase().contains(value.toString().toLowerCase())) {
           searchDataResults.add(element);
         }
       }
@@ -268,8 +257,7 @@ class SettingController extends GetxController {
   /// ========================================== Route Management =======================================================
 
   ///Create Route
-  ApiResponse _createRouteResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _createRouteResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get createRouteResponse => _createRouteResponse;
   Future createRouteViewModel({required Map<String, dynamic> body}) async {
@@ -292,8 +280,7 @@ class SettingController extends GetxController {
   }
 
   ///Create Stop Stop
-  ApiResponse _createStopResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _createStopResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get createStopResponse => _createStopResponse;
   Future createStopViewModel({required Map<String, dynamic> body}) async {
@@ -316,8 +303,7 @@ class SettingController extends GetxController {
   }
 
   ///Create Stop Stop Sequence
-  ApiResponse _createStopSeqResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _createStopSeqResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get createStopSeqResponse => _createStopSeqResponse;
   Future createStopSeqViewModel({required Map<String, dynamic> body}) async {
@@ -343,8 +329,7 @@ class SettingController extends GetxController {
 
   List<StopDisplayResult> stopDisplayResult = [];
   List<StopDisplayResult> tempStopDisplayResult = [];
-  ApiResponse _getStopDisplayListResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getStopDisplayListResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getStopDisplayListResponse => _getStopDisplayListResponse;
   Future getStopDisplayListViewModel() async {
@@ -355,8 +340,7 @@ class SettingController extends GetxController {
 
     update();
     try {
-      GetStopDisplayListResModel response =
-          await SettingRepo().getStopDisplayList();
+      GetStopDisplayListResModel response = await SettingRepo().getStopDisplayList();
       _getStopDisplayListResponse = ApiResponse.complete(response);
       log("response==$response");
 
@@ -378,8 +362,7 @@ class SettingController extends GetxController {
   List<StopResult> stopResult = [];
   List<StopResult> tempStopResult = [];
 
-  ApiResponse _getStopListResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getStopListResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getStopListResponse => _getStopListResponse;
   Future getStopListViewModel() async {
@@ -410,18 +393,15 @@ class SettingController extends GetxController {
   /// ========================================== Vehicle Management =======================================================
 
   /// Create Vehicle
-  ApiResponse _createVehicleResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _createVehicleResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get createVehicleResponse => _createVehicleResponse;
-  Future createVehicleRouteViewModel(
-      {required Map<String, String> body}) async {
+  Future createVehicleRouteViewModel({required Map<String, String> body}) async {
     update();
     _createVehicleResponse = ApiResponse.loading(message: 'Loading');
     update();
     try {
-      var response = await SettingRepo()
-          .createVehicle(body: body, imagePath: pickedImage?.path ?? '');
+      var response = await SettingRepo().createVehicle(body: body, imagePath: pickedImage?.path ?? '');
       _createVehicleResponse = ApiResponse.complete(response);
 
       getVehicleListViewModel();
@@ -452,21 +432,17 @@ class SettingController extends GetxController {
   }
 
   ///updateVehicle
-  ApiResponse _updateVehicleResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _updateVehicleResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get updateVehicleResponse => _updateVehicleResponse;
   Future updateVehicleRouteViewModel(
-      {required Map<String, String> body,
-      required String uuid,
-      required String vehicleImage}) async {
+      {required Map<String, String> body, required String uuid, required String vehicleImage}) async {
     update();
     _updateVehicleResponse = ApiResponse.loading(message: 'Loading');
 
     update();
     try {
-      var response = await SettingRepo()
-          .updateVehicle(body: body, uuid: uuid, vehicleImage: vehicleImage);
+      var response = await SettingRepo().updateVehicle(body: body, uuid: uuid, vehicleImage: vehicleImage);
       _updateVehicleResponse = ApiResponse.complete(response);
 
       getVehicleListViewModel();
@@ -486,8 +462,7 @@ class SettingController extends GetxController {
   List<VehicleList.Result> searchData = [];
   List<VehicleList.Result> allData = [];
   List<VehicleList.Result> busRegister = [];
-  ApiResponse _getVehicleListResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getVehicleListResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getVehicleListResponse => _getVehicleListResponse;
   Future getVehicleListViewModel() async {
@@ -515,8 +490,7 @@ class SettingController extends GetxController {
   List<gpsList.Result> gpsDeviceResult = [];
   List<gpsList.Result> allGpsDeviceResult = [];
 
-  ApiResponse _getGpsImeiListResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getGpsImeiListResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getGpsImeiListResponse => _getGpsImeiListResponse;
   Future getGPSImeiListViewModel() async {
@@ -527,8 +501,7 @@ class SettingController extends GetxController {
 
     update();
     try {
-      gpsList.GpsImeiListResModel response =
-          await SettingRepo().getGPSImeiList();
+      gpsList.GpsImeiListResModel response = await SettingRepo().getGPSImeiList();
       _getGpsImeiListResponse = ApiResponse.complete(response);
       log("response==$response");
       gpsDeviceResult.addAll(response.results);
@@ -548,8 +521,7 @@ class SettingController extends GetxController {
 
   List<busList.Result> busResult = [];
   List<busList.Result> allBusResult = [];
-  ApiResponse _getBusDisplayListResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getBusDisplayListResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getBusDisplayListResponse => _getBusDisplayListResponse;
   Future getBusDisplayViewModel() async {
@@ -560,8 +532,7 @@ class SettingController extends GetxController {
 
     update();
     try {
-      busList.BusDisplayResModel response =
-          await SettingRepo().getBusDisplayList();
+      busList.BusDisplayResModel response = await SettingRepo().getBusDisplayList();
       _getBusDisplayListResponse = ApiResponse.complete(response);
       log("response=getBusDisplayViewModel=$response");
 
@@ -590,8 +561,7 @@ class SettingController extends GetxController {
 
   /// Create time slot
 
-  ApiResponse _createTimeSlotResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _createTimeSlotResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get createTimeSlotResponse => _createTimeSlotResponse;
   Future createTimeSlotViewModel({required Map<String, dynamic> body}) async {
@@ -652,21 +622,18 @@ class SettingController extends GetxController {
 
   List<DailyTripManagementResult> data = [];
 
-  ApiResponse _dailyTripManagementResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _dailyTripManagementResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get dailyTripManagementResponse => _dailyTripManagementResponse;
-  Future dailyTripManagementViewModel(
-      {String? routeId, String? direction, String? day}) async {
+  Future dailyTripManagementViewModel({String? routeId, String? direction, String? day}) async {
     update();
 
     _dailyTripManagementResponse = ApiResponse.loading(message: 'Loading');
 
     update();
     try {
-      DailyRouteTripResponseModel response = await SettingRepo()
-          .dailyTripManagementRepo(
-              day: day, direction: direction, routeId: routeId);
+      DailyRouteTripResponseModel response =
+          await SettingRepo().dailyTripManagementRepo(day: day, direction: direction, routeId: routeId);
       _dailyTripManagementResponse = ApiResponse.complete(response);
       data = response.results!;
 
@@ -692,14 +659,12 @@ class SettingController extends GetxController {
   /// ========================================== BUS TIME TABLE =======================================================
 
   isVisible(index) {
-    busTimeTableData.first.daySlot![index].isVisible =
-        !busTimeTableData.first.daySlot![index].isVisible;
+    busTimeTableData.first.daySlot![index].isVisible = !busTimeTableData.first.daySlot![index].isVisible;
     update();
   }
 
   List<GetBusTimeTable> busTimeTableData = [];
-  ApiResponse _getBusTimeTableResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getBusTimeTableResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getBusTimeTableResponse => _getBusTimeTableResponse;
   Future busTimeTableViewModel({String? routeId, String? direction}) async {
@@ -708,8 +673,7 @@ class SettingController extends GetxController {
 
     update();
     try {
-      GetBusTimeTableResModel response = await SettingRepo()
-          .busTimeTableRepo(direction: direction, routeId: routeId);
+      GetBusTimeTableResModel response = await SettingRepo().busTimeTableRepo(direction: direction, routeId: routeId);
       _getBusTimeTableResponse = ApiResponse.complete(response);
       busTimeTableData = response.results!;
       log("_getBusTimeTableResponse=register=$response");
@@ -726,12 +690,10 @@ class SettingController extends GetxController {
 
   /// Create bus time slot
 
-  ApiResponse _createBusTimeSlotResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _createBusTimeSlotResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get createBusTimeSlotResponse => _createBusTimeSlotResponse;
-  Future createBusTimeSlotViewModel(
-      {required Map<String, dynamic> body}) async {
+  Future createBusTimeSlotViewModel({required Map<String, dynamic> body}) async {
     update();
     _createBusTimeSlotResponse = ApiResponse.loading(message: 'Loading');
     update();
@@ -755,8 +717,7 @@ class SettingController extends GetxController {
 
   /// Create bus day slot
 
-  ApiResponse _createBusDaySlotResponse =
-      ApiResponse.initial(message: 'Initialization');
+  ApiResponse _createBusDaySlotResponse = ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get createBusDaySlotResponse => _createBusDaySlotResponse;
   Future createBusDaySlotViewModel({required Map<String, dynamic> body}) async {
@@ -776,6 +737,16 @@ class SettingController extends GetxController {
       log("_createVehicleResponse==>${e.toString()}");
       update();
     }
+    update();
+  }
+
+  var timeTableId = "";
+  Future<void> createTimeTable({Map<String, dynamic>? body}) async {
+    var response = await SettingRepo().createTimeTable(body: body!);
+
+    CreateTimeTableIdResModel createTimeTableIdResModel = CreateTimeTableIdResModel.fromJson(jsonDecode(response));
+    log("createTimeTableIdResModel--------------> ${createTimeTableIdResModel.id}");
+    timeTableId = createTimeTableIdResModel.id!;
     update();
   }
 }

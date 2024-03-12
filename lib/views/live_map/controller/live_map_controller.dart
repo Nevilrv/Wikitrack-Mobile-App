@@ -317,7 +317,13 @@ class LiveMapController extends GetxController {
       lat = allImeiList[0].lat;
       long = allImeiList[0].lng;
     }
-
+    GoogleMapController controller = await googleMapController.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        // on below line we have given positions of Location 5
+        CameraPosition(
+      target: LatLng(lat!, long!),
+      zoom: 15,
+    )));
     log("lat--------------> ${lat}");
 
     update();
@@ -584,7 +590,7 @@ class LiveMapController extends GetxController {
     } else {
       searchDataResults = [];
       for (var element in tempList) {
-        if (element.name.toString().toLowerCase().contains(value.toString().toLowerCase())) {
+        if (element.routeNo.toString().toLowerCase().contains(value.toString().toLowerCase())) {
           searchDataResults.add(element);
         }
       }
@@ -799,6 +805,8 @@ class LiveMapController extends GetxController {
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) {
       currentPosition = position;
+      // lat = currentPosition!.latitude;
+      // long = currentPosition!.longitude;
       update();
       log('currentPosition!.latitude==========>>>>>${currentPosition!.latitude}');
       log('currentPosition!.longitude==========>>>>>${currentPosition!.longitude}');

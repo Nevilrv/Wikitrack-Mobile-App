@@ -360,4 +360,19 @@ class SettingRepo {
       log("res-----ERROR===$e");
     }
   }
+
+  Future<dynamic> createTimeTable({required Map<String, dynamic> body}) async {
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      final result = await http.post(
+        headers: headers,
+        Uri.parse(ApiRouts.createTimeTable),
+        body: jsonEncode(body),
+      );
+      log('result.body::::::::::::::::::::==========>>>>>>>>>>>${result.body}');
+      return result.body;
+    } catch (e) {
+      log("res-----ERROR===$e");
+    }
+  }
 }

@@ -8,6 +8,7 @@ import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppImages.dart';
 import 'package:wikitrack/utils/AppRoutes.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/views/home/controller/home_controller.dart';
 import 'package:wikitrack/views/reports/report_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,6 +20,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
+  HomeController homeController = Get.find();
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      homeController.getHomeScreenData();
+    });
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,43 +48,47 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: buildDrawer(width, height),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            SizedBox(
-              height: height * 0.04,
-            ),
-            Row(
+        child: GetBuilder<HomeController>(
+          builder: (controller) {
+            return Column(
               children: [
-                commonContainer(
-                  height,
-                  width,
-                  AppImages.vehicle,
-                  AppStrings.vehicle,
-                  '03',
-                ),
                 SizedBox(
-                  width: width * 0.03,
+                  height: height * 0.04,
                 ),
-                commonContainer(
-                  height,
-                  width,
-                  AppImages.stop,
-                  AppStrings.stops,
-                  '03',
-                ),
-                SizedBox(
-                  width: width * 0.03,
-                ),
-                commonContainer(
-                  height,
-                  width,
-                  AppImages.routes,
-                  AppStrings.routes,
-                  '03',
-                ),
+                Row(
+                  children: [
+                    commonContainer(
+                      height,
+                      width,
+                      AppImages.vehicle,
+                      AppStrings.vehicle,
+                      '${controller.vehicleLength}',
+                    ),
+                    SizedBox(
+                      width: width * 0.03,
+                    ),
+                    commonContainer(
+                      height,
+                      width,
+                      AppImages.stop,
+                      AppStrings.stops,
+                      '${controller.stopsLength}',
+                    ),
+                    SizedBox(
+                      width: width * 0.03,
+                    ),
+                    commonContainer(
+                      height,
+                      width,
+                      AppImages.routes,
+                      AppStrings.routes,
+                      '${controller.routesLength}',
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
+            );
+          },
         ),
       ),
     );

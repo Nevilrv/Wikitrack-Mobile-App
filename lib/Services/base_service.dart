@@ -42,4 +42,5 @@ class ApiRouts {
   static String createStopTime = "${baseUrl}vehicles/stopactualtime/create/";
   static String getTimeByRegNo = "${baseUrl}vehicles/stop-actual-time/list/?reg_no=";
   static String getTimeByRouteNo = "${baseUrl}vehicles/stop-actual-time/list/?route_no=";
+  static String createTimeTable = "${baseUrl}vehicles/timetable/create/";
 }

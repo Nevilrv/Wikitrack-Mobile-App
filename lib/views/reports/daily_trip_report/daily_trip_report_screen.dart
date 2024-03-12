@@ -124,11 +124,11 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                                         children: [
                                                           Flexible(
                                                             child: Text(
-                                                              (controller.searchDataResults[index].name
+                                                              (controller.searchDataResults[index].routeNo
                                                                           .toString()
                                                                           .isEmpty
                                                                       ? "NA"
-                                                                      : controller.searchDataResults[index].name)
+                                                                      : controller.searchDataResults[index].routeNo)
                                                                   .toString()
                                                                   .capitalizeFirst
                                                                   .toString(),

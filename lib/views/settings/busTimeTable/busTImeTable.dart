@@ -59,21 +59,24 @@ class _RountineTripManagementState extends State<BusTimeTable> {
               Get.back();
             },
           ),
-          floatingActionButton: controller.busTimeTableData.isEmpty
+          floatingActionButton: /*controller.busTimeTableData.isEmpty
               ? const SizedBox()
-              : GestureDetector(
-                  onTap: () {
-                    buildShowModalBottomSheet(context, height, width);
-                  },
-                  child: const CircleAvatar(
-                    backgroundColor: AppColors.primaryColor,
-                    child: Icon(
-                      Icons.add,
-                      color: AppColors.whiteColor,
-                      size: 25,
-                    ),
-                  ),
-                ),
+              : */
+              controller.selectedRouteId != null
+                  ? GestureDetector(
+                      onTap: () {
+                        buildShowModalBottomSheet(context, height, width);
+                      },
+                      child: const CircleAvatar(
+                        backgroundColor: AppColors.primaryColor,
+                        child: Icon(
+                          Icons.add,
+                          color: AppColors.whiteColor,
+                          size: 25,
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Padding(
@@ -465,6 +468,26 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                           ),
                           CommonButton(
                               onTap: () async {
+                                if (settingController.busTimeTableData.isEmpty) {
+                                  log('is empty----');
+
+                                  await settingController.createTimeTable(body: {
+                                    "route": settingController.selectedRouteId,
+                                    "status": true
+                                  }).then((value) async {
+                                    settingController.busTimeTableData.clear();
+                                    await settingController.busTimeTableViewModel(
+                                      routeId: settingController.searchDataResults
+                                          .where((element) => element.id == settingController.selectedRouteId)
+                                          .first
+                                          .routeNo
+                                          .toString()
+                                          .replaceAll(" ", "%20"),
+                                      direction: settingController.isForward ? "0" : "1",
+                                    );
+                                  });
+                                } else {}
+
                                 await settingController.createBusDaySlotViewModel(
                                   body: {
                                     "timetable": "${settingController.busTimeTableData.first.id}",
@@ -472,16 +495,17 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                     "status": false
                                   },
                                 );
+                                if (settingController.busTimeTableData.isNotEmpty) {
+                                  bool? value = settingController.busTimeTableData.first.daySlot?.any(
+                                    (element) =>
+                                        element.day.toString().toLowerCase() ==
+                                        DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
+                                  );
 
-                                bool? value = settingController.busTimeTableData.first.daySlot?.any(
-                                  (element) =>
-                                      element.day.toString().toLowerCase() ==
-                                      DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
-                                );
-
-                                if (value == true) {
-                                  commonSnackBar(message: "Selected Day already exist. Please try with another one.");
-                                  return;
+                                  if (value == true) {
+                                    commonSnackBar(message: "Selected Day already exist. Please try with another one.");
+                                    return;
+                                  }
                                 }
 
                                 Navigator.pop(context);

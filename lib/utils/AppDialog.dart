@@ -56,72 +56,73 @@ class AppDialog {
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () {
-                                  controller.setRouteId(controller.searchDataResults[index].id.toString());
+                                  onTap: () {
+                                    controller.setRouteId(controller.searchDataResults[index].id.toString());
 
-                                  Get.back();
-                                  setState123(() {});
-                                  controller.update();
-                                },
-                                child: from == "bus_time_table"
-                                    ? Column(
-                                        children: [
-                                          SizedBox(height: 15),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                                            child: Text(
-                                              (controller.searchDataResults[index].routeNo.toString().isEmpty
-                                                      ? "NA"
-                                                      : controller.searchDataResults[index].routeNo)
-                                                  .toString(),
-                                            ),
-                                          ),
-                                          SizedBox(height: 15),
-                                          Divider(height: 3)
-                                        ],
-                                      )
-                                    : from == "daily_trip_management"
-                                        ? Column(
-                                            children: [
-                                              SizedBox(height: 15),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                                child: Text(
-                                                  (controller.searchDataResults[index].name.toString().isEmpty
-                                                          ? "NA"
-                                                          : controller.searchDataResults[index].name)
-                                                      .toString()
-                                                      .capitalizeFirst
-                                                      .toString(),
-                                                ),
+                                    Get.back();
+                                    setState123(() {});
+                                    controller.update();
+                                  },
+                                  child: from == "bus_time_table"
+                                      ? Column(
+                                          children: [
+                                            SizedBox(height: 15),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                                              child: Text(
+                                                (controller.searchDataResults[index].routeNo.toString().isEmpty
+                                                        ? "NA"
+                                                        : controller.searchDataResults[index].routeNo)
+                                                    .toString(),
                                               ),
-                                              SizedBox(height: 15),
-                                              Divider(height: 3)
-                                            ],
-                                          )
-                                        : controller.searchDataResults[index].direction == "1"
-                                            ? Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(height: 15),
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                                    child: Text(
-                                                      (controller.searchDataResults[index].name.toString().isEmpty
-                                                              ? "NA"
-                                                              : controller.searchDataResults[index].name)
-                                                          .toString()
-                                                          .capitalizeFirst
-                                                          .toString(),
-                                                    ),
+                                            ),
+                                            SizedBox(height: 15),
+                                            Divider(height: 3)
+                                          ],
+                                        )
+                                      : from == "daily_trip_management"
+                                          ? Column(
+                                              children: [
+                                                SizedBox(height: 15),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                                  child: Text(
+                                                    (controller.searchDataResults[index].routeNo.toString().isEmpty
+                                                            ? "NA"
+                                                            : controller.searchDataResults[index].routeNo)
+                                                        .toString()
+                                                        .capitalizeFirst
+                                                        .toString(),
                                                   ),
-                                                  SizedBox(height: 15),
-                                                  Divider(height: 3)
-                                                ],
-                                              )
-                                            : SizedBox(),
-                              );
+                                                ),
+                                                SizedBox(height: 15),
+                                                Divider(height: 3)
+                                              ],
+                                            )
+                                          : /* controller.searchDataResults[index].direction == "1"
+                                            ?*/
+                                          Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(height: 15),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                                  child: Text(
+                                                    (controller.searchDataResults[index].routeNo.toString().isEmpty
+                                                            ? "NA"
+                                                            : controller.searchDataResults[index].routeNo)
+                                                        .toString()
+                                                        .capitalizeFirst
+                                                        .toString(),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 15),
+                                                Divider(height: 3)
+                                              ],
+                                            )
+                                  // : SizedBox(),
+                                  );
                             },
                           ),
                         ),

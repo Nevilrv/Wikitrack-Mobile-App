@@ -252,7 +252,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                             items: controller.routes.map((RouteResult value) {
                                                               return DropdownMenuItem<RouteResult>(
                                                                 value: value,
-                                                                child: Text(value.name!),
+                                                                child: Text(value.routeNo!),
                                                               );
                                                             }).toList(),
                                                           ),

@@ -211,13 +211,13 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                               Flexible(
                                                                                 child: Text(
                                                                                   (controller.searchDataResults[index]
-                                                                                              .name
+                                                                                              .routeNo
                                                                                               .toString()
                                                                                               .isEmpty
                                                                                           ? "NA"
                                                                                           : controller
                                                                                               .searchDataResults[index]
-                                                                                              .name)
+                                                                                              .routeNo)
                                                                                       .toString()
                                                                                       .capitalizeFirst
                                                                                       .toString(),
