@@ -123,7 +123,7 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                 if (controller.selectedRouteId != null) {
                                   controller.busTimeTableData.clear();
                                   await controller.busTimeTableViewModel(
-                                    routeId: controller.searchDataResults
+                                    routeId: controller.searchDataResults1
                                         .where((element) => element.id == controller.selectedRouteId)
                                         .first
                                         .routeNo
@@ -131,6 +131,9 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                         .replaceAll(" ", "%20"),
                                     direction: controller.isForward ? "0" : "1",
                                   );
+
+                                  bool isMatch = false;
+                                  String id = "";
                                 }
                               },
                             ),
@@ -468,58 +471,106 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                           ),
                           CommonButton(
                               onTap: () async {
+                                log("settingController.selectedRouteId1--------------> ${settingController.selectedRouteId}");
+
                                 if (settingController.busTimeTableData.isEmpty) {
                                   log('is empty----');
 
-                                  await settingController.createTimeTable(body: {
-                                    "route": settingController.selectedRouteId,
-                                    "status": true
-                                  }).then((value) async {
-                                    settingController.busTimeTableData.clear();
-                                    await settingController.busTimeTableViewModel(
-                                      routeId: settingController.searchDataResults
-                                          .where((element) => element.id == settingController.selectedRouteId)
-                                          .first
-                                          .routeNo
-                                          .toString()
-                                          .replaceAll(" ", "%20"),
-                                      direction: settingController.isForward ? "0" : "1",
-                                    );
+                                  bool isMatch = false;
+                                  String id = "";
+                                  settingController.searchDataResults1.forEach((element) {
+                                    if ((element.routeNo == settingController.selectedRouteNo) &&
+                                        (element.direction.toString() == (settingController.isForward ? "0" : "1"))) {
+                                      isMatch = true;
+                                      id = element.id!;
+                                    }
                                   });
-                                } else {}
+                                  if (isMatch == true) {
+                                    await settingController
+                                        .createTimeTable(body: {"route": id, "status": true}).then((value) async {
+                                      settingController.busTimeTableData.clear();
+                                      await settingController.busTimeTableViewModel(
+                                        routeId: settingController.searchDataResults
+                                            .where((element) => element.id == settingController.selectedRouteId)
+                                            .first
+                                            .routeNo
+                                            .toString()
+                                            .replaceAll(" ", "%20"),
+                                        direction: settingController.isForward ? "0" : "1",
+                                      );
+                                      await settingController.createBusDaySlotViewModel(
+                                        body: {
+                                          "timetable": "${settingController.busTimeTableData.first.id}",
+                                          "day": DateFormat("EEEE").format(selectedDate.first!),
+                                          "status": false
+                                        },
+                                      );
+                                      if (settingController.busTimeTableData.isNotEmpty) {
+                                        bool? value = settingController.busTimeTableData.first.daySlot?.any(
+                                          (element) =>
+                                              element.day.toString().toLowerCase() ==
+                                              DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
+                                        );
 
-                                await settingController.createBusDaySlotViewModel(
-                                  body: {
-                                    "timetable": "${settingController.busTimeTableData.first.id}",
-                                    "day": DateFormat("EEEE").format(selectedDate.first!),
-                                    "status": false
-                                  },
-                                );
-                                if (settingController.busTimeTableData.isNotEmpty) {
-                                  bool? value = settingController.busTimeTableData.first.daySlot?.any(
-                                    (element) =>
-                                        element.day.toString().toLowerCase() ==
-                                        DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
-                                  );
+                                        if (value == true) {
+                                          commonSnackBar(
+                                              message: "Selected Day already exist. Please try with another one.");
+                                          return;
+                                        }
+                                      }
 
-                                  if (value == true) {
-                                    commonSnackBar(message: "Selected Day already exist. Please try with another one.");
-                                    return;
+                                      Navigator.pop(context);
+
+                                      settingController.busTimeTableData.clear();
+                                      await settingController.busTimeTableViewModel(
+                                        routeId: settingController.searchDataResults
+                                            .where((element) => element.id == settingController.selectedRouteId)
+                                            .first
+                                            .routeNo
+                                            .toString()
+                                            .replaceAll(" ", "%20"),
+                                        direction: settingController.isForward ? "0" : "1",
+                                      );
+                                    });
+                                  } else {
+                                    commonSnackBar(message: "Route direction not found");
                                   }
+                                } else {
+                                  log('not empty----');
+                                  await settingController.createBusDaySlotViewModel(
+                                    body: {
+                                      "timetable": "${settingController.busTimeTableData.first.id}",
+                                      "day": DateFormat("EEEE").format(selectedDate.first!),
+                                      "status": false
+                                    },
+                                  );
+                                  if (settingController.busTimeTableData.isNotEmpty) {
+                                    bool? value = settingController.busTimeTableData.first.daySlot?.any(
+                                      (element) =>
+                                          element.day.toString().toLowerCase() ==
+                                          DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
+                                    );
+
+                                    if (value == true) {
+                                      commonSnackBar(
+                                          message: "Selected Day already exist. Please try with another one.");
+                                      return;
+                                    }
+                                  }
+
+                                  Navigator.pop(context);
+
+                                  settingController.busTimeTableData.clear();
+                                  await settingController.busTimeTableViewModel(
+                                    routeId: settingController.searchDataResults
+                                        .where((element) => element.id == settingController.selectedRouteId)
+                                        .first
+                                        .routeNo
+                                        .toString()
+                                        .replaceAll(" ", "%20"),
+                                    direction: settingController.isForward ? "0" : "1",
+                                  );
                                 }
-
-                                Navigator.pop(context);
-
-                                settingController.busTimeTableData.clear();
-                                await settingController.busTimeTableViewModel(
-                                  routeId: settingController.searchDataResults
-                                      .where((element) => element.id == settingController.selectedRouteId)
-                                      .first
-                                      .routeNo
-                                      .toString()
-                                      .replaceAll(" ", "%20"),
-                                  direction: settingController.isForward ? "0" : "1",
-                                );
                               },
                               title: AppStrings.submit),
                         ],

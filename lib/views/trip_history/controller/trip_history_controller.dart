@@ -221,7 +221,11 @@ class TripHistoryController extends GetxController {
           if (element1.daySlot!.isNotEmpty) {
             element1.daySlot!.forEach((element2) {
               if (element2.timeSlot!.isNotEmpty) {
-                timeSlotList.addAll(element2.timeSlot!);
+                element2.timeSlot!.forEach((element3) {
+                  if (element3.dailyrouteTimeslot![0].vehicle != null) {
+                    timeSlotList.add(element3);
+                  }
+                });
               } else {
                 isLoading = false;
                 update();
@@ -385,184 +389,192 @@ class TripHistoryController extends GetxController {
         if (routesVehicleResult[0].daySlot![0].timeSlot!.isEmpty) {
           commonSnackBar(message: "No routes found");
         } else {
-          if (routesVehicleResult[0].daySlot![0].timeSlot![0].dailyrouteTimeslot!.isEmpty) {
-            commonSnackBar(message: "No routes found");
-          } else {
-            routesVehicleResult[0].daySlot![0].timeSlot![0].dailyrouteTimeslot!.forEach((element1) async {
-              String flat = '';
-              String flang = '';
-              String estimatedTime = '';
-              if (element1.actualTime!.isNotEmpty) {
-                log('empty---------ed-');
+          routesVehicleResult[0].daySlot![0].timeSlot!.forEach((element2) {
+            if (element2.dailyrouteTimeslot!.isEmpty) {
+              commonSnackBar(message: "No routes found");
+            } else {
+              element2.dailyrouteTimeslot!.forEach((element1) async {
+                String flat = '';
+                String flang = '';
+                String estimatedTime = '';
+                if (element1.vehicle == null) {
+                } else {
+                  if (element1.actualTime!.isNotEmpty) {
+                    log('empty---------ed-');
 
-                element1.actualTime!.forEach((element2) async {
-                  List data = element2.stopSeq!.stopId!.location!.split(',');
-                  String lat;
-                  String lang;
-                  if (data.length == 2) {
-                    lat = data[0];
-                    lang = data[1];
-                  } else {
-                    lat = data[0];
-                    lang = data[2];
-                  }
-                  if (stopIndex == 0) {
-                    String time = routesVehicleResult[0].daySlot![0].timeSlot![0].time!;
-                    String actualTime = element2.time!;
-                    if (element2.time == "00") {
-                      estimatedTime =
-                          "${DateTime.parse('${element1.date}').add(Duration(minutes: int.parse(element2.time!)))}";
-                    } else {
-                      estimatedTime =
-                          "${DateTime.parse('${element1.date}').add(Duration(hours: int.parse(time.split(":")[0]), minutes: int.parse(time.split(":")[1]), seconds: int.parse(time.split(":")[2])))}";
-                    }
-                    log("estimatedTime--------------> ${estimatedTime}");
-                    DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
-                        hours: int.parse(actualTime.split(":")[0]),
-                        minutes: int.parse(actualTime.split(":")[1]),
-                        seconds: int.parse(actualTime.split(":")[2])));
-
-                    log("actualFinalTime--------------> ${actualFinalTime}");
-
-                    flat = lat;
-                    flang = lang;
-                    markers.add(Marker(
-                      // given marker id
-                      markerId: MarkerId("Stop ${stopIndex.toString()}"),
-                      // given marker icon
-                      icon: BitmapDescriptor.fromBytes(stopsIcons),
-                      // given position
-                      position: LatLng(double.parse(lat), double.parse(lang)),
-                      infoWindow: InfoWindow(
-                          // given title for marker
-                          title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
-                          snippet:
-                              "ActualTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))} EstimatedTime:${DateFormat('hh:mm a').format(actualFinalTime)}"),
-                    ));
-                  } else {
-                    String actualTime = element2.time!;
-                    String time = element2.stopSeq!.travalTime!;
-                    estimatedTime = "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
-                    log("estimatedTime-----dsede---------> ${estimatedTime}");
-                    DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
-                        hours: int.parse(actualTime.split(":")[0]),
-                        minutes: int.parse(actualTime.split(":")[1]),
-                        seconds: int.parse(actualTime.split(":")[2])));
-                    log("actualFinalTime-------d-------> ${actualFinalTime}");
-
-                    markers.add(Marker(
-                      // given marker id
-                      markerId: MarkerId("Stop ${stopIndex.toString()}"),
-                      // given marker icon
-                      icon: BitmapDescriptor.fromBytes(stopsIcons),
-                      // given position
-                      position: LatLng(double.parse(lat), double.parse(lang)),
-                      infoWindow: InfoWindow(
-                          // given title for marker
-                          title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
-                          snippet:
-                              "ActualTime:${DateFormat('hh:mm a').format(actualFinalTime)} EstimatedTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))}"),
-                    ));
-                  }
-
-                  stopIndex++;
-                });
-
-                GoogleMapController controller = await googleMapController.future;
-                controller.animateCamera(CameraUpdate.newCameraPosition(
-                    // on below line we have given positions of Location 5
-                    CameraPosition(
-                  target: LatLng(double.parse(flat), double.parse(flang)),
-                  zoom: 15,
-                )));
-                update();
-                stateSetter(() {});
-              } else {
-                Get.back();
-                isLoading1 = false;
-                stateSetter(() {});
-                // stateSetter(() {});
-                commonSnackBar(message: "No actual time found");
-                // Get.snackbar("Wikitrack", "No actual time found",
-                //     backgroundColor: AppColors.primaryColor,
-                //     colorText: AppColors.whiteColor,
-                //     snackPosition: SnackPosition.BOTTOM);
-              }
-            });
-            routesVehicleResult[0].daySlot![0].timeSlot![0].dailyrouteTimeslot!.forEach((element1) async {
-              polylineCoordinates.clear();
-              polylines.clear();
-              int changeIndex = 0;
-
-              if (element1.actualTime!.isEmpty) {
-                // commonSnackBar(message: "No actual time found");
-                // Get.back();
-                // stateSetter(() {});
-              } else {
-                for (int i = 0; i < element1.actualTime!.length; i++) {
-                  if (changeIndex == 0) {
-                    changeIndex++;
-                  } else {
-                    log("changeIndex-------------->${changeIndex - 1} -- ${changeIndex}");
-
-                    List data = element1.actualTime![changeIndex - 1].stopSeq!.stopId!.location!.split(',');
-                    List data1 = element1.actualTime![changeIndex].stopSeq!.stopId!.location!.split(',');
-                    log("data--------------> ${data}");
-                    log("data--------------> ${data1}");
-
-                    String lat;
-                    String lat1;
-                    String lang;
-                    String lang1;
-                    if (data.length == 2) {
-                      lat = data[0];
-                      lang = data[1];
-                    } else {
-                      lat = data[0];
-                      lang = data[2];
-                    }
-                    if (data1.length == 2) {
-                      lat1 = data1[0];
-                      lang1 = data1[1];
-                    } else {
-                      lat1 = data1[0];
-                      lang1 = data1[2];
-                    }
-                    log("lat--lang------------> ${lat} ${lang}");
-                    log("lat1--lang1------------> ${lat1} ${lang1}");
-
-                    // makers added according to index
-                    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-                      'AIzaSyA_S7GfAh6rJYWQ5X4n4X-3poo3vymuspU',
-                      PointLatLng(double.parse(lat), double.parse(lang)),
-                      PointLatLng(double.parse(lat1), double.parse(lang1)),
-                      travelMode: TravelMode.driving,
-                    );
-                    if (result.points.isNotEmpty) {
-                      for (var point in result.points) {
-                        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-                        log("point.latitude--------------> ${point.latitude}");
-                        log("point.longitude--------------> ${point.longitude}");
+                    element1.actualTime!.forEach((element2) async {
+                      List data = element2.stopSeq!.stopId!.location!.split(',');
+                      String lat;
+                      String lang;
+                      if (data.length == 2) {
+                        lat = data[0];
+                        lang = data[1];
+                      } else {
+                        lat = data[0];
+                        lang = data[2];
                       }
-                    }
-                    _addPolyLine(i);
+                      if (stopIndex == 0) {
+                        String time = routesVehicleResult[0].daySlot![0].timeSlot![0].time!;
+                        String actualTime = element2.time!;
+                        if (element2.time == "00") {
+                          estimatedTime =
+                              "${DateTime.parse('${element1.date}').add(Duration(minutes: int.parse(element2.time!)))}";
+                        } else {
+                          estimatedTime =
+                              "${DateTime.parse('${element1.date}').add(Duration(hours: int.parse(time.split(":")[0]), minutes: int.parse(time.split(":")[1]), seconds: int.parse(time.split(":")[2])))}";
+                        }
+                        log("estimatedTime--------------> ${estimatedTime}");
+                        DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
+                            hours: int.parse(actualTime.split(":")[0]),
+                            minutes: int.parse(actualTime.split(":")[1]),
+                            seconds: int.parse(actualTime.split(":")[2])));
 
-                    changeIndex++;
+                        log("actualFinalTime--------------> ${actualFinalTime}");
+
+                        flat = lat;
+                        flang = lang;
+                        markers.add(Marker(
+                          // given marker id
+                          markerId: MarkerId("Stop ${stopIndex.toString()}"),
+                          // given marker icon
+                          icon: BitmapDescriptor.fromBytes(stopsIcons),
+                          // given position
+                          position: LatLng(double.parse(lat), double.parse(lang)),
+                          infoWindow: InfoWindow(
+                              // given title for marker
+                              title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
+                              snippet:
+                                  "ActualTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))} EstimatedTime:${DateFormat('hh:mm a').format(actualFinalTime)}"),
+                        ));
+                      } else {
+                        String actualTime = element2.time!;
+                        String time = element2.stopSeq!.travalTime!;
+                        estimatedTime = "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
+                        log("estimatedTime-----dsede---------> ${estimatedTime}");
+                        DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
+                            hours: int.parse(actualTime.split(":")[0]),
+                            minutes: int.parse(actualTime.split(":")[1]),
+                            seconds: int.parse(actualTime.split(":")[2])));
+                        log("actualFinalTime-------d-------> ${actualFinalTime}");
+
+                        markers.add(Marker(
+                          // given marker id
+                          markerId: MarkerId("Stop ${stopIndex.toString()}"),
+                          // given marker icon
+                          icon: BitmapDescriptor.fromBytes(stopsIcons),
+                          // given position
+                          position: LatLng(double.parse(lat), double.parse(lang)),
+                          infoWindow: InfoWindow(
+                              // given title for marker
+                              title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
+                              snippet:
+                                  "ActualTime:${DateFormat('hh:mm a').format(actualFinalTime)} EstimatedTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))}"),
+                        ));
+                      }
+
+                      stopIndex++;
+                    });
+
+                    GoogleMapController controller = await googleMapController.future;
+                    controller.animateCamera(CameraUpdate.newCameraPosition(
+                        // on below line we have given positions of Location 5
+                        CameraPosition(
+                      target: LatLng(double.parse(flat), double.parse(flang)),
+                      zoom: 15,
+                    )));
                     update();
+                    stateSetter(() {});
+                  } else {
+                    Get.back();
+                    isLoading1 = false;
+                    stateSetter(() {});
+                    // stateSetter(() {});
+                    commonSnackBar(message: "No actual time found");
+                    // Get.snackbar("Wikitrack", "No actual time found",
+                    //     backgroundColor: AppColors.primaryColor,
+                    //     colorText: AppColors.whiteColor,
+                    //     snackPosition: SnackPosition.BOTTOM);
                   }
-
-                  log("changeIndex--------------> ${changeIndex}");
-
-                  //
-
-                  update();
                 }
-                isLoading1 = false;
-                stateSetter(() {});
-                Get.back();
-              }
-            });
-          }
+              });
+              element2.dailyrouteTimeslot!.forEach((element1) async {
+                if (element1.vehicle == null) {
+                } else {
+                  polylineCoordinates.clear();
+                  // polylines.clear();
+                  int changeIndex = 0;
+
+                  if (element1.actualTime!.isEmpty) {
+                    // commonSnackBar(message: "No actual time found");
+                    // Get.back();
+                    // stateSetter(() {});
+                  } else {
+                    for (int i = 0; i < element1.actualTime!.length; i++) {
+                      if (changeIndex == 0) {
+                        changeIndex++;
+                      } else {
+                        log("changeIndex-------------->${changeIndex - 1} -- ${changeIndex}");
+
+                        List data = element1.actualTime![changeIndex - 1].stopSeq!.stopId!.location!.split(',');
+                        List data1 = element1.actualTime![changeIndex].stopSeq!.stopId!.location!.split(',');
+                        log("data--------------> ${data}");
+                        log("data--------------> ${data1}");
+
+                        String lat;
+                        String lat1;
+                        String lang;
+                        String lang1;
+                        if (data.length == 2) {
+                          lat = data[0];
+                          lang = data[1];
+                        } else {
+                          lat = data[0];
+                          lang = data[2];
+                        }
+                        if (data1.length == 2) {
+                          lat1 = data1[0];
+                          lang1 = data1[1];
+                        } else {
+                          lat1 = data1[0];
+                          lang1 = data1[2];
+                        }
+                        log("lat--lang------------> ${lat} ${lang}");
+                        log("lat1--lang1------------> ${lat1} ${lang1}");
+
+                        // makers added according to index
+                        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+                          'AIzaSyA_S7GfAh6rJYWQ5X4n4X-3poo3vymuspU',
+                          PointLatLng(double.parse(lat), double.parse(lang)),
+                          PointLatLng(double.parse(lat1), double.parse(lang1)),
+                          travelMode: TravelMode.driving,
+                        );
+                        if (result.points.isNotEmpty) {
+                          for (var point in result.points) {
+                            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+                            log("point.latitude--------------> ${point.latitude}");
+                            log("point.longitude--------------> ${point.longitude}");
+                          }
+                        }
+                        _addPolyLine(i);
+
+                        changeIndex++;
+                        update();
+                      }
+
+                      log("changeIndex--------------> ${changeIndex}");
+
+                      //
+
+                      update();
+                    }
+                    isLoading1 = false;
+                    stateSetter(() {});
+                    Get.back();
+                  }
+                }
+              });
+            }
+          });
         }
       }
     }
@@ -589,6 +601,10 @@ class TripHistoryController extends GetxController {
     } else {
       log("results---------vfd-----> ${results}");
       if (results[0].dailyrouteVehicle!.isNotEmpty) {
+        // results.forEach((element) {
+        //   element.dailyrouteVehicle
+        //
+        // });
         results[0].dailyrouteVehicle!.forEach((element1) async {
           String flat = '';
           String flang = '';

@@ -18,7 +18,8 @@ import 'package:wikitrack/utils/AppImages.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
 import 'package:wikitrack/utils/FontSize.dart';
 import 'package:wikitrack/views/trip_history/controller/trip_history_controller.dart';
-import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart' as vehicle;
+import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
+    as vehicle;
 
 import '../../response_model/daily_trip_route_res_model.dart';
 import '../../response_model/get_route_list_res_model.dart';
@@ -56,21 +57,24 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Location services are disabled. Please enable the services')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
       return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Location permissions are denied')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
       return false;
     }
     return true;
@@ -80,7 +84,9 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) {
+      await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high)
+          .then((Position position) {
         setState(() => currentPosition = position);
         log('currentPosition!.latitude==========>>>>>${currentPosition!.latitude}');
         log('currentPosition!.longitude==========>>>>>${currentPosition!.longitude}');
@@ -136,7 +142,8 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                           isScrollControlled: true,
                           context: context,
                           builder: (BuildContext context) {
-                            return StatefulBuilder(builder: (context, setState) {
+                            return StatefulBuilder(
+                                builder: (context, setState) {
                               return Container(
                                 height: h * 0.75,
                                 decoration: BoxDecoration(
@@ -147,16 +154,19 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: w * 0.03),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: h * 0.015,
                                       ),
                                       Text(
                                         "${AppStrings.tripHistory} Filters",
-                                        style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                                        style: blackMedium16TextStyle.copyWith(
+                                            fontWeight: FontWeight.w500),
                                       ),
                                       SizedBox(
                                         height: h * 0.01,
@@ -164,8 +174,13 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                       Row(
                                         children: [
                                           Text(
-                                            controller.isForward == true ? AppStrings.byRoute : AppStrings.byVehicle,
-                                            style: blackMedium14TextStyle.copyWith(fontWeight: FontWeight.w500),
+                                            controller.isForward == true
+                                                ? AppStrings.byRoute
+                                                : AppStrings.byVehicle,
+                                            style:
+                                                blackMedium14TextStyle.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                           ),
                                           SizedBox(
                                             width: w * 0.02,
@@ -176,28 +191,43 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                             child: FittedBox(
                                               fit: BoxFit.fill,
                                               child: CupertinoSwitch(
-                                                activeColor: AppColors.iconBlueColor,
-                                                thumbColor: AppColors.whiteColor,
-                                                trackColor: AppColors.iconBlueColor,
+                                                activeColor:
+                                                    AppColors.iconBlueColor,
+                                                thumbColor:
+                                                    AppColors.whiteColor,
+                                                trackColor:
+                                                    AppColors.iconBlueColor,
                                                 value: controller.isForward,
                                                 onChanged: (val) async {
                                                   log("nvjsdnvbjsnvbksd");
-                                                  controller.changeIsForward(val);
+                                                  controller
+                                                      .changeIsForward(val);
                                                   controller.date = "";
-                                                  controller.selectedDateIndex = 0;
+                                                  controller.selectedDateIndex =
+                                                      0;
                                                   count = -1;
-                                                  controller.dropdownValue = null;
-                                                  controller.selectedVehicle = null;
-                                                  controller.toDateController.clear();
-                                                  controller.toDate = DateTime.now();
-                                                  controller.selectedDateIndex = 0;
-                                                  controller.fromDateController.clear();
-                                                  controller.timeSlotList.clear();
-                                                  controller.vehicleTimeSlotList.clear();
+                                                  controller.dropdownValue =
+                                                      null;
+                                                  controller.selectedVehicle =
+                                                      null;
+                                                  controller.toDateController
+                                                      .clear();
+                                                  controller.toDate =
+                                                      DateTime.now();
+                                                  controller.selectedDateIndex =
+                                                      0;
+                                                  controller.fromDateController
+                                                      .clear();
+                                                  controller.timeSlotList
+                                                      .clear();
+                                                  controller.vehicleTimeSlotList
+                                                      .clear();
                                                   controller.results.clear();
-                                                  controller.routesVehicleResult.clear();
+                                                  controller.routesVehicleResult
+                                                      .clear();
                                                   controller.isLoading1 = false;
-                                                  controller.fromDate = DateTime.now();
+                                                  controller.fromDate =
+                                                      DateTime.now();
                                                   controller.isForward1 = false;
 
                                                   setState(() {});
@@ -213,46 +243,83 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                       controller.isForward == true
                                           ? Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Row(
                                                     children: [
                                                       Container(
                                                         width: w * 0.4,
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
                                                             10,
                                                           ),
-                                                          border: Border.all(color: AppColors.lightGreyColor),
+                                                          border: Border.all(
+                                                              color: AppColors
+                                                                  .lightGreyColor),
                                                         ),
                                                         child: Padding(
-                                                          padding: EdgeInsets.symmetric(horizontal: w * 0.02),
-                                                          child: DropdownButton<RouteResult>(
-                                                            value: controller.dropdownValue,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      w * 0.02),
+                                                          child: DropdownButton<
+                                                              RouteResult>(
+                                                            value: controller
+                                                                .dropdownValue,
                                                             isExpanded: true,
-                                                            icon: const Icon(CupertinoIcons.chevron_down),
-                                                            hint: Text(AppStrings.route),
+                                                            icon: const Icon(
+                                                                CupertinoIcons
+                                                                    .chevron_down),
+                                                            hint: Text(
+                                                                AppStrings
+                                                                    .route),
                                                             elevation: 16,
-                                                            style: const TextStyle(color: Colors.deepPurple),
-                                                            underline: SizedBox(),
-                                                            onChanged: (RouteResult? value) {
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .deepPurple),
+                                                            underline:
+                                                                SizedBox(),
+                                                            onChanged:
+                                                                (RouteResult?
+                                                                    value) {
                                                               // This is called when the user selects an item.
 
                                                               count = -1;
                                                               setState(() {
-                                                                controller.dropdownValue = value;
+                                                                controller
+                                                                        .dropdownValue =
+                                                                    value;
                                                               });
-                                                              controller.selectedDateIndex = 0;
-                                                              controller.vehicleTimeSlotList.clear();
-                                                              controller.timeSlotList.clear();
-                                                              if (controller.date != "") {
-                                                                controller.getVehicles(setState);
+                                                              controller
+                                                                  .selectedDateIndex = 0;
+                                                              controller
+                                                                  .vehicleTimeSlotList
+                                                                  .clear();
+                                                              controller
+                                                                  .timeSlotList
+                                                                  .clear();
+                                                              if (controller
+                                                                      .date !=
+                                                                  "") {
+                                                                controller
+                                                                    .getVehicles(
+                                                                        setState);
                                                               }
                                                             },
-                                                            items: controller.routes.map((RouteResult value) {
-                                                              return DropdownMenuItem<RouteResult>(
+                                                            items: controller
+                                                                .routes
+                                                                .map(
+                                                                    (RouteResult
+                                                                        value) {
+                                                              return DropdownMenuItem<
+                                                                  RouteResult>(
                                                                 value: value,
-                                                                child: Text(value.routeNo!),
+                                                                child: Text(value
+                                                                    .routeNo!),
                                                               );
                                                             }).toList(),
                                                           ),
@@ -264,23 +331,48 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                         width: w * 0.13,
                                                         child: FittedBox(
                                                           fit: BoxFit.fill,
-                                                          child: CupertinoSwitch(
-                                                            activeColor: AppColors.iconBlueColor,
-                                                            thumbColor: AppColors.whiteColor,
-                                                            trackColor: AppColors.iconBlueColor,
-                                                            value: controller.isForward1,
-                                                            onChanged: (val) async {
+                                                          child:
+                                                              CupertinoSwitch(
+                                                            activeColor: AppColors
+                                                                .iconBlueColor,
+                                                            thumbColor:
+                                                                AppColors
+                                                                    .whiteColor,
+                                                            trackColor: AppColors
+                                                                .iconBlueColor,
+                                                            value: controller
+                                                                .isForward1,
+                                                            onChanged:
+                                                                (val) async {
                                                               count = -1;
 
-                                                              if (controller.dropdownValue == null) {
-                                                                commonSnackBar(message: "Please select route");
-                                                              } else if (controller.fromDateController.text.isEmpty) {
-                                                                commonSnackBar(message: "Please select from date");
-                                                              } else if (controller.toDateController.text.isEmpty) {
-                                                                commonSnackBar(message: "Please select to date");
+                                                              if (controller
+                                                                      .dropdownValue ==
+                                                                  null) {
+                                                                commonSnackBar(
+                                                                    message:
+                                                                        "Please select route");
+                                                              } else if (controller
+                                                                  .fromDateController
+                                                                  .text
+                                                                  .isEmpty) {
+                                                                commonSnackBar(
+                                                                    message:
+                                                                        "Please select from date");
+                                                              } else if (controller
+                                                                  .toDateController
+                                                                  .text
+                                                                  .isEmpty) {
+                                                                commonSnackBar(
+                                                                    message:
+                                                                        "Please select to date");
                                                               } else {
-                                                                controller.changeIsForward1(val);
-                                                                controller.getVehicles(setState);
+                                                                controller
+                                                                    .changeIsForward1(
+                                                                        val);
+                                                                controller
+                                                                    .getVehicles(
+                                                                        setState);
                                                               }
 
                                                               setState(() {});
@@ -290,8 +382,11 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                       ),
                                                       Text(
                                                         "To/From",
-                                                        style: blackMedium14TextStyle.copyWith(
-                                                            fontWeight: FontWeight.w500),
+                                                        style: blackMedium14TextStyle
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
                                                       )
                                                     ],
                                                   ),
@@ -303,47 +398,70 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                   : */
                                                   Expanded(
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Row(
                                                           children: [
                                                             Expanded(
                                                               flex: 1,
                                                               child: Container(
-                                                                  height: h * 0.06,
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius: BorderRadius.circular(
+                                                                  height:
+                                                                      h * 0.06,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
                                                                       10,
                                                                     ),
-                                                                    border: Border.all(color: AppColors.lightGreyColor),
+                                                                    border: Border.all(
+                                                                        color: AppColors
+                                                                            .lightGreyColor),
                                                                   ),
-                                                                  child: Padding(
-                                                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                                                    child: Center(
-                                                                      child: TextFormField(
-                                                                        onTap: () async {
-                                                                          if (controller.dropdownValue == null) {
-                                                                            commonSnackBar(
-                                                                                message: "Please select route");
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            15),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          TextFormField(
+                                                                        onTap:
+                                                                            () async {
+                                                                          if (controller.dropdownValue ==
+                                                                              null) {
+                                                                            commonSnackBar(message: "Please select route");
                                                                           } else {
-                                                                            count = -1;
-                                                                            await controller.selectDate(
-                                                                                context, setState);
+                                                                            count =
+                                                                                -1;
+                                                                            await controller.selectDate(context,
+                                                                                setState);
                                                                             controller.update();
                                                                             setState(() {});
                                                                           }
                                                                         },
-                                                                        readOnly: true,
-                                                                        decoration: InputDecoration(
-                                                                          hintText: "From Date",
-                                                                          hintStyle: greyMedium14TextStyle.copyWith(
-                                                                              color: AppColors.mediumGreyColor),
-                                                                          border: InputBorder.none,
+                                                                        readOnly:
+                                                                            true,
+                                                                        decoration:
+                                                                            InputDecoration(
+                                                                          hintText:
+                                                                              "From Date",
+                                                                          hintStyle:
+                                                                              greyMedium14TextStyle.copyWith(color: AppColors.mediumGreyColor),
+                                                                          border:
+                                                                              InputBorder.none,
                                                                         ),
-                                                                        keyboardType: TextInputType.none,
-                                                                        controller: controller.fromDateController,
+                                                                        keyboardType:
+                                                                            TextInputType.none,
+                                                                        controller:
+                                                                            controller.fromDateController,
                                                                         style: greyMedium14TextStyle.copyWith(
-                                                                            color: AppColors.mediumGreyColor),
+                                                                            color:
+                                                                                AppColors.mediumGreyColor),
                                                                       ),
                                                                     ),
                                                                   )),
@@ -354,36 +472,63 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                             Expanded(
                                                               flex: 1,
                                                               child: Container(
-                                                                height: h * 0.06,
-                                                                decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.circular(
+                                                                height:
+                                                                    h * 0.06,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
                                                                     10,
                                                                   ),
-                                                                  border: Border.all(color: AppColors.lightGreyColor),
+                                                                  border: Border.all(
+                                                                      color: AppColors
+                                                                          .lightGreyColor),
                                                                 ),
                                                                 child: Padding(
-                                                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                                                  child: TextFormField(
-                                                                    onTap: () async {
-                                                                      if (controller.dropdownValue == null) {
-                                                                        commonSnackBar(message: "Please select route");
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15),
+                                                                  child:
+                                                                      TextFormField(
+                                                                    onTap:
+                                                                        () async {
+                                                                      if (controller
+                                                                              .dropdownValue ==
+                                                                          null) {
+                                                                        commonSnackBar(
+                                                                            message:
+                                                                                "Please select route");
                                                                       } else {
-                                                                        count = -1;
+                                                                        count =
+                                                                            -1;
                                                                         await controller.toSelectDate(
-                                                                            context, setState);
-                                                                        controller.update();
-                                                                        setState(() {});
+                                                                            context,
+                                                                            setState);
+                                                                        controller
+                                                                            .update();
+                                                                        setState(
+                                                                            () {});
                                                                       }
                                                                     },
-                                                                    readOnly: true,
+                                                                    readOnly:
+                                                                        true,
                                                                     decoration: InputDecoration(
-                                                                        hintText: "To Date",
+                                                                        hintText:
+                                                                            "To Date",
                                                                         hintStyle: greyMedium14TextStyle.copyWith(
-                                                                            color: AppColors.mediumGreyColor),
-                                                                        border: InputBorder.none),
-                                                                    controller: controller.toDateController,
-                                                                    style: greyMedium14TextStyle.copyWith(
-                                                                        color: AppColors.mediumGreyColor),
+                                                                            color: AppColors
+                                                                                .mediumGreyColor),
+                                                                        border:
+                                                                            InputBorder.none),
+                                                                    controller:
+                                                                        controller
+                                                                            .toDateController,
+                                                                    style: greyMedium14TextStyle
+                                                                        .copyWith(
+                                                                            color:
+                                                                                AppColors.mediumGreyColor),
                                                                   ),
                                                                 ),
                                                               ),
@@ -393,53 +538,62 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                         SizedBox(
                                                           height: h * 0.02,
                                                         ),
-                                                        controller.fromDateController.text == "" ||
-                                                                controller.toDateController.text == ""
+                                                        controller.fromDateController
+                                                                        .text ==
+                                                                    "" ||
+                                                                controller
+                                                                        .toDateController
+                                                                        .text ==
+                                                                    ""
                                                             ? SizedBox()
-                                                            : controller.days.isEmpty
-                                                                ? Text("No days found")
+                                                            : controller.days
+                                                                    .isEmpty
+                                                                ? Text(
+                                                                    "No days found")
                                                                 : Container(
-                                                                    height: h * 0.05,
-                                                                    width: w * 1,
-                                                                    child: ListView.builder(
-                                                                      itemCount: controller.days.length,
-                                                                      shrinkWrap: true,
-                                                                      scrollDirection: Axis.horizontal,
-                                                                      itemBuilder: (context, index) {
+                                                                    height: h *
+                                                                        0.05,
+                                                                    width:
+                                                                        w * 1,
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      itemCount: controller
+                                                                          .days
+                                                                          .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      scrollDirection:
+                                                                          Axis.horizontal,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
                                                                         return Padding(
-                                                                          padding: EdgeInsets.symmetric(
-                                                                              horizontal: w * 0.01),
-                                                                          child: GestureDetector(
-                                                                            onTap: () {
+                                                                          padding:
+                                                                              EdgeInsets.symmetric(horizontal: w * 0.01),
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
                                                                               log("controller.days[index]--------------> ${controller.days[index]}");
                                                                               count = -1;
                                                                               controller.selectedDateIndex = index;
-                                                                              controller.date = controller.days[index]
-                                                                                  .toString()
-                                                                                  .split(" ")
-                                                                                  .first;
+                                                                              controller.date = controller.days[index].toString().split(" ").first;
                                                                               controller.getVehicles(setState);
 
                                                                               controller.update();
                                                                               setState(() {});
                                                                               log("date--------------> ${controller.date}");
                                                                             },
-                                                                            child: Container(
+                                                                            child:
+                                                                                Container(
                                                                               decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.circular(
                                                                                   10,
                                                                                 ),
-                                                                                border: Border.all(
-                                                                                    color:
-                                                                                        controller.selectedDateIndex ==
-                                                                                                index
-                                                                                            ? AppColors.primaryColor
-                                                                                            : AppColors.lightGreyColor),
+                                                                                border: Border.all(color: controller.selectedDateIndex == index ? AppColors.primaryColor : AppColors.lightGreyColor),
                                                                               ),
                                                                               child: Padding(
-                                                                                padding: EdgeInsets.symmetric(
-                                                                                    vertical: h * 0.01,
-                                                                                    horizontal: w * 0.02),
+                                                                                padding: EdgeInsets.symmetric(vertical: h * 0.01, horizontal: w * 0.02),
                                                                                 child: Text(
                                                                                   "${DateFormat('dd MMM yyyy').format(controller.days[index])}",
                                                                                   style: greyMedium14TextStyle.copyWith(
@@ -456,66 +610,75 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                         SizedBox(
                                                           height: h * 0.02,
                                                         ),
-                                                        controller.isLoading == true
+                                                        controller.isLoading ==
+                                                                true
                                                             ? Center(
-                                                                child: CircularProgressIndicator(
-                                                                color: AppColors.primaryColor,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                color: AppColors
+                                                                    .primaryColor,
                                                               ))
-                                                            : controller.timeSlotList.isEmpty
-                                                                ? Center(child: Text("No vehicle found"))
+                                                            : controller
+                                                                    .timeSlotList
+                                                                    .isEmpty
+                                                                ? Center(
+                                                                    child: Text(
+                                                                        "No vehicle found"))
                                                                 : Container(
-                                                                    height: h * 0.31,
-                                                                    width: w * 1,
-                                                                    child: ListView.builder(
-                                                                      itemCount: controller.timeSlotList.length,
-                                                                      shrinkWrap: true,
-                                                                      itemBuilder: (context, index) {
+                                                                    height: h *
+                                                                        0.31,
+                                                                    width:
+                                                                        w * 1,
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      itemCount: controller
+                                                                          .timeSlotList
+                                                                          .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        log("controller.timeSlotList[index].dailyrouteTimeslot![0].vehicle?.regNo--------------> ${controller.timeSlotList[index].dailyrouteTimeslot![0].vehicle?.regNo}");
+
                                                                         return GestureDetector(
-                                                                          onTap: () {
-                                                                            count = index;
+                                                                          onTap:
+                                                                              () {
+                                                                            count =
+                                                                                index;
                                                                             log('count==========>>>>>${count}');
                                                                             log('index==========>>>>>${index}');
-                                                                            controller.getRoutesOnVehicle(
-                                                                                controller.timeSlotList[index].time!,
+                                                                            controller.getRoutesOnVehicle(controller.timeSlotList[index].time!,
                                                                                 setState);
                                                                             setState(() {});
                                                                           },
-                                                                          child: Padding(
-                                                                            padding: EdgeInsets.symmetric(
-                                                                                vertical: h * 0.005),
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(vertical: h * 0.005),
                                                                             child: Container(
                                                                                 decoration: BoxDecoration(
-                                                                                  color: count == index
-                                                                                      ? AppColors.pinkColor
-                                                                                      : Colors.transparent,
+                                                                                  color: count == index ? AppColors.pinkColor : Colors.transparent,
                                                                                   borderRadius: BorderRadius.circular(
                                                                                     10,
                                                                                   ),
-                                                                                  border: Border.all(
-                                                                                      color: AppColors.pinkColor),
+                                                                                  border: Border.all(color: AppColors.pinkColor),
                                                                                 ),
                                                                                 child: Padding(
-                                                                                  padding: EdgeInsets.symmetric(
-                                                                                      horizontal: w * 0.02,
-                                                                                      vertical: h * 0.011),
+                                                                                  padding: EdgeInsets.symmetric(horizontal: w * 0.02, vertical: h * 0.011),
                                                                                   child: Column(
-                                                                                    crossAxisAlignment:
-                                                                                        CrossAxisAlignment.start,
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
                                                                                       Text(
-                                                                                        '${index + 1} ${controller.timeSlotList[index].dailyrouteTimeslot![0].vehicle!.regNo!}',
-                                                                                        style: greyMedium14TextStyle
-                                                                                            .copyWith(
-                                                                                          color:
-                                                                                              AppColors.mediumGreyColor,
+                                                                                        '${index + 1} ${controller.timeSlotList[index].dailyrouteTimeslot![0].vehicle?.regNo!}',
+                                                                                        style: greyMedium14TextStyle.copyWith(
+                                                                                          color: AppColors.mediumGreyColor,
                                                                                         ),
                                                                                       ),
                                                                                       Text(
                                                                                         "${controller.timeSlotList[index].time}",
-                                                                                        style: greyMedium14TextStyle
-                                                                                            .copyWith(
-                                                                                          color:
-                                                                                              AppColors.mediumGreyColor,
+                                                                                        style: greyMedium14TextStyle.copyWith(
+                                                                                          color: AppColors.mediumGreyColor,
                                                                                         ),
                                                                                       ),
                                                                                     ],
@@ -527,17 +690,23 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                     ),
                                                                   ),
                                                         Spacer(),
-                                                        controller.isLoading1 == true
+                                                        controller.isLoading1 ==
+                                                                true
                                                             ? Center(
-                                                                child: CircularProgressIndicator(
-                                                                color: AppColors.primaryColor,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                color: AppColors
+                                                                    .primaryColor,
                                                               ))
                                                             : count == -1
                                                                 ? SizedBox()
                                                                 : CommonButton(
-                                                                    title: "Select",
+                                                                    title:
+                                                                        "Select",
                                                                     onTap: () {
-                                                                      controller.addMarkersRoutes(setState);
+                                                                      controller
+                                                                          .addMarkersRoutes(
+                                                                              setState);
                                                                     }),
                                                         SizedBox(
                                                           height: h * 0.02,
@@ -550,43 +719,74 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                             )
                                           : Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
                                                     width: w * 1,
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
                                                         10,
                                                       ),
-                                                      border: Border.all(color: AppColors.lightGreyColor),
+                                                      border: Border.all(
+                                                          color: AppColors
+                                                              .lightGreyColor),
                                                     ),
                                                     child: Padding(
-                                                      padding: EdgeInsets.symmetric(horizontal: w * 0.02),
-                                                      child: DropdownButton<vehicle.Result>(
-                                                        value: controller.selectedVehicle,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  w * 0.02),
+                                                      child: DropdownButton<
+                                                          vehicle.Result>(
+                                                        value: controller
+                                                            .selectedVehicle,
                                                         isExpanded: true,
-                                                        icon: const Icon(CupertinoIcons.chevron_down),
-                                                        hint: Text(AppStrings.vehicle),
+                                                        icon: const Icon(
+                                                            CupertinoIcons
+                                                                .chevron_down),
+                                                        hint: Text(
+                                                            AppStrings.vehicle),
                                                         elevation: 16,
-                                                        style: const TextStyle(color: Colors.deepPurple),
+                                                        style: const TextStyle(
+                                                            color: Colors
+                                                                .deepPurple),
                                                         underline: SizedBox(),
-                                                        onChanged: (vehicle.Result? value) {
+                                                        onChanged:
+                                                            (vehicle.Result?
+                                                                value) {
                                                           count = -1;
                                                           // This is called when the user selects an item.
                                                           setState(() {
-                                                            controller.selectedVehicle = value!;
+                                                            controller
+                                                                    .selectedVehicle =
+                                                                value!;
                                                           });
-                                                          controller.selectedDateIndex = 0;
-                                                          controller.vehicleTimeSlotList.clear();
-                                                          controller.timeSlotList.clear();
-                                                          if (controller.date != "") {
-                                                            controller.getRoutesList(setState);
+                                                          controller
+                                                              .selectedDateIndex = 0;
+                                                          controller
+                                                              .vehicleTimeSlotList
+                                                              .clear();
+                                                          controller
+                                                              .timeSlotList
+                                                              .clear();
+                                                          if (controller.date !=
+                                                              "") {
+                                                            controller
+                                                                .getRoutesList(
+                                                                    setState);
                                                           }
                                                         },
-                                                        items: controller.vehicles.map((vehicle.Result value) {
-                                                          return DropdownMenuItem<vehicle.Result>(
+                                                        items: controller
+                                                            .vehicles
+                                                            .map((vehicle.Result
+                                                                value) {
+                                                          return DropdownMenuItem<
+                                                              vehicle.Result>(
                                                             value: value,
-                                                            child: Text(value.regNo!),
+                                                            child: Text(
+                                                                value.regNo!),
                                                           );
                                                         }).toList(),
                                                       ),
@@ -594,7 +794,9 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                   ),
                                                   Expanded(
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         SizedBox(
                                                           height: h * 0.02,
@@ -604,40 +806,61 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                             Expanded(
                                                               flex: 1,
                                                               child: Container(
-                                                                  height: h * 0.06,
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius: BorderRadius.circular(
+                                                                  height:
+                                                                      h * 0.06,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
                                                                       10,
                                                                     ),
-                                                                    border: Border.all(color: AppColors.lightGreyColor),
+                                                                    border: Border.all(
+                                                                        color: AppColors
+                                                                            .lightGreyColor),
                                                                   ),
-                                                                  child: Padding(
-                                                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                                                    child: Center(
-                                                                      child: TextFormField(
-                                                                        onTap: () async {
-                                                                          if (controller.selectedVehicle == null) {
-                                                                            commonSnackBar(
-                                                                                message: "Please select vehicle");
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            15),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          TextFormField(
+                                                                        onTap:
+                                                                            () async {
+                                                                          if (controller.selectedVehicle ==
+                                                                              null) {
+                                                                            commonSnackBar(message: "Please select vehicle");
                                                                           } else {
-                                                                            count = -1;
-                                                                            await controller.selectDate(
-                                                                                context, setState);
+                                                                            count =
+                                                                                -1;
+                                                                            await controller.selectDate(context,
+                                                                                setState);
                                                                             controller.update();
                                                                             setState(() {});
                                                                           }
                                                                         },
-                                                                        readOnly: true,
-                                                                        decoration: InputDecoration(
-                                                                          hintText: "From Date",
-                                                                          hintStyle: greyMedium14TextStyle.copyWith(
-                                                                              color: AppColors.mediumGreyColor),
-                                                                          border: InputBorder.none,
+                                                                        readOnly:
+                                                                            true,
+                                                                        decoration:
+                                                                            InputDecoration(
+                                                                          hintText:
+                                                                              "From Date",
+                                                                          hintStyle:
+                                                                              greyMedium14TextStyle.copyWith(color: AppColors.mediumGreyColor),
+                                                                          border:
+                                                                              InputBorder.none,
                                                                         ),
-                                                                        keyboardType: TextInputType.none,
-                                                                        controller: controller.fromDateController,
+                                                                        keyboardType:
+                                                                            TextInputType.none,
+                                                                        controller:
+                                                                            controller.fromDateController,
                                                                         style: greyMedium14TextStyle.copyWith(
-                                                                            color: AppColors.mediumGreyColor),
+                                                                            color:
+                                                                                AppColors.mediumGreyColor),
                                                                       ),
                                                                     ),
                                                                   )),
@@ -648,37 +871,63 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                             Expanded(
                                                               flex: 1,
                                                               child: Container(
-                                                                height: h * 0.06,
-                                                                decoration: BoxDecoration(
-                                                                  borderRadius: BorderRadius.circular(
+                                                                height:
+                                                                    h * 0.06,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
                                                                     10,
                                                                   ),
-                                                                  border: Border.all(color: AppColors.lightGreyColor),
+                                                                  border: Border.all(
+                                                                      color: AppColors
+                                                                          .lightGreyColor),
                                                                 ),
                                                                 child: Padding(
-                                                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                                                  child: TextFormField(
-                                                                    onTap: () async {
-                                                                      if (controller.selectedVehicle == null) {
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15),
+                                                                  child:
+                                                                      TextFormField(
+                                                                    onTap:
+                                                                        () async {
+                                                                      if (controller
+                                                                              .selectedVehicle ==
+                                                                          null) {
                                                                         commonSnackBar(
-                                                                            message: "Please select vehicle");
+                                                                            message:
+                                                                                "Please select vehicle");
                                                                       } else {
-                                                                        count = -1;
+                                                                        count =
+                                                                            -1;
                                                                         await controller.toSelectDate(
-                                                                            context, setState);
-                                                                        controller.update();
-                                                                        setState(() {});
+                                                                            context,
+                                                                            setState);
+                                                                        controller
+                                                                            .update();
+                                                                        setState(
+                                                                            () {});
                                                                       }
                                                                     },
-                                                                    readOnly: true,
+                                                                    readOnly:
+                                                                        true,
                                                                     decoration: InputDecoration(
-                                                                        hintText: "To Date",
+                                                                        hintText:
+                                                                            "To Date",
                                                                         hintStyle: greyMedium14TextStyle.copyWith(
-                                                                            color: AppColors.mediumGreyColor),
-                                                                        border: InputBorder.none),
-                                                                    controller: controller.toDateController,
-                                                                    style: greyMedium14TextStyle.copyWith(
-                                                                        color: AppColors.mediumGreyColor),
+                                                                            color: AppColors
+                                                                                .mediumGreyColor),
+                                                                        border:
+                                                                            InputBorder.none),
+                                                                    controller:
+                                                                        controller
+                                                                            .toDateController,
+                                                                    style: greyMedium14TextStyle
+                                                                        .copyWith(
+                                                                            color:
+                                                                                AppColors.mediumGreyColor),
                                                                   ),
                                                                 ),
                                                               ),
@@ -688,51 +937,60 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                         SizedBox(
                                                           height: h * 0.02,
                                                         ),
-                                                        controller.fromDateController.text == "" ||
-                                                                controller.toDateController.text == ""
+                                                        controller.fromDateController
+                                                                        .text ==
+                                                                    "" ||
+                                                                controller
+                                                                        .toDateController
+                                                                        .text ==
+                                                                    ""
                                                             ? SizedBox()
-                                                            : controller.days.isEmpty
-                                                                ? Text("No days found")
+                                                            : controller.days
+                                                                    .isEmpty
+                                                                ? Text(
+                                                                    "No days found")
                                                                 : Container(
-                                                                    height: h * 0.05,
-                                                                    width: w * 1,
-                                                                    child: ListView.builder(
-                                                                      itemCount: controller.days.length,
-                                                                      shrinkWrap: true,
-                                                                      scrollDirection: Axis.horizontal,
-                                                                      itemBuilder: (context, index) {
+                                                                    height: h *
+                                                                        0.05,
+                                                                    width:
+                                                                        w * 1,
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      itemCount: controller
+                                                                          .days
+                                                                          .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      scrollDirection:
+                                                                          Axis.horizontal,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
                                                                         return Padding(
-                                                                          padding: EdgeInsets.symmetric(
-                                                                              horizontal: w * 0.01),
-                                                                          child: GestureDetector(
-                                                                            onTap: () {
+                                                                          padding:
+                                                                              EdgeInsets.symmetric(horizontal: w * 0.01),
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
                                                                               controller.selectedDateIndex = index;
-                                                                              controller.date = controller.days[index]
-                                                                                  .toString()
-                                                                                  .split(" ")
-                                                                                  .first;
+                                                                              controller.date = controller.days[index].toString().split(" ").first;
                                                                               count = -1;
                                                                               controller.getRoutesList(setState);
                                                                               controller.update();
                                                                               setState(() {});
                                                                               log("date--------------> ${controller.date}");
                                                                             },
-                                                                            child: Container(
+                                                                            child:
+                                                                                Container(
                                                                               decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.circular(
                                                                                   10,
                                                                                 ),
-                                                                                border: Border.all(
-                                                                                    color:
-                                                                                        controller.selectedDateIndex ==
-                                                                                                index
-                                                                                            ? AppColors.primaryColor
-                                                                                            : AppColors.lightGreyColor),
+                                                                                border: Border.all(color: controller.selectedDateIndex == index ? AppColors.primaryColor : AppColors.lightGreyColor),
                                                                               ),
                                                                               child: Padding(
-                                                                                padding: EdgeInsets.symmetric(
-                                                                                    vertical: h * 0.01,
-                                                                                    horizontal: w * 0.02),
+                                                                                padding: EdgeInsets.symmetric(vertical: h * 0.01, horizontal: w * 0.02),
                                                                                 child: Text(
                                                                                   "${DateFormat('dd MMM yyyy').format(controller.days[index])}",
                                                                                   style: greyMedium14TextStyle.copyWith(
@@ -749,65 +1007,72 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                         SizedBox(
                                                           height: h * 0.02,
                                                         ),
-                                                        controller.isLoading == true
+                                                        controller.isLoading ==
+                                                                true
                                                             ? Center(
-                                                                child: CircularProgressIndicator(
-                                                                color: AppColors.primaryColor,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                color: AppColors
+                                                                    .primaryColor,
                                                               ))
-                                                            : controller.vehicleTimeSlotList.isEmpty
-                                                                ? Center(child: Text("No routes found"))
+                                                            : controller
+                                                                    .vehicleTimeSlotList
+                                                                    .isEmpty
+                                                                ? Center(
+                                                                    child: Text(
+                                                                        "No routes found"))
                                                                 : Container(
-                                                                    height: h * 0.31,
-                                                                    width: w * 1,
-                                                                    child: ListView.builder(
-                                                                      itemCount: controller.vehicleTimeSlotList.length,
-                                                                      shrinkWrap: true,
-                                                                      itemBuilder: (context, index) {
+                                                                    height: h *
+                                                                        0.31,
+                                                                    width:
+                                                                        w * 1,
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      itemCount: controller
+                                                                          .vehicleTimeSlotList
+                                                                          .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
                                                                         return GestureDetector(
-                                                                          onTap: () {
-                                                                            count = index;
+                                                                          onTap:
+                                                                              () {
+                                                                            count =
+                                                                                index;
                                                                             log('count==========>>>>>${count}');
                                                                             log('index==========>>>>>${index}');
-                                                                            controller.getVehiclesOneRoute(controller
-                                                                                .vehicleTimeSlotList[index].time!);
+                                                                            controller.getVehiclesOneRoute(controller.vehicleTimeSlotList[index].time!);
                                                                             setState(() {});
                                                                           },
-                                                                          child: Padding(
-                                                                            padding: EdgeInsets.symmetric(
-                                                                                vertical: h * 0.005),
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(vertical: h * 0.005),
                                                                             child: Container(
                                                                                 decoration: BoxDecoration(
-                                                                                  color: count == index
-                                                                                      ? AppColors.pinkColor
-                                                                                      : Colors.transparent,
+                                                                                  color: count == index ? AppColors.pinkColor : Colors.transparent,
                                                                                   borderRadius: BorderRadius.circular(
                                                                                     10,
                                                                                   ),
-                                                                                  border: Border.all(
-                                                                                      color: AppColors.pinkColor),
+                                                                                  border: Border.all(color: AppColors.pinkColor),
                                                                                 ),
                                                                                 child: Padding(
-                                                                                  padding: EdgeInsets.symmetric(
-                                                                                      horizontal: w * 0.02,
-                                                                                      vertical: h * 0.011),
+                                                                                  padding: EdgeInsets.symmetric(horizontal: w * 0.02, vertical: h * 0.011),
                                                                                   child: Column(
-                                                                                    crossAxisAlignment:
-                                                                                        CrossAxisAlignment.start,
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
                                                                                       Text(
-                                                                                        "${index + 1}. (${controller.vehicleTimeSlotList[index].dayslot!.timetable.route.name})",
-                                                                                        style: greyMedium14TextStyle
-                                                                                            .copyWith(
-                                                                                          color:
-                                                                                              AppColors.mediumGreyColor,
+                                                                                        "${index + 1}. (${controller.vehicleTimeSlotList[index].dayslot!.timetable!.route!.name})",
+                                                                                        style: greyMedium14TextStyle.copyWith(
+                                                                                          color: AppColors.mediumGreyColor,
                                                                                         ),
                                                                                       ),
                                                                                       Text(
                                                                                         "${controller.vehicleTimeSlotList[index].time}",
-                                                                                        style: greyMedium14TextStyle
-                                                                                            .copyWith(
-                                                                                          color:
-                                                                                              AppColors.mediumGreyColor,
+                                                                                        style: greyMedium14TextStyle.copyWith(
+                                                                                          color: AppColors.mediumGreyColor,
                                                                                         ),
                                                                                       ),
                                                                                     ],
@@ -819,17 +1084,23 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                     ),
                                                                   ),
                                                         Spacer(),
-                                                        controller.isLoading1 == true
+                                                        controller.isLoading1 ==
+                                                                true
                                                             ? Center(
-                                                                child: CircularProgressIndicator(
-                                                                color: AppColors.primaryColor,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                color: AppColors
+                                                                    .primaryColor,
                                                               ))
                                                             : count == -1
                                                                 ? SizedBox()
                                                                 : CommonButton(
-                                                                    title: "Select",
+                                                                    title:
+                                                                        "Select",
                                                                     onTap: () {
-                                                                      controller.addMarkers(setState);
+                                                                      controller
+                                                                          .addMarkers(
+                                                                              setState);
                                                                     }),
                                                         SizedBox(
                                                           height: h * 0.02,
@@ -868,19 +1139,21 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                   // },
                   markers: Set<Marker>.of(controller.markers),
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+                    target: LatLng(
+                        currentPosition!.latitude, currentPosition!.longitude),
                     zoom: 15,
                   ),
                   polylines: Set<Polyline>.of(controller.polylines.values),
                   onMapCreated: (GoogleMapController controllers) {
                     controller.googleMapController.complete(controllers);
 
-                    controllers.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                        target: LatLng(
-                          controller.lat!,
-                          controller.long!,
-                        ),
-                        zoom: 15)));
+                    controllers.moveCamera(
+                        CameraUpdate.newCameraPosition(CameraPosition(
+                            target: LatLng(
+                              controller.lat!,
+                              controller.long!,
+                            ),
+                            zoom: 15)));
                   },
                 ),
         );
@@ -888,7 +1161,8 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
     );
   }
 
-  GestureDetector buildContainerTile(double height, double width, String title, String image, Function() onTap) {
+  GestureDetector buildContainerTile(double height, double width, String title,
+      String image, Function() onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

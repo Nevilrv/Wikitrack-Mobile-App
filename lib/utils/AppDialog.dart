@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -58,7 +60,7 @@ class AppDialog {
                               return GestureDetector(
                                   onTap: () {
                                     controller.setRouteId(controller.searchDataResults[index].id.toString());
-
+                                    controller.selectedRouteNo = controller.searchDataResults[index].routeNo;
                                     Get.back();
                                     setState123(() {});
                                     controller.update();
@@ -154,7 +156,7 @@ class AppDialog {
         if (isTrip == false && controller.selectedRouteId != null) {
           controller.busTimeTableData.clear();
           await controller.busTimeTableViewModel(
-            routeId: controller.searchDataResults
+            routeId: controller.searchDataResults1
                 .where((element) => element.id == controller.selectedRouteId)
                 .first
                 .routeNo

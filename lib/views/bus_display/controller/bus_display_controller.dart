@@ -75,6 +75,7 @@ class BusDisplayController extends GetxController {
     nextStopTime = "";
     int stopIndex = 0;
     int stopIndex1 = -1;
+    log("response--------------> ${response.body}");
     if (response.statusCode == 200) {
       GetStopTimeByRouteNoResModel responsee = GetStopTimeByRouteNoResModel.fromJson(jsonDecode(response.body));
       log("response--------------> ${response.body}");

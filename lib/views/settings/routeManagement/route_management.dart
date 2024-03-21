@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:get/get.dart';
@@ -76,20 +77,28 @@ class _RouteManagementState extends State<RouteManagement> {
             ),
           );
         } else if (controller.getRouteListResponse.status == Status.COMPLETE) {
-          List<RouteResult> results = [];
+          List<RouteResult> results = [RouteResult(), RouteResult()];
 
-          for (var element in controller.searchDataResults) {
-            if (controller.searchDataResults.isNotEmpty) {
-              var d = controller.searchDataResults
+          for (var element in controller.searchDataResults1) {
+            if (controller.searchDataResults1.isNotEmpty) {
+              var d = controller.searchDataResults1
                   .where((ele) =>
                       ele.id.toString() ==
-                      (controller.selectedRouteId ?? controller.searchDataResults[0].id.toString()))
+                      (controller.selectedRouteId ?? controller.searchDataResults1[0].id.toString()))
                   .first
                   .routeNo;
+
               if (d != "") {
                 if (element.routeNo == d) {
-                  results.add(element);
+                  if (element.direction == "1") {
+                    results.removeAt(0);
+                    results.insert(0, element);
+                  } else {
+                    results.removeAt(1);
+                    results.insert(1, element);
+                  }
                 }
+                log("results--------------> ${results}");
               }
             }
           }
@@ -157,216 +166,229 @@ class _RouteManagementState extends State<RouteManagement> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          (results.isNotEmpty && results[0].stopSequence!.isNotEmpty)
-                              ? Expanded(
-                                  child: ListView.separated(
-                                    separatorBuilder: (context, index) {
-                                      return Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: width * 0.03),
-                                          child: const Dash(
-                                              direction: Axis.vertical,
-                                              length: 50,
-                                              dashLength: 8,
-                                              dashColor: AppColors.textGreyColor,
-                                              dashGap: 4),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: results[0].stopSequence!.length + 1,
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return (index == results[0].stopSequence!.length)
-                                          ? GestureDetector(
-                                              onTap: () async {
-                                                await settingController.getStopListViewModel();
-                                                await settingController.getStopDisplayListViewModel();
-                                                if (!mounted) return;
-                                                addNewStop(
-                                                  priority: index,
-                                                  context: context,
-                                                  height: height,
-                                                  width: width,
-                                                  controller: controller,
-                                                  direction: results[0].direction.toString(),
-                                                  routId: results[0].id.toString(),
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.add_circle_outline_sharp,
-                                                    color: AppColors.primaryColor,
-                                                  ),
-                                                  SizedBox(
-                                                    width: Get.width * 0.02,
-                                                  ),
-                                                  Text(
-                                                    AppStrings.addStop,
-                                                    style: blackMedium16TextStyle,
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          : Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.circle_outlined,
-                                                      color: AppColors.primaryColor,
-                                                    ),
-                                                    SizedBox(
-                                                      width: Get.width * 0.02,
-                                                    ),
-                                                    Text(
-                                                      "${results[0].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
-                                                      style: blackMedium16TextStyle,
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            );
-                                    },
+                          results[0].stopSequence == null
+                              ? const Expanded(
+                                  child: Center(
+                                    child: Text('No Routes'),
                                   ),
                                 )
-                              : Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: width * 0.03),
-                                        child: const Dash(
-                                            direction: Axis.vertical,
-                                            length: 50,
-                                            dashLength: 8,
-                                            dashColor: AppColors.textGreyColor,
-                                            dashGap: 4),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          await settingController.getStopListViewModel();
-                                          await settingController.getStopDisplayListViewModel();
-
-                                          if (!mounted) return;
-
-                                          addNewStop(
-                                            priority: 0,
-                                            context: context,
-                                            height: height,
-                                            width: width,
-                                            controller: controller,
-                                            direction: results[0].direction.toString(),
-                                            routId: results[0].id.toString(),
+                              : (results.isNotEmpty && results[0].stopSequence!.isNotEmpty)
+                                  ? Expanded(
+                                      child: ListView.separated(
+                                        separatorBuilder: (context, index) {
+                                          return Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: width * 0.03),
+                                              child: const Dash(
+                                                  direction: Axis.vertical,
+                                                  length: 50,
+                                                  dashLength: 8,
+                                                  dashColor: AppColors.textGreyColor,
+                                                  dashGap: 4),
+                                            ),
                                           );
                                         },
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.add_circle_outline_sharp,
-                                              color: AppColors.primaryColor,
-                                            ),
-                                            SizedBox(
-                                              width: Get.width * 0.02,
-                                            ),
-                                            Text(
-                                              AppStrings.addStop,
-                                              style: blackMedium16TextStyle,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                          (results.length >= 2 && results[1].stopSequence!.isNotEmpty)
-                              ? Expanded(
-                                  child: ListView.separated(
-                                    separatorBuilder: (context, index) {
-                                      return Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: width * 0.03),
-                                          child: const Dash(
-                                              direction: Axis.vertical,
-                                              length: 50,
-                                              dashLength: 8,
-                                              dashColor: AppColors.textGreyColor,
-                                              dashGap: 4),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: results[1].stopSequence!.length + 1,
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return (index == results[1].stopSequence!.length)
-                                          ? GestureDetector(
-                                              onTap: () async {
-                                                await settingController.getStopListViewModel();
-                                                await settingController.getStopDisplayListViewModel();
-
-                                                if (!mounted) return;
-
-                                                addNewStop(
-                                                  priority: index,
-                                                  context: context,
-                                                  height: height,
-                                                  width: width,
-                                                  controller: controller,
-                                                  direction: results[1].direction.toString(),
-                                                  routId: results[1].id.toString(),
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.add_circle_outline_sharp,
-                                                    color: AppColors.primaryColor,
+                                        itemCount: results[0].stopSequence!.length + 1,
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return (index == results[0].stopSequence!.length)
+                                              ? GestureDetector(
+                                                  onTap: () async {
+                                                    await settingController.getStopListViewModel();
+                                                    await settingController.getStopDisplayListViewModel();
+                                                    if (!mounted) return;
+                                                    addNewStop(
+                                                      priority: index,
+                                                      context: context,
+                                                      height: height,
+                                                      width: width,
+                                                      controller: controller,
+                                                      direction: results[0].direction.toString(),
+                                                      routId: results[0].id.toString(),
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.add_circle_outline_sharp,
+                                                        color: AppColors.primaryColor,
+                                                      ),
+                                                      SizedBox(
+                                                        width: Get.width * 0.02,
+                                                      ),
+                                                      Text(
+                                                        AppStrings.addStop,
+                                                        style: blackMedium16TextStyle,
+                                                      )
+                                                    ],
                                                   ),
-                                                  SizedBox(
-                                                    width: Get.width * 0.02,
-                                                  ),
-                                                  Text(
-                                                    AppStrings.addStop,
-                                                    style: blackMedium16TextStyle,
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          : Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
+                                                )
+                                              : Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    const Icon(
-                                                      Icons.circle_outlined,
-                                                      color: AppColors.primaryColor,
+                                                    Row(
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.circle_outlined,
+                                                          color: AppColors.primaryColor,
+                                                        ),
+                                                        SizedBox(
+                                                          width: Get.width * 0.02,
+                                                        ),
+                                                        Text(
+                                                          "${results[0].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
+                                                          style: blackMedium16TextStyle,
+                                                        )
+                                                      ],
                                                     ),
-                                                    SizedBox(
-                                                      width: Get.width * 0.02,
-                                                    ),
-                                                    Text(
-                                                      "${results[1].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
-                                                      style: blackMedium16TextStyle,
-                                                    )
                                                   ],
+                                                );
+                                        },
+                                      ),
+                                    )
+                                  : Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: width * 0.03),
+                                            child: const Dash(
+                                                direction: Axis.vertical,
+                                                length: 50,
+                                                dashLength: 8,
+                                                dashColor: AppColors.textGreyColor,
+                                                dashGap: 4),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              await settingController.getStopListViewModel();
+                                              await settingController.getStopDisplayListViewModel();
+
+                                              if (!mounted) return;
+
+                                              addNewStop(
+                                                priority: 0,
+                                                context: context,
+                                                height: height,
+                                                width: width,
+                                                controller: controller,
+                                                direction: results[0].direction.toString(),
+                                                routId: results[0].id.toString(),
+                                              );
+                                            },
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.add_circle_outline_sharp,
+                                                  color: AppColors.primaryColor,
                                                 ),
+                                                SizedBox(
+                                                  width: Get.width * 0.02,
+                                                ),
+                                                Text(
+                                                  AppStrings.addStop,
+                                                  style: blackMedium16TextStyle,
+                                                )
                                               ],
-                                            );
-                                    },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                          results[1].stopSequence == null
+                              ? const Expanded(
+                                  child: Center(
+                                    child: Text('No Routes'),
                                   ),
                                 )
-                              : results.length == 1
+                              : (results.length >= 2 && results[1].stopSequence!.isNotEmpty)
+                                  ? Expanded(
+                                      child: ListView.separated(
+                                        separatorBuilder: (context, index) {
+                                          return Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: width * 0.03),
+                                              child: const Dash(
+                                                  direction: Axis.vertical,
+                                                  length: 50,
+                                                  dashLength: 8,
+                                                  dashColor: AppColors.textGreyColor,
+                                                  dashGap: 4),
+                                            ),
+                                          );
+                                        },
+                                        itemCount: results[1].stopSequence!.length + 1,
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return (index == results[1].stopSequence!.length)
+                                              ? GestureDetector(
+                                                  onTap: () async {
+                                                    await settingController.getStopListViewModel();
+                                                    await settingController.getStopDisplayListViewModel();
+
+                                                    if (!mounted) return;
+
+                                                    addNewStop(
+                                                      priority: index,
+                                                      context: context,
+                                                      height: height,
+                                                      width: width,
+                                                      controller: controller,
+                                                      direction: results[1].direction.toString(),
+                                                      routId: results[1].id.toString(),
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.add_circle_outline_sharp,
+                                                        color: AppColors.primaryColor,
+                                                      ),
+                                                      SizedBox(
+                                                        width: Get.width * 0.02,
+                                                      ),
+                                                      Text(
+                                                        AppStrings.addStop,
+                                                        style: blackMedium16TextStyle,
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              : Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.circle_outlined,
+                                                          color: AppColors.primaryColor,
+                                                        ),
+                                                        SizedBox(
+                                                          width: Get.width * 0.02,
+                                                        ),
+                                                        Text(
+                                                          "${results[1].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
+                                                          style: blackMedium16TextStyle,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                );
+                                        },
+                                      ),
+                                    )
+                                  : /*results.length == 1
                                   ? const Expanded(
                                       child: Center(
                                         child: Text('No Routes'),
                                       ),
                                     )
-                                  : Expanded(
+                                  : */
+                                  Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -781,118 +803,163 @@ class _RouteManagementState extends State<RouteManagement> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: height * 0.65),
-            // height: height * 0.4,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Center(
-                        child: Container(
-                          height: height * 0.01,
-                          width: width * 0.09,
-                          decoration: BoxDecoration(
-                              color: AppColors.grey2Color.withOpacity(0.5), borderRadius: BorderRadius.circular(100)),
-                        ),
-                      ),
-                      SizedBox(
-                        height: height * 0.05,
-                      ),
-                      Text(
-                        AppStrings.addNewRoute,
-                        style: blackMedium16TextStyle,
-                      ),
-                      SizedBox(
-                        height: height * 0.03,
-                      ),
-                      Text(
-                        AppStrings.routeno,
-                        style: grey1Medium12TextStyle,
-                      ),
-                      SizedBox(
-                        height: height * 0.01,
-                      ),
-                      commonTextField(
-                        keyboardType: TextInputType.number,
-                        controller: controller.routeNo,
-                        textColor: Colors.black,
-                      ),
-                      SizedBox(
-                        height: height * 0.03,
-                      ),
-                      Text(
-                        AppStrings.routeName,
-                        style: grey1Medium12TextStyle,
-                      ),
-                      SizedBox(
-                        height: height * 0.01,
-                      ),
-                      commonTextField(
-                        textColor: Colors.black,
-                        controller: controller.routeName,
-                      ),
-                      SizedBox(
-                        height: height * 0.03,
-                      ),
-                      Text(
-                        AppStrings.direction,
-                        style: grey1Medium12TextStyle,
-                      ),
-                      SizedBox(
-                        height: height * 0.01,
-                      ),
-                      commonTextField(
-                        textColor: Colors.black,
-                        controller: controller.direction,
-                      ),
-                      SizedBox(
-                        height: height * 0.05,
-                      ),
-                      CommonButton(
-                          onTap: () async {
-                            bool value = controller.searchDataResults
-                                .any((element) => element.routeNo.toString() == controller.routeNo.text);
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: height * 0.65),
+                // height: height * 0.4,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                              height: height * 0.01,
+                              width: width * 0.09,
+                              decoration: BoxDecoration(
+                                  color: AppColors.grey2Color.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(100)),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.05,
+                          ),
+                          Text(
+                            AppStrings.addNewRoute,
+                            style: blackMedium16TextStyle,
+                          ),
+                          SizedBox(
+                            height: height * 0.03,
+                          ),
+                          Text(
+                            AppStrings.routeno,
+                            style: grey1Medium12TextStyle,
+                          ),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
+                          commonTextField(
+                            keyboardType: TextInputType.number,
+                            controller: controller.routeNo,
+                            textColor: Colors.black,
+                          ),
+                          SizedBox(
+                            height: height * 0.03,
+                          ),
+                          Text(
+                            AppStrings.routeName,
+                            style: grey1Medium12TextStyle,
+                          ),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
+                          commonTextField(
+                            textColor: Colors.black,
+                            controller: controller.routeName,
+                          ),
+                          SizedBox(
+                            height: height * 0.03,
+                          ),
+                          Text(
+                            AppStrings.direction,
+                            style: grey1Medium12TextStyle,
+                          ),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
 
-                            if (controller.routeNo.text.isEmpty ||
-                                controller.routeName.text.isEmpty ||
-                                controller.direction.text.isEmpty) {
-                              commonSnackBar(message: "Please enter all the details");
-                              return;
-                            }
+                          Row(
+                            children: [
+                              Text(
+                                "Forward",
+                                style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                height: height * 0.04,
+                                width: width * 0.13,
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: CupertinoSwitch(
+                                    activeColor: AppColors.iconBlueColor,
+                                    thumbColor: AppColors.whiteColor,
+                                    trackColor: AppColors.iconBlueColor,
+                                    value: controller.isForward1,
+                                    onChanged: (value) async {
+                                      await controller.changeIsForward1();
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Reverse",
+                                style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
 
-                            if (value == true) {
-                              commonSnackBar(message: "Route number already exist. Please try with another route no.");
-                              return;
-                            }
+                          // commonTextField(
+                          //   textColor: Colors.black,
+                          //   controller: controller.direction,
+                          // ),
+                          SizedBox(
+                            height: height * 0.05,
+                          ),
+                          CommonButton(
+                              onTap: () async {
+                                String v = controller.isForward1 ? "0" : "1";
+                                bool value = controller.searchDataResults.any((element) =>
+                                    element.routeNo.toString() == controller.routeNo.text &&
+                                    (element.direction.toString() == v));
+                                // log("element.direction--------------> ${element.direction}");
 
-                            var body = {
-                              "route_no": controller.routeNo.text,
-                              "name": controller.routeName.text,
-                              "direction": controller.direction.text,
-                              "status": false
-                            };
+                                // String v = controller.isForward1 ? "0" : "1";
+                                // bool value1 =
+                                //     controller.searchDataResults.any((element) => element.direction.toString() == v);
 
-                            await controller.createRouteViewModel(body: body);
-                            await controller.clearRoute();
-                            Get.back();
-                            getData();
-                          },
-                          title: AppStrings.submit),
-                    ],
+                                if (controller.routeNo.text.isEmpty || controller.routeName.text.isEmpty) {
+                                  commonSnackBar(message: "Please enter all the details");
+                                  return;
+                                }
+
+                                log("value--------------> ${value}");
+
+                                if (value == true) {
+                                  commonSnackBar(
+                                      message:
+                                          "Route number or direction already exist. Please try with another route no or direction");
+                                  return;
+                                } else {
+                                  var body = {
+                                    "route_no": controller.routeNo.text,
+                                    "name": controller.routeName.text,
+                                    "direction": controller.isForward1 ? "0" : "1",
+                                    "status": false
+                                  };
+
+                                  await controller.createRouteViewModel(body: body);
+                                  await controller.clearRoute();
+                                  Get.back();
+                                  getData();
+                                }
+                              },
+                              title: AppStrings.submit),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

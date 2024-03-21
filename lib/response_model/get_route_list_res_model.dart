@@ -146,11 +146,9 @@
 
 import 'dart:convert';
 
-GetRouteListResModel getRouteListResModelFromJson(String str) =>
-    GetRouteListResModel.fromJson(json.decode(str));
+GetRouteListResModel getRouteListResModelFromJson(String str) => GetRouteListResModel.fromJson(json.decode(str));
 
-String getRouteListResModelToJson(GetRouteListResModel data) =>
-    json.encode(data.toJson());
+String getRouteListResModelToJson(GetRouteListResModel data) => json.encode(data.toJson());
 
 class GetRouteListResModel {
   int? count;
@@ -165,24 +163,19 @@ class GetRouteListResModel {
     this.results,
   });
 
-  factory GetRouteListResModel.fromJson(Map<String, dynamic> json) =>
-      GetRouteListResModel(
+  factory GetRouteListResModel.fromJson(Map<String, dynamic> json) => GetRouteListResModel(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
-        results: json["results"] == null
-            ? []
-            : List<RouteResult>.from(
-                json["results"]!.map((x) => RouteResult.fromJson(x))),
+        results:
+            json["results"] == null ? [] : List<RouteResult>.from(json["results"]!.map((x) => RouteResult.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "count": count,
         "next": next,
         "previous": previous,
-        "results": results == null
-            ? []
-            : List<dynamic>.from(results!.map((x) => x.toJson())),
+        "results": results == null ? [] : List<dynamic>.from(results!.map((x) => x.toJson())),
       };
 }
 
@@ -208,11 +201,10 @@ class RouteResult {
         routeNo: json["route_no"],
         name: json["name"],
         direction: json["direction"],
-        status: json["status"],
+        status: json["status"] == null ? false : true,
         stopSequence: json["StopSequence"] == null
             ? []
-            : List<StopSequence>.from(
-                json["StopSequence"]!.map((x) => StopSequence.fromJson(x))),
+            : List<StopSequence>.from(json["StopSequence"]!.map((x) => StopSequence.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -221,9 +213,7 @@ class RouteResult {
         "name": name,
         "direction": direction,
         "status": status,
-        "StopSequence": stopSequence == null
-            ? []
-            : List<dynamic>.from(stopSequence!.map((x) => x.toJson())),
+        "StopSequence": stopSequence == null ? [] : List<dynamic>.from(stopSequence!.map((x) => x.toJson())),
       };
 }
 
@@ -247,8 +237,7 @@ class StopSequence {
         priority: json["priority"],
         travalTime: json["traval_time"],
         status: json["status"],
-        stopId:
-            json["stop_id"] == null ? null : StopId.fromJson(json["stop_id"]),
+        stopId: json["stop_id"] == null ? null : StopId.fromJson(json["stop_id"]),
       );
 
   Map<String, dynamic> toJson() => {

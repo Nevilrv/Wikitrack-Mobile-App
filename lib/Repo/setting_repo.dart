@@ -121,6 +121,8 @@ class SettingRepo {
   bool isLoading = false;
   Future<dynamic> getDailyRouteTripRouteList({String? routeNo, String? direction, String? day}) async {
     try {
+      log("${ApiRouts.getDailyRouteTripFilter}--------------> ${ApiRouts.getDailyRouteTripFilter}route_no=$routeNo&direction=$direction}");
+
       var response = await APIService().getResponse(
           url: "${ApiRouts.getDailyRouteTripFilter}route_no=$routeNo&direction=$direction", apitype: APIType.aGet);
       log('response>getDailyRouteTripFilter>>> $response');

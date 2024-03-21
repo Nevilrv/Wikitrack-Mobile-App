@@ -7,7 +7,8 @@ import 'dart:convert';
 GetVehiclesListResModel getVehicleListResModelFromJson(String str) =>
     GetVehiclesListResModel.fromJson(json.decode(str));
 
-String getVehicleListResModelToJson(GetVehiclesListResModel data) => json.encode(data.toJson());
+String getVehicleListResModelToJson(GetVehiclesListResModel data) =>
+    json.encode(data.toJson());
 
 class GetVehiclesListResModel {
   int? count;
@@ -22,11 +23,13 @@ class GetVehiclesListResModel {
     this.results,
   });
 
-  factory GetVehiclesListResModel.fromJson(Map<String, dynamic> json) => GetVehiclesListResModel(
+  factory GetVehiclesListResModel.fromJson(Map<String, dynamic> json) =>
+      GetVehiclesListResModel(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
-        results: List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+        results:
+            List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,11 +66,16 @@ class Result {
         chassisNo: json["chassis_no"],
         vehicleImg: json["vehicle_img"],
         regNo: json["reg_no"],
-        busDisplay: json["bus_display"] == null ? json["bus_display"] : BusDisplay.fromJson(json["bus_display"]),
-        gpsDevice: json["gps_device"] == null ? json["gps_device"] : GpsDisplay.fromJson(json["gps_device"]),
+        busDisplay: json["bus_display"] == null
+            ? json["bus_display"]
+            : BusDisplay.fromJson(json["bus_display"]),
+        gpsDevice: json["gps_device"] == null
+            ? json["gps_device"]
+            : GpsDisplay.fromJson(json["gps_device"]),
         dailyrouteVehicle: json["dailyroute_vehicle"] == null
             ? null
-            : List<DailyrouteVehicle>.from(json["dailyroute_vehicle"].map((x) => DailyrouteVehicle.fromJson(x))),
+            : List<DailyrouteVehicle>.from(json["dailyroute_vehicle"]
+                .map((x) => DailyrouteVehicle.fromJson(x))),
         status: json["status"],
       );
 
@@ -78,8 +86,9 @@ class Result {
         "reg_no": regNo,
         "bus_display": busDisplay?.toJson(),
         "gps_device": gpsDevice,
-        "dailyroute_vehicle":
-            dailyrouteVehicle == null ? null : List<dynamic>.from(dailyrouteVehicle!.map((x) => x.toJson())),
+        "dailyroute_vehicle": dailyrouteVehicle == null
+            ? null
+            : List<dynamic>.from(dailyrouteVehicle!.map((x) => x.toJson())),
         "status": status,
       };
 }
@@ -147,13 +156,17 @@ class DailyrouteVehicle {
     this.status,
   });
 
-  factory DailyrouteVehicle.fromJson(Map<String, dynamic> json) => DailyrouteVehicle(
+  factory DailyrouteVehicle.fromJson(Map<String, dynamic> json) =>
+      DailyrouteVehicle(
         id: json["id"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
-        timeslot: json["timeslot"] == null ? null : Timeslot.fromJson(json["timeslot"]),
+        timeslot: json["timeslot"] == null
+            ? null
+            : Timeslot.fromJson(json["timeslot"]),
         actualTime: json["actual_time"] == null
             ? []
-            : List<ActualTime>.from(json["actual_time"]!.map((x) => ActualTime.fromJson(x))),
+            : List<ActualTime>.from(
+                json["actual_time"]!.map((x) => ActualTime.fromJson(x))),
         status: json["status"],
       );
 
@@ -162,7 +175,9 @@ class DailyrouteVehicle {
         "date":
             "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
         "timeslot": timeslot?.toJson(),
-        "actual_time": actualTime == null ? [] : List<dynamic>.from(actualTime!.map((x) => x.toJson())),
+        "actual_time": actualTime == null
+            ? []
+            : List<dynamic>.from(actualTime!.map((x) => x.toJson())),
         "status": status,
       };
 }
@@ -180,7 +195,9 @@ class ActualTime {
 
   factory ActualTime.fromJson(Map<String, dynamic> json) => ActualTime(
         id: json["id"],
-        stopSeq: json["stop_seq"] == null ? null : StopSeq.fromJson(json["stop_seq"]),
+        stopSeq: json["stop_seq"] == null
+            ? null
+            : StopSeq.fromJson(json["stop_seq"]),
         time: json["time"],
       );
 
@@ -215,7 +232,8 @@ class StopSeq {
         route: json["route"],
         priority: json["priority"],
         travalTime: json["traval_time"],
-        stopId: json["stop_id"] == null ? null : StopId.fromJson(json["stop_id"]),
+        stopId:
+            json["stop_id"] == null ? null : StopId.fromJson(json["stop_id"]),
         direction: json["direction"],
         status: json["status"],
       );
@@ -252,7 +270,9 @@ class StopId {
         id: json["id"],
         stopNo: json["stop_no"],
         name: json["name"],
-        stopDisplay: json["stop_display"] == null ? null : StopDisplay.fromJson(json["stop_display"]),
+        stopDisplay: json["stop_display"] == null
+            ? null
+            : StopDisplay.fromJson(json["stop_display"]),
         location: json["location"],
         status: json["status"],
       );
@@ -311,7 +331,8 @@ class Timeslot {
   factory Timeslot.fromJson(Map<String, dynamic> json) => Timeslot(
         id: json["id"],
         time: json["time"],
-        dayslot: json["dayslot"] == null ? null : Dayslot.fromJson(json["dayslot"]),
+        dayslot:
+            json["dayslot"] == null ? null : Dayslot.fromJson(json["dayslot"]),
         status: json["status"],
       );
 
@@ -324,53 +345,55 @@ class Timeslot {
 }
 
 class Dayslot {
-  String id;
-  String day;
-  Timetable timetable;
-  bool status;
+  String? id;
+  String? day;
+  Timetable? timetable;
+  bool? status;
 
   Dayslot({
-    required this.id,
-    required this.day,
-    required this.timetable,
-    required this.status,
+    this.id,
+    this.day,
+    this.timetable,
+    this.status,
   });
 
   factory Dayslot.fromJson(Map<String, dynamic> json) => Dayslot(
         id: json["id"],
         day: json["day"],
-        timetable: Timetable.fromJson(json["timetable"]),
+        timetable: json["timetable"] == null
+            ? null
+            : Timetable.fromJson(json["timetable"]),
         status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "day": day,
-        "timetable": timetable.toJson(),
+        "timetable": timetable?.toJson(),
         "status": status,
       };
 }
 
 class Timetable {
-  String id;
-  Route route;
-  bool status;
+  String? id;
+  Route? route;
+  bool? status;
 
   Timetable({
-    required this.id,
-    required this.route,
-    required this.status,
+    this.id,
+    this.route,
+    this.status,
   });
 
   factory Timetable.fromJson(Map<String, dynamic> json) => Timetable(
         id: json["id"],
-        route: Route.fromJson(json["route"]),
+        route: json["route"] == null ? null : Route.fromJson(json["route"]),
         status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "route": route.toJson(),
+        "route": route?.toJson(),
         "status": status,
       };
 }

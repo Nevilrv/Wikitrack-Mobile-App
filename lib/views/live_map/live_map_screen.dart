@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_map_marker_animation/widgets/animarker.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
@@ -30,7 +31,8 @@ class LiveMapScreen extends StatefulWidget {
   State<LiveMapScreen> createState() => _LiveMapScreenState();
 }
 
-class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserver {
+class _LiveMapScreenState extends State<LiveMapScreen>
+    with WidgetsBindingObserver {
   // SettingController settingController = Get.find();
   LiveMapController liveMapController = Get.find();
 
@@ -38,13 +40,13 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
   void initState() {
     // TODO: implement initState
     WidgetsBinding.instance.addObserver(this);
+    log("DateFormat('EEEE').format(DateTime.now())--------------> ${DateFormat('EEEE').format(DateTime.now())}");
+
     SocketConnection.connectSocket(() {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         liveMapController.getCurrentPosition();
         await liveMapController.getVehicleListViewModel();
         await liveMapController.getRouteListViewModel();
-        double distanceInMeters = Geolocator.distanceBetween(21.218401, 72.8792374, 21.1781093, 72.5882196);
-        log("distanceInMeters--------------> ${distanceInMeters}");
       });
       liveMapController.getSocketLiveMapData();
       liveMapController.getLiveMapDataListener();
@@ -116,15 +118,21 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                 ),
                                 child: Center(
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: w * 0.05),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
                                         SizedBox(
                                           height: h * 0.03,
                                         ),
-                                        buildContainerTile(h, w, AppStrings.byRoute, AppImages.routeManage, () {
+                                        buildContainerTile(
+                                            h,
+                                            w,
+                                            AppStrings.byRoute,
+                                            AppImages.routeManage, () {
                                           controller.searchResult("");
                                           controller.searchController.clear();
                                           controller.stopSequence.clear();
@@ -137,54 +145,104 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                             context: context,
                                             builder: (context) {
                                               return StatefulBuilder(
-                                                builder: (context, setState123) {
+                                                builder:
+                                                    (context, setState123) {
                                                   return AlertDialog(
-                                                    shape: const RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.all(
+                                                    shape:
+                                                        const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
                                                         Radius.circular(20.0),
                                                       ),
                                                     ),
-                                                    contentPadding: const EdgeInsets.only(top: 10.0),
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
+                                                            top: 10.0),
                                                     title: const Text(
                                                       AppStrings.selectRoute,
-                                                      style: TextStyle(fontSize: 24.0),
+                                                      style: TextStyle(
+                                                          fontSize: 24.0),
                                                     ),
                                                     content: Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                                      child: SingleChildScrollView(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 10),
+                                                      child:
+                                                          SingleChildScrollView(
                                                         child: SizedBox(
-                                                          height: MediaQuery.of(context).size.height * 0.5,
-                                                          width: MediaQuery.of(context).size.width * 0.9,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.5,
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.9,
                                                           child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: <Widget>[
                                                               commonTextField(
-                                                                onChanged: (p0) {
-                                                                  controller.searchResult(p0);
-                                                                  setState123(() {});
+                                                                onChanged:
+                                                                    (p0) {
+                                                                  controller
+                                                                      .searchResult(
+                                                                          p0);
+                                                                  setState123(
+                                                                      () {});
                                                                 },
-                                                                controller: controller.searchController,
-                                                                textColor: AppColors.blackColor,
-                                                                color: AppColors.iconGreyColor,
-                                                                prefixIcon: const Icon(Icons.search),
+                                                                controller:
+                                                                    controller
+                                                                        .searchController,
+                                                                textColor: AppColors
+                                                                    .blackColor,
+                                                                color: AppColors
+                                                                    .iconGreyColor,
+                                                                prefixIcon:
+                                                                    const Icon(Icons
+                                                                        .search),
                                                               ),
-                                                              const SizedBox(height: 10),
+                                                              const SizedBox(
+                                                                  height: 10),
                                                               Expanded(
-                                                                child: ListView.separated(
-                                                                  separatorBuilder: (context, index) {
-                                                                    return const Divider(height: 0);
+                                                                child: ListView
+                                                                    .separated(
+                                                                  separatorBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    return const Divider(
+                                                                        height:
+                                                                            0);
                                                                   },
-                                                                  itemCount: controller.searchDataResults.length,
-                                                                  shrinkWrap: true,
-                                                                  itemBuilder: (context, index) {
+                                                                  itemCount:
+                                                                      controller
+                                                                          .searchDataResults
+                                                                          .length,
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
                                                                     return ListTile(
-                                                                      onTap: () {
+                                                                      onTap:
+                                                                          () {
                                                                         // Get.back();
-                                                                        controller.setRouteId(
-                                                                          controller.searchDataResults[index].routeNo
+                                                                        controller
+                                                                            .setRouteId(
+                                                                          controller
+                                                                              .searchDataResults[index]
+                                                                              .routeNo
                                                                               .toString(),
-                                                                          controller.searchDataResults[index].id
+                                                                          controller
+                                                                              .searchDataResults[index]
+                                                                              .id
                                                                               .toString(),
                                                                         );
                                                                         // controller.stopSequence.clear();
@@ -197,11 +255,14 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                         //       .searchDataResults[index]
                                                                         //       .stopSequence as Iterable<StopSequence>);
                                                                         // }
-                                                                        setState123(() {});
+                                                                        setState123(
+                                                                            () {});
                                                                         log("controller.stopSequence--------------> ${controller.stopSequence}");
                                                                       },
-                                                                      title: Builder(
-                                                                        builder: (context) {
+                                                                      title:
+                                                                          Builder(
+                                                                        builder:
+                                                                            (context) {
                                                                           return Row(
                                                                             mainAxisAlignment:
                                                                                 MainAxisAlignment.spaceBetween,
@@ -210,17 +271,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                             children: [
                                                                               Flexible(
                                                                                 child: Text(
-                                                                                  (controller.searchDataResults[index]
-                                                                                              .routeNo
-                                                                                              .toString()
-                                                                                              .isEmpty
-                                                                                          ? "NA"
-                                                                                          : controller
-                                                                                              .searchDataResults[index]
-                                                                                              .routeNo)
-                                                                                      .toString()
-                                                                                      .capitalizeFirst
-                                                                                      .toString(),
+                                                                                  (controller.searchDataResults[index].routeNo.toString().isEmpty ? "NA" : controller.searchDataResults[index].routeNo).toString().capitalizeFirst.toString(),
                                                                                 ),
                                                                               ),
                                                                               const SizedBox(width: 5),
@@ -231,15 +282,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                 decoration: BoxDecoration(
                                                                                   shape: BoxShape.circle,
                                                                                   border: Border.all(
-                                                                                    color: controller
-                                                                                                .searchDataResults[
-                                                                                                    index]
-                                                                                                .routeNo
-                                                                                                .toString() ==
-                                                                                            controller.selectedRouteId
-                                                                                                .toString()
-                                                                                        ? AppColors.primaryColor
-                                                                                        : AppColors.textGreyColor,
+                                                                                    color: controller.searchDataResults[index].routeNo.toString() == controller.selectedRouteId.toString() ? AppColors.primaryColor : AppColors.textGreyColor,
                                                                                     width: 2,
                                                                                   ),
                                                                                 ),
@@ -249,15 +292,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                     width: 17,
                                                                                     decoration: BoxDecoration(
                                                                                       shape: BoxShape.circle,
-                                                                                      color: controller
-                                                                                                  .searchDataResults[
-                                                                                                      index]
-                                                                                                  .routeNo
-                                                                                                  .toString() ==
-                                                                                              controller.selectedRouteId
-                                                                                                  .toString()
-                                                                                          ? AppColors.primaryColor
-                                                                                          : Colors.transparent,
+                                                                                      color: controller.searchDataResults[index].routeNo.toString() == controller.selectedRouteId.toString() ? AppColors.primaryColor : Colors.transparent,
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -271,29 +306,44 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                 ),
                                                               ),
                                                               Text(
-                                                                AppStrings.direction,
-                                                                style: textGreyMedium16TextStyle,
+                                                                AppStrings
+                                                                    .direction,
+                                                                style:
+                                                                    textGreyMedium16TextStyle,
                                                               ),
                                                               Row(
                                                                 children: [
                                                                   Text(
                                                                     "Forward",
                                                                     style: blackMedium16TextStyle.copyWith(
-                                                                        fontWeight: FontWeight.w500),
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
                                                                   ),
                                                                   SizedBox(
-                                                                    height: h * 0.04,
-                                                                    width: w * 0.13,
-                                                                    child: FittedBox(
-                                                                      fit: BoxFit.fill,
-                                                                      child: CupertinoSwitch(
-                                                                        activeColor: AppColors.iconBlueColor,
-                                                                        thumbColor: AppColors.whiteColor,
-                                                                        trackColor: AppColors.iconBlueColor,
-                                                                        value: controller.isForward,
-                                                                        onChanged: (value) async {
-                                                                          await controller.changeIsForward();
-                                                                          setState123(() {});
+                                                                    height: h *
+                                                                        0.04,
+                                                                    width: w *
+                                                                        0.13,
+                                                                    child:
+                                                                        FittedBox(
+                                                                      fit: BoxFit
+                                                                          .fill,
+                                                                      child:
+                                                                          CupertinoSwitch(
+                                                                        activeColor:
+                                                                            AppColors.iconBlueColor,
+                                                                        thumbColor:
+                                                                            AppColors.whiteColor,
+                                                                        trackColor:
+                                                                            AppColors.iconBlueColor,
+                                                                        value: controller
+                                                                            .isForward,
+                                                                        onChanged:
+                                                                            (value) async {
+                                                                          await controller
+                                                                              .changeIsForward();
+                                                                          setState123(
+                                                                              () {});
                                                                         },
                                                                       ),
                                                                     ),
@@ -301,36 +351,43 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                   Text(
                                                                     "Reverse",
                                                                     style: blackMedium16TextStyle.copyWith(
-                                                                        fontWeight: FontWeight.w500),
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
                                                                   ),
                                                                 ],
                                                               ),
                                                               SizedBox(
-                                                                height: h * 0.005,
+                                                                height:
+                                                                    h * 0.005,
                                                               ),
-                                                              controller.isLoading1 == true
+                                                              controller.isLoading1 ==
+                                                                      true
                                                                   ? const Center(
-                                                                      child: CircularProgressIndicator(
-                                                                        color: AppColors.primaryColor,
+                                                                      child:
+                                                                          CircularProgressIndicator(
+                                                                        color: AppColors
+                                                                            .primaryColor,
                                                                       ),
                                                                     )
                                                                   : SizedBox(
-                                                                      height: h * 0.05,
-                                                                      child: CommonButton(
-                                                                        title: AppStrings.submit,
-                                                                        onTap: () async {
-                                                                          if (controller.selectedRouteId == "") {
-                                                                            commonSnackBar(
-                                                                                message: 'Please select route');
+                                                                      height: h *
+                                                                          0.05,
+                                                                      child:
+                                                                          CommonButton(
+                                                                        title: AppStrings
+                                                                            .submit,
+                                                                        onTap:
+                                                                            () async {
+                                                                          if (controller.selectedRouteId ==
+                                                                              "") {
+                                                                            commonSnackBar(message: 'Please select route');
                                                                           } else {
-                                                                            await controller
-                                                                                .getRouteListByDirectionViewModel(
-                                                                                    controller.selectedRouteId,
-                                                                                    controller.isForward ? '1' : '0');
-                                                                            await controller.getDailyRouteTripViewModel(
-                                                                                setState123);
+                                                                            await controller.getRouteListByDirectionViewModel(controller.selectedRouteId,
+                                                                                controller.isForward ? '1' : '0');
+                                                                            await controller.getDailyRouteTripViewModel(setState123);
 
-                                                                            if (controller.isLoading1 == false) {
+                                                                            if (controller.isLoading1 ==
+                                                                                false) {
                                                                               showModalBottomSheet<void>(
                                                                                 context: context,
                                                                                 builder: (BuildContext context) {
@@ -339,18 +396,14 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                       height: h * 0.3,
                                                                                       decoration: BoxDecoration(
                                                                                         color: AppColors.primaryColor,
-                                                                                        borderRadius:
-                                                                                            BorderRadius.circular(20),
+                                                                                        borderRadius: BorderRadius.circular(20),
                                                                                       ),
                                                                                       child: Padding(
-                                                                                        padding: EdgeInsets.only(
-                                                                                            top: h * 0.07),
+                                                                                        padding: EdgeInsets.only(top: h * 0.07),
                                                                                         child: Container(
                                                                                           decoration: BoxDecoration(
                                                                                             color: AppColors.whiteColor,
-                                                                                            borderRadius:
-                                                                                                BorderRadius.circular(
-                                                                                                    20),
+                                                                                            borderRadius: BorderRadius.circular(20),
                                                                                           ),
                                                                                         ),
                                                                                       ),
@@ -361,13 +414,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                         top: h * 0.02,
                                                                                         // bottom: 0,
                                                                                         child: Column(
-                                                                                          crossAxisAlignment:
-                                                                                              CrossAxisAlignment.start,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                                                           children: [
                                                                                             Text(
                                                                                               "${controller.selectedRouteId}",
-                                                                                              style:
-                                                                                                  whiteMedium16TextStyle,
+                                                                                              style: whiteMedium16TextStyle,
                                                                                             ),
                                                                                             SizedBox(
                                                                                               height: h * 0.05,
@@ -375,8 +426,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                             Center(
                                                                                               child: Text(
                                                                                                 "${controller.selectedRouteId}",
-                                                                                                style:
-                                                                                                    blackMedium16TextStyle,
+                                                                                                style: blackMedium16TextStyle,
                                                                                               ),
                                                                                             ),
                                                                                             SizedBox(
@@ -385,89 +435,59 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                             SizedBox(
                                                                                               height: h * 0.01,
                                                                                             ),
-                                                                                            controller.stopSequence
-                                                                                                    .isEmpty
+                                                                                            controller.stopSequence.isEmpty
                                                                                                 ? Padding(
-                                                                                                    padding:
-                                                                                                        const EdgeInsets
-                                                                                                            .all(8.0),
+                                                                                                    padding: const EdgeInsets.all(8.0),
                                                                                                     child: Center(
                                                                                                       child: Text(
                                                                                                         "No stop found",
-                                                                                                        style:
-                                                                                                            blackMedium14TextStyle,
+                                                                                                        style: blackMedium14TextStyle,
                                                                                                       ),
                                                                                                     ),
                                                                                                   )
                                                                                                 : Center(
-                                                                                                    child:
-                                                                                                        SingleChildScrollView(
-                                                                                                      scrollDirection:
-                                                                                                          Axis.horizontal,
+                                                                                                    child: SingleChildScrollView(
+                                                                                                      scrollDirection: Axis.horizontal,
                                                                                                       child: Row(
-                                                                                                        crossAxisAlignment:
-                                                                                                            CrossAxisAlignment
-                                                                                                                .end,
-                                                                                                        mainAxisAlignment:
-                                                                                                            MainAxisAlignment
-                                                                                                                .center,
-                                                                                                        children: List.generate(
-                                                                                                            controller
-                                                                                                                    .stopSequence
-                                                                                                                    .isEmpty
-                                                                                                                ? 0
-                                                                                                                : controller
-                                                                                                                    .stopSequence
-                                                                                                                    .length,
-                                                                                                            (index) {
+                                                                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                        children: List.generate(controller.stopSequence.isEmpty ? 0 : controller.stopSequence.length, (index) {
+                                                                                                          controller.routeBusStopsData.forEach((element) {
+                                                                                                            log('element["stop_id"]--------------> ${element["stop_id"]}');
+                                                                                                            log("controller.stopSequence[index].stopId?.id--------------> ${controller.stopSequence[index].stopId?.id}");
+                                                                                                          });
+
                                                                                                           return Column(
-                                                                                                            mainAxisAlignment:
-                                                                                                                MainAxisAlignment
-                                                                                                                    .start,
-                                                                                                            crossAxisAlignment:
-                                                                                                                CrossAxisAlignment
-                                                                                                                    .start,
+                                                                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                                                                            crossAxisAlignment: CrossAxisAlignment.start,
                                                                                                             children: [
                                                                                                               Row(
-                                                                                                                children: List.generate(
-                                                                                                                    controller.routeBusStopsData.isEmpty
-                                                                                                                        ? 0
-                                                                                                                        : controller.routeBusStopsData[controller.routeBusStopsData.indexWhere((element) => element["stop_id"] == controller.stopSequence[index].stopId?.id)]["count"],
-                                                                                                                    (index1) {
-                                                                                                                  return SvgPicture.asset(
-                                                                                                                      AppImages.bus2);
+                                                                                                                children: List.generate(controller.routeBusStopsData.isEmpty ? 0 : controller.routeBusStopsData[controller.routeBusStopsData.indexWhere((element) => element["stop_id"] == controller.stopSequence[index].stopId?.id)]["count"], (index1) {
+                                                                                                                  return SvgPicture.asset(AppImages.bus2);
                                                                                                                 }),
                                                                                                               ),
                                                                                                               Row(
                                                                                                                 children: [
                                                                                                                   CircleAvatar(
-                                                                                                                    radius:
-                                                                                                                        w * 0.023,
-                                                                                                                    backgroundColor:
-                                                                                                                        AppColors.textGreyColor,
+                                                                                                                    radius: w * 0.023,
+                                                                                                                    backgroundColor: AppColors.textGreyColor,
                                                                                                                   ),
-                                                                                                                  controller.stopSequence.length == index + 1
-                                                                                                                      ? const SizedBox()
-                                                                                                                      : const Dash(direction: Axis.horizontal, length: 10, dashLength: 5, dashColor: AppColors.textGreyColor, dashGap: 5),
+                                                                                                                  controller.stopSequence.length == index + 1 ? const SizedBox() : const Dash(direction: Axis.horizontal, length: 10, dashLength: 5, dashColor: AppColors.textGreyColor, dashGap: 5),
                                                                                                                 ],
                                                                                                               ),
                                                                                                               SizedBox(
-                                                                                                                height: h *
-                                                                                                                    0.005,
+                                                                                                                height: h * 0.005,
                                                                                                               ),
                                                                                                               Row(
                                                                                                                 children: [
                                                                                                                   SizedBox(
-                                                                                                                    height:
-                                                                                                                        h * 0.07,
-                                                                                                                    child:
-                                                                                                                        RotatedBox(
+                                                                                                                    height: h * 0.07,
+                                                                                                                    child: RotatedBox(
                                                                                                                       quarterTurns: -1,
                                                                                                                       child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, '${controller.stopSequence[index].stopId!.name}', style: blackMedium14TextStyle),
                                                                                                                     ),
                                                                                                                   ),
-                                                                                                                  const SizedBox(
-                                                                                                                      width: 8)
+                                                                                                                  const SizedBox(width: 8)
                                                                                                                 ],
                                                                                                               ),
                                                                                                             ],
@@ -539,89 +559,135 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                         SizedBox(
                                           height: h * 0.03,
                                         ),
-                                        buildContainerTile(h, w, AppStrings.byVehicle, AppImages.vehicleManage, () {
+                                        buildContainerTile(
+                                            h,
+                                            w,
+                                            AppStrings.byVehicle,
+                                            AppImages.vehicleManage, () {
                                           controller.searchId = "";
                                           controller.selector = 0;
                                           controller.loading3 = false;
                                           setState(() {});
 
-                                          TextEditingController search = TextEditingController();
+                                          TextEditingController search =
+                                              TextEditingController();
                                           showDialog(
                                             context: context,
                                             builder: (context) {
                                               return StatefulBuilder(
                                                 builder: (context, setState1) {
                                                   return AlertDialog(
-                                                    shape: const RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.all(
+                                                    shape:
+                                                        const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
                                                         Radius.circular(
                                                           20.0,
                                                         ),
                                                       ),
                                                     ),
-                                                    contentPadding: const EdgeInsets.only(
+                                                    contentPadding:
+                                                        const EdgeInsets.only(
                                                       top: 10.0,
                                                     ),
                                                     title: const Text(
                                                       AppStrings.selectVehicle,
-                                                      style: TextStyle(fontSize: 24.0),
+                                                      style: TextStyle(
+                                                          fontSize: 24.0),
                                                     ),
-                                                    content: SingleChildScrollView(
+                                                    content:
+                                                        SingleChildScrollView(
                                                       child: SizedBox(
-                                                        height: MediaQuery.of(context).size.height * 0.5,
-                                                        width: MediaQuery.of(context).size.width * 0.9,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.5,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
                                                         child: Stack(
                                                           children: [
                                                             Padding(
-                                                              padding: const EdgeInsets.symmetric(
-                                                                  horizontal: 10, vertical: 10),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          10),
                                                               child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
                                                                 children: <Widget>[
                                                                   commonTextField(
-                                                                    controller: search,
-                                                                    prefixIcon: const Icon(Icons.search),
-                                                                    textColor: AppColors.blackColor,
-                                                                    color: AppColors.iconGreyColor,
-                                                                    onChanged: (value) {
-                                                                      controller.searchStopResult(value);
-                                                                      setState1(() {});
+                                                                    controller:
+                                                                        search,
+                                                                    prefixIcon:
+                                                                        const Icon(
+                                                                            Icons.search),
+                                                                    textColor:
+                                                                        AppColors
+                                                                            .blackColor,
+                                                                    color: AppColors
+                                                                        .iconGreyColor,
+                                                                    onChanged:
+                                                                        (value) {
+                                                                      controller
+                                                                          .searchStopResult(
+                                                                              value);
+                                                                      setState1(
+                                                                          () {});
                                                                     },
                                                                   ),
                                                                   const SizedBox(
                                                                     height: 10,
                                                                   ),
                                                                   Expanded(
-                                                                    child: ListView.separated(
-                                                                      separatorBuilder: (context, index) {
-                                                                        return const Divider(height: 0);
+                                                                    child: ListView
+                                                                        .separated(
+                                                                      separatorBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        return const Divider(
+                                                                            height:
+                                                                                0);
                                                                       },
-                                                                      itemCount: controller.searchData.length,
-                                                                      shrinkWrap: true,
-                                                                      itemBuilder: (context, index) {
+                                                                      itemCount: controller
+                                                                          .searchData
+                                                                          .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
                                                                         return ListTile(
-                                                                          onTap: () async {
+                                                                          onTap:
+                                                                              () async {
                                                                             controller.stopSequence.clear();
 
                                                                             controller.update();
 
                                                                             controller.searchId =
-                                                                                controller.searchData[index].regNo ??
-                                                                                    '';
+                                                                                controller.searchData[index].regNo ?? '';
 
-                                                                            controller.selector = controller.searchData
-                                                                                .indexWhere((element) =>
-                                                                                    element.id ==
-                                                                                    controller.searchData[index].id);
+                                                                            controller.selector = controller.searchData.indexWhere((element) =>
+                                                                                element.id ==
+                                                                                controller.searchData[index].id);
 
-                                                                            await controller.getStopTimeByRegNo(
-                                                                                regNo: controller.searchId);
+                                                                            await controller.getStopTimeByRegNo(regNo: controller.searchId);
 
-                                                                            await controller.getVehicleRouteList(
-                                                                                controller.searchId, setState1);
+                                                                            await controller.getVehicleRouteList(controller.searchId,
+                                                                                setState1);
 
-                                                                            if (controller.loading3 == false) {
+                                                                            if (controller.loading3 ==
+                                                                                false) {
                                                                               showModalBottomSheet<void>(
                                                                                 context: context,
                                                                                 builder: (BuildContext context) {
@@ -630,18 +696,14 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                       height: h * 0.3,
                                                                                       decoration: BoxDecoration(
                                                                                         color: AppColors.primaryColor,
-                                                                                        borderRadius:
-                                                                                            BorderRadius.circular(20),
+                                                                                        borderRadius: BorderRadius.circular(20),
                                                                                       ),
                                                                                       child: Padding(
-                                                                                        padding: EdgeInsets.only(
-                                                                                            top: h * 0.07),
+                                                                                        padding: EdgeInsets.only(top: h * 0.07),
                                                                                         child: Container(
                                                                                           decoration: BoxDecoration(
                                                                                             color: AppColors.whiteColor,
-                                                                                            borderRadius:
-                                                                                                BorderRadius.circular(
-                                                                                                    20),
+                                                                                            borderRadius: BorderRadius.circular(20),
                                                                                           ),
                                                                                         ),
                                                                                       ),
@@ -652,13 +714,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                         top: h * 0.02,
                                                                                         // bottom: 0,
                                                                                         child: Column(
-                                                                                          crossAxisAlignment:
-                                                                                              CrossAxisAlignment.start,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                                                           children: [
                                                                                             Text(
                                                                                               "${controller.searchId}",
-                                                                                              style:
-                                                                                                  whiteMedium16TextStyle,
+                                                                                              style: whiteMedium16TextStyle,
                                                                                             ),
                                                                                             SizedBox(
                                                                                               height: h * 0.05,
@@ -666,101 +726,83 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                                             Center(
                                                                                               child: Text(
                                                                                                 "${controller.searchId}",
-                                                                                                style:
-                                                                                                    blackMedium16TextStyle,
+                                                                                                style: blackMedium16TextStyle,
                                                                                               ),
                                                                                             ),
                                                                                             SizedBox(
                                                                                               height: h * 0.01,
                                                                                             ),
-                                                                                            Center(
-                                                                                              child: Row(
-                                                                                                crossAxisAlignment:
-                                                                                                    CrossAxisAlignment
-                                                                                                        .center,
-                                                                                                mainAxisAlignment:
-                                                                                                    MainAxisAlignment
-                                                                                                        .center,
-                                                                                                children: List.generate(
-                                                                                                    controller
-                                                                                                        .stopSequence
-                                                                                                        .length,
-                                                                                                    (index) => Row(
-                                                                                                          children: [
-                                                                                                            CircleAvatar(
-                                                                                                              radius: w *
-                                                                                                                  0.023,
-                                                                                                              backgroundColor: /*index == 6 ||
-                                                                                                                      index ==
-                                                                                                                          7 ||
-                                                                                                                      index ==
-                                                                                                                          8 ||
-                                                                                                                      index ==
-                                                                                                                          9 ||
-                                                                                                                      index ==
-                                                                                                                          10
-                                                                                                                  ? AppColors
-                                                                                                                      .primaryColor
-                                                                                                                  : */
-                                                                                                                  controller.stopSequence.indexWhere((element) => element.stopId?.id.toString() == controller.busStopDataIds[0].toString()) >= index
-                                                                                                                      // controller.busStopDataIds[0] == controller.stopSequence[index].stopId?.id.toString()
-                                                                                                                      ? AppColors.textGreyColor
-                                                                                                                      : AppColors.primaryColor,
-                                                                                                            ),
-                                                                                                            index + 1 ==
-                                                                                                                    controller
-                                                                                                                        .stopSequence.length
-                                                                                                                ? const SizedBox()
-                                                                                                                : const Dash(
-                                                                                                                    direction: Axis
-                                                                                                                        .horizontal,
-                                                                                                                    length:
-                                                                                                                        12,
-                                                                                                                    dashLength:
-                                                                                                                        3,
-                                                                                                                    dashColor:
-                                                                                                                        AppColors.textGreyColor,
-                                                                                                                    dashGap: 3),
-                                                                                                          ],
-                                                                                                        )),
-                                                                                              ),
-                                                                                            ),
-                                                                                            SizedBox(
-                                                                                              height: h * 0.005,
-                                                                                            ),
-                                                                                            Center(
-                                                                                              child: Padding(
-                                                                                                padding:
-                                                                                                    const EdgeInsets
-                                                                                                        .only(left: 5),
-                                                                                                child: Row(
-                                                                                                  mainAxisAlignment:
-                                                                                                      MainAxisAlignment
-                                                                                                          .center,
-                                                                                                  children:
-                                                                                                      List.generate(
-                                                                                                          controller
-                                                                                                              .stopSequence
-                                                                                                              .length,
-                                                                                                          (index) =>
-                                                                                                              Row(
-                                                                                                                children: [
-                                                                                                                  SizedBox(
-                                                                                                                    height:
-                                                                                                                        h * 0.07,
-                                                                                                                    child:
-                                                                                                                        RotatedBox(
-                                                                                                                      quarterTurns: -1,
-                                                                                                                      child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, '${controller.stopSequence[index].stopId!.name}', style: blackMedium14TextStyle),
-                                                                                                                    ),
-                                                                                                                  ),
-                                                                                                                  const SizedBox(
-                                                                                                                      width: 8)
-                                                                                                                ],
-                                                                                                              )),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
+                                                                                            controller.stopSequence.isEmpty
+                                                                                                ? Center(
+                                                                                                    child: Padding(
+                                                                                                      padding: EdgeInsets.only(top: h * 0.03),
+                                                                                                      child: Text(
+                                                                                                        "No Data found",
+                                                                                                        style: blackMedium14TextStyle,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  )
+                                                                                                : Column(
+                                                                                                    children: [
+                                                                                                      Center(
+                                                                                                        child: Row(
+                                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                          children: List.generate(
+                                                                                                              controller.stopSequence.length,
+                                                                                                              (index) => Row(
+                                                                                                                    children: [
+                                                                                                                      CircleAvatar(
+                                                                                                                        radius: w * 0.023,
+                                                                                                                        backgroundColor: /*index == 6 ||
+                                                                                                                          index ==
+                                                                                                                              7 ||
+                                                                                                                          index ==
+                                                                                                                              8 ||
+                                                                                                                          index ==
+                                                                                                                              9 ||
+                                                                                                                          index ==
+                                                                                                                              10
+                                                                                                                      ? AppColors
+                                                                                                                          .primaryColor
+                                                                                                                      : */
+                                                                                                                            controller.stopSequence.indexWhere((element) => element.stopId?.id.toString() == controller.busStopDataIds.first.toString()) >= index
+                                                                                                                                // controller.busStopDataIds[0] == controller.stopSequence[index].stopId?.id.toString()
+                                                                                                                                ? AppColors.textGreyColor
+                                                                                                                                : AppColors.primaryColor,
+                                                                                                                      ),
+                                                                                                                      index + 1 == controller.stopSequence.length ? const SizedBox() : const Dash(direction: Axis.horizontal, length: 12, dashLength: 3, dashColor: AppColors.textGreyColor, dashGap: 3),
+                                                                                                                    ],
+                                                                                                                  )),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      SizedBox(
+                                                                                                        height: h * 0.005,
+                                                                                                      ),
+                                                                                                      Center(
+                                                                                                        child: Padding(
+                                                                                                          padding: const EdgeInsets.only(left: 5),
+                                                                                                          child: Row(
+                                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                            children: List.generate(
+                                                                                                                controller.stopSequence.length,
+                                                                                                                (index) => Row(
+                                                                                                                      children: [
+                                                                                                                        SizedBox(
+                                                                                                                          height: h * 0.07,
+                                                                                                                          child: RotatedBox(
+                                                                                                                            quarterTurns: -1,
+                                                                                                                            child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, '${controller.stopSequence[index].stopId!.name}', style: blackMedium14TextStyle),
+                                                                                                                          ),
+                                                                                                                        ),
+                                                                                                                        const SizedBox(width: 8)
+                                                                                                                      ],
+                                                                                                                    )),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ],
+                                                                                                  ),
                                                                                           ],
                                                                                         )),
                                                                                   ]);
@@ -768,8 +810,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                               );
                                                                             }
                                                                           },
-                                                                          title: Text(
-                                                                              controller.searchData[index].regNo ?? ''),
+                                                                          title:
+                                                                              Text(controller.searchData[index].regNo ?? ''),
                                                                         );
                                                                       },
                                                                     ),
@@ -778,14 +820,17 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                                                                 ],
                                                               ),
                                                             ),
-                                                            controller.loading3 == true
+                                                            controller.loading3 ==
+                                                                    true
                                                                 ? Container(
                                                                     // height: h,
                                                                     // width: w,
-                                                                    color: Colors.black12,
+                                                                    color: Colors
+                                                                        .black12,
                                                                     child: const Center(
                                                                         child: CircularProgressIndicator(
-                                                                      color: AppColors.primaryColor,
+                                                                      color: AppColors
+                                                                          .primaryColor,
                                                                     )))
                                                                 : const SizedBox()
                                                           ],
@@ -836,19 +881,21 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
                   // },
                   markers: Set<Marker>.of(controller.markers),
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(controller.lat!, controller.long!),
+                    target: LatLng(controller.currentPosition!.latitude,
+                        controller.currentPosition!.longitude),
                     zoom: 15,
                   ),
                   polylines: Set<Polyline>.of(controller.polylines.values),
                   onMapCreated: (GoogleMapController controllers) {
                     controller.googleMapController.complete(controllers);
 
-                    controllers.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                        target: LatLng(
-                          controller.lat!,
-                          controller.long!,
-                        ),
-                        zoom: 15)));
+                    controllers.moveCamera(
+                        CameraUpdate.newCameraPosition(CameraPosition(
+                            target: LatLng(
+                              controller.lat!,
+                              controller.long!,
+                            ),
+                            zoom: 15)));
                   },
                 );
         },
@@ -856,7 +903,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
     );
   }
 
-  GestureDetector buildContainerTile(double height, double width, String title, String image, Function() onTap) {
+  GestureDetector buildContainerTile(double height, double width, String title,
+      String image, Function() onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -877,7 +925,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> with WidgetsBindingObserv
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             children: [
-              SvgPicture.asset(image, height: height * 0.033, width: height * 0.033),
+              SvgPicture.asset(image,
+                  height: height * 0.033, width: height * 0.033),
               SizedBox(
                 width: width * 0.03,
               ),

@@ -19,10 +19,12 @@ import 'package:wikitrack/response_model/create_stop_time_res_model.dart';
 import 'package:wikitrack/response_model/get_daily_route_trip_res_model.dart';
 import 'package:wikitrack/response_model/get_imeiToReg_res_model.dart';
 import 'package:wikitrack/response_model/get_route_list_res_model.dart';
-import 'package:wikitrack/response_model/get_stop_time_by_reg_no_res_model.dart' as getByRegNo;
+import 'package:wikitrack/response_model/get_stop_time_by_reg_no_res_model.dart'
+    as getByRegNo;
 import 'package:wikitrack/response_model/get_stop_time_by_route_no_res_model.dart';
 import 'package:wikitrack/socket/socket_service.dart';
-import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart' as VehicleList;
+import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
+    as VehicleList;
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppImages.dart';
 import 'package:http/http.dart' as http;
@@ -98,7 +100,8 @@ class LiveMapController extends GetxController {
         //     title: 'vehicle: ${allImeiList[ind].imei}',
         //   ),
         // );
-        transition([allImeiList[ind].lat, allImeiList[ind].lng], ind, [lng.latitude, lng.longitude]);
+        transition([allImeiList[ind].lat, allImeiList[ind].lng], ind,
+            [lng.latitude, lng.longitude]);
         // transition([allImeiList[ind].lat, allImeiList[ind].lng], [lng.latitude, lng.longitude], ind);
         update();
         log("allImeiList--------------> a ${allImeiList}");
@@ -237,7 +240,8 @@ class LiveMapController extends GetxController {
     moveMarker(i, deltaLat, deltaLng, position, i);
   }
 
-  moveMarker(int i, double? deltaLat, double? deltaLng, List position, int index) {
+  moveMarker(
+      int i, double? deltaLat, double? deltaLng, List position, int index) {
     position[0] += deltaLat;
     position[1] += deltaLng;
     var latlng = LatLng(position[0], position[1]);
@@ -277,7 +281,8 @@ class LiveMapController extends GetxController {
   // List<Marker> markers = <Marker>[];
   // List<Marker> markers = <Marker>[];
   GetImeitoRegResModel? getImeitoRegResModel;
-  ApiResponse _getVehicleListResponse = ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getVehicleListResponse =
+      ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getVehicleListResponse => _getVehicleListResponse;
 
@@ -310,7 +315,7 @@ class LiveMapController extends GetxController {
     if (imeiList.isNotEmpty) {
       getImeitoRegResModel = await LiveMapRepo().getImeiToReg(body: body);
       for (var element in getImeitoRegResModel!.data) {
-        allImeiList.add(element.latestDocument);
+        allImeiList.add(element.latestDocument!);
       }
     }
     if (allImeiList.isNotEmpty) {
@@ -335,7 +340,8 @@ class LiveMapController extends GetxController {
 
   ///getDaily route trip
   GetDailyRouteTripResModel? getDailyRouteTripResModel;
-  ApiResponse _getDailyRouteTripResponse = ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getDailyRouteTripResponse =
+      ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getDailyRouteTripResponse => _getDailyRouteTripResponse;
   bool isLoading1 = false;
@@ -357,7 +363,7 @@ class LiveMapController extends GetxController {
       for (var element in getDailyRouteTripResModel!.results) {
         if (element.daySlot.isNotEmpty) {
           for (var element1 in element.daySlot) {
-            if (element1.day == 'Monday') {
+            if (element1.day == DateFormat('EEEE').format(DateTime.now())) {
               if (element1.timeSlot.isNotEmpty) {
                 for (var element2 in element1.timeSlot) {
                   if (element2.dailyrouteTimeslot.isNotEmpty) {
@@ -371,13 +377,13 @@ class LiveMapController extends GetxController {
               log("element1--------------> ${element1.timeSlot}");
             }
           }
-          log("vehicleIMEIList--------------> ${vehicleIMEIList}");
+          log("vehicleIMEIList--------------> $vehicleIMEIList");
         }
       }
     }
 
     var body = json.encode({"imei": vehicleIMEIList, "type": "one"});
-    log("body--------------> ${body}");
+    log("body--------------> $body");
     allImeiList.clear();
     routeBusStopsData.clear();
     update();
@@ -392,24 +398,34 @@ class LiveMapController extends GetxController {
       }
       List<int> value = [];
       busData.clear();
-
+      bool isDistanceMatch = false;
       for (var element in allImeiList) {
         log("element>>>${jsonEncode(element)}");
 
         stopSequence.forEach((element1) async {
           log("element1>>>${jsonEncode(element1)}");
+
+          log("double.parse(element1.stopId!.location!.split(',')[0]--------------> ${double.parse(element1.stopId!.location!.split(',')[0])}");
+          log("double.parse(element1.stopId!.location!.split(',')[2]--------------> ${double.parse(element1.stopId!.location!.split(',')[1])}");
+
           double distanceInMeters = Geolocator.distanceBetween(
               element.lat,
               element.lng,
               double.parse(element1.stopId!.location!.split(',')[0]),
-              double.parse(element1.stopId!.location!.split(',')[2]));
+              double.parse(element1.stopId!.location!.split(',')[1]));
 
-          if (distanceInMeters <= 50.00) {
+          log("distanceInMeters--------------> ${distanceInMeters}");
+
+          if (distanceInMeters <= 700) {
             String vehicleId = "";
-
+            isDistanceMatch = true;
             for (var element0 in allData) {
+              log("element0.gpsDevice?.imei--------------> ${element0.gpsDevice?.imei}");
+              log("element.imei--------------> ${element.imei}");
+
               if (element0.gpsDevice?.imei == element.imei) {
                 vehicleId = element0.id ?? "";
+                log("vehicleId--------------> ${vehicleId}");
               }
             }
 
@@ -422,6 +438,7 @@ class LiveMapController extends GetxController {
               "current_date":
                   "${current.year}-${current.month}-${current.day}T${current.hour}:${current.minute}:${current.second}"
             });
+            log("selectedRouteId--------------> ${selectedRouteId}");
           }
           // log("distanceInMeters--------------> ${distanceInMeters}");
           // value.add(distanceInMeters.round());
@@ -430,10 +447,9 @@ class LiveMapController extends GetxController {
         // firstNonConsecutive(value, element.id);
         // value.clear();
       }
-      log("selectedRouteId--------------> ${selectedRouteId}");
-
-      await getStopTimeByRouteNo(routeNo: selectedRouteId);
-
+      if (isDistanceMatch == true) {
+        await getStopTimeByRouteNo(routeNo: selectedRouteId);
+      }
       update();
     }
     loadMarkers();
@@ -529,7 +545,8 @@ class LiveMapController extends GetxController {
   String selectedRouteId = "";
   String selRouteId = "";
   TextEditingController searchController = TextEditingController();
-  ApiResponse _getRouteListResponse = ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getRouteListResponse =
+      ApiResponse.initial(message: 'Initialization');
   ApiResponse get getRouteListResponse => _getRouteListResponse;
 
   Future getRouteListViewModel() async {
@@ -540,13 +557,15 @@ class LiveMapController extends GetxController {
 
     update();
     try {
-      GetRouteListResModel response = await SettingRepo().getRouteList('${ApiRouts.routeList}');
+      GetRouteListResModel response =
+          await SettingRepo().getRouteList('${ApiRouts.routeList}');
       // searchDataResults.addAll(response.results!);
       // tempList.addAll(response.results!);
 
       response.results!.forEach((element) {
         // searchDataResults.add(element);
-        bool hasThreeID = searchDataResults.any((mapTested) => mapTested.routeNo == element.routeNo);
+        bool hasThreeID = searchDataResults
+            .any((mapTested) => mapTested.routeNo == element.routeNo);
         if (hasThreeID == true) {
         } else {
           searchDataResults.add(element);
@@ -568,12 +587,15 @@ class LiveMapController extends GetxController {
     update();
   }
 
-  Future getRouteListByDirectionViewModel(String stopNo, String direction) async {
+  Future getRouteListByDirectionViewModel(
+      String stopNo, String direction) async {
     stopSequence.clear();
     update();
+    log("${ApiRouts.routeList}--------------> ${ApiRouts.routeList}?route_no=$stopNo&direction=$direction}");
+
     try {
-      GetRouteListResModel response =
-          await SettingRepo().getRouteList('${ApiRouts.routeList}?route_no=$stopNo&direction=$direction');
+      GetRouteListResModel response = await SettingRepo().getRouteList(
+          '${ApiRouts.routeList}?route_no=$stopNo&direction=$direction');
 
       if (response.results![0].stopSequence!.isNotEmpty) {
         stopSequence.addAll(response.results![0].stopSequence!);
@@ -590,7 +612,10 @@ class LiveMapController extends GetxController {
     } else {
       searchDataResults = [];
       for (var element in tempList) {
-        if (element.routeNo.toString().toLowerCase().contains(value.toString().toLowerCase())) {
+        if (element.routeNo
+            .toString()
+            .toLowerCase()
+            .contains(value.toString().toLowerCase())) {
           searchDataResults.add(element);
         }
       }
@@ -601,6 +626,9 @@ class LiveMapController extends GetxController {
   setRouteId(String value, String id) {
     selectedRouteId = value;
     selRouteId = id;
+    log("selectedRouteId--------------> ${selectedRouteId}");
+    log("selRouteId--------------> ${selRouteId}");
+
     update();
   }
 
@@ -623,7 +651,10 @@ class LiveMapController extends GetxController {
       searchData = [];
       for (var element in allData) {
         if (element.busDisplay != null) {
-          if (element.regNo.toString().toLowerCase().contains(value.toString().toLowerCase())) {
+          if (element.regNo
+              .toString()
+              .toLowerCase()
+              .contains(value.toString().toLowerCase())) {
             searchData.add(element);
           }
         }
@@ -647,8 +678,9 @@ class LiveMapController extends GetxController {
     setState1(() {});
     update();
     List<VehicleList.Result> allData = [];
-    geVehicleRouteTripResModel = await LiveMapRepo().getVehicleRouteTrip(regNo: regNo);
-    allData = geVehicleRouteTripResModel!.results!;
+    geVehicleRouteTripResModel =
+        await LiveMapRepo().getVehicleRouteTrip(regNo: regNo);
+    allData = geVehicleRouteTripResModel?.results ?? [];
 
     var imeiList = [];
     for (var element in allData) {
@@ -678,18 +710,20 @@ class LiveMapController extends GetxController {
     log("data--------------> ${getImeitoRegResModel!.data}");
     log("allImeiList--------------> ${allImeiList}");
 
-    if (geVehicleRouteTripResModel!.results!.isNotEmpty) {
+    if (geVehicleRouteTripResModel?.results?.isNotEmpty ?? false) {
       for (var element in geVehicleRouteTripResModel!.results!) {
         for (var element1 in element.dailyrouteVehicle!) {
-          if (element1.timeslot!.dayslot!.day == 'Monday') {
-            routeNo = element1.timeslot!.dayslot!.timetable.route.routeNo;
-            direction = element1.timeslot!.dayslot!.timetable.route.direction;
+          if (element1.timeslot!.dayslot!.day ==
+              DateFormat('EEEE').format(DateTime.now())) {
+            routeNo = element1.timeslot!.dayslot!.timetable!.route!.routeNo;
+            direction = element1.timeslot!.dayslot!.timetable!.route!.direction;
           }
         }
       }
 
       if (routeNo != "" && direction != "") {
-        GetRouteListResModel? getRouteListResModel = await LiveMapRepo().getRouteList(routeNo, direction);
+        GetRouteListResModel? getRouteListResModel =
+            await LiveMapRepo().getRouteList(routeNo, direction);
         if (getRouteListResModel != null) {
           stopSequence.clear();
           for (var element in getRouteListResModel.results!) {
@@ -727,7 +761,8 @@ class LiveMapController extends GetxController {
         } else {
           log("changeIndex-------------->${changeIndex - 1} -- ${changeIndex}");
 
-          List data = stopSequence[changeIndex - 1].stopId!.location!.split(',');
+          List data =
+              stopSequence[changeIndex - 1].stopId!.location!.split(',');
           List data1 = stopSequence[changeIndex].stopId!.location!.split(',');
           log("data--------------> ${data}");
           log("data--------------> ${data1}");
@@ -754,7 +789,8 @@ class LiveMapController extends GetxController {
           log("lat1--lang1------------> ${lat1} ${lang1}");
 
           // makers added according to index
-          PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+          PolylineResult result =
+              await polylinePoints.getRouteBetweenCoordinates(
             'AIzaSyA_S7GfAh6rJYWQ5X4n4X-3poo3vymuspU',
             PointLatLng(double.parse(lat), double.parse(lang)),
             PointLatLng(double.parse(lat1), double.parse(lang1)),
@@ -789,7 +825,11 @@ class LiveMapController extends GetxController {
 
   _addPolyLine() {
     PolylineId id = PolylineId("poly");
-    Polyline polyline = Polyline(polylineId: id, color: AppColors.primaryColor, points: polylineCoordinates, width: 3);
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: AppColors.primaryColor,
+        points: polylineCoordinates,
+        width: 3);
     polylines[id] = polyline;
     update();
   }
@@ -803,7 +843,8 @@ class LiveMapController extends GetxController {
   Future<void> getCurrentPosition() async {
     final hasPermission = await handleLocationPermission();
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
       currentPosition = position;
       // lat = currentPosition!.latitude;
       // long = currentPosition!.longitude;
@@ -842,7 +883,9 @@ class LiveMapController extends GetxController {
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      commonSnackBar(message: 'Location permissions are permanently denied, we cannot request permissions.');
+      commonSnackBar(
+          message:
+              'Location permissions are permanently denied, we cannot request permissions.');
       return false;
     }
     return true;
@@ -850,9 +893,12 @@ class LiveMapController extends GetxController {
 
   Future<Uint8List> getImages(String path, int width) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetHeight: width);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetHeight: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 
   loadMarkers() async {
@@ -916,23 +962,30 @@ class LiveMapController extends GetxController {
 
   /// Create Actual Stop Time
   Future createStopTimeViewModel({required Map<String, dynamic> body}) async {
-    http.Response response = await http.post(Uri.parse(ApiRouts.createStopTime), body: body);
+    log('api call------------');
+    http.Response response =
+        await http.post(Uri.parse(ApiRouts.createStopTime), body: body);
 
-    if (response.statusCode == 200) {
-      log("response--------------> ${response.body}");
+    log("response.statusCode--------------> ${response.statusCode}");
+
+    if (response.statusCode == 201) {
+      log("response-createStopTimeViewModel-------------> ${response.body}");
     } else {
-      CreateStopTimeResModel responsee = CreateStopTimeResModel.fromJson(jsonDecode(response.body));
+      CreateStopTimeResModel responsee =
+          CreateStopTimeResModel.fromJson(jsonDecode(response.body));
     }
   }
 
   /// Get Stop Time by Reg No
   List<String> busStopDataIds = [];
   Future getStopTimeByRegNo({required String regNo}) async {
-    http.Response response = await http.get(Uri.parse("${ApiRouts.getTimeByRegNo}$regNo"));
+    http.Response response =
+        await http.get(Uri.parse("${ApiRouts.getTimeByRegNo}$regNo"));
 
     if (response.statusCode == 200) {
       getByRegNo.GetStopTimeByRegNoResModel responsee =
-          getByRegNo.GetStopTimeByRegNoResModel.fromJson(jsonDecode(response.body));
+          getByRegNo.GetStopTimeByRegNoResModel.fromJson(
+              jsonDecode(response.body));
       log("response-busStopDataIds-------------> ${response.body}");
 
       busStopDataIds.clear();
@@ -950,20 +1003,26 @@ class LiveMapController extends GetxController {
   List<StopTimeByRouteNo>? routeBusData = [];
   List<Map<String, dynamic>> routeBusStopsData = [];
   Future getStopTimeByRouteNo({required String routeNo}) async {
-    http.Response response = await http.get(Uri.parse("${ApiRouts.getTimeByRouteNo}$routeNo"));
+    routeBusStopsData.clear();
+    log("${ApiRouts.getTimeByRouteNo}$routeNo--------------> ${ApiRouts.getTimeByRouteNo}$routeNo}");
+
+    http.Response response =
+        await http.get(Uri.parse("${ApiRouts.getTimeByRouteNo}$routeNo"));
 
     if (response.statusCode == 200) {
-      GetStopTimeByRouteNoResModel responsee = GetStopTimeByRouteNoResModel.fromJson(jsonDecode(response.body));
+      GetStopTimeByRouteNoResModel responsee =
+          GetStopTimeByRouteNoResModel.fromJson(jsonDecode(response.body));
       log("response--------------> ${response.body}");
 
       routeBusData = responsee.results;
 
-      routeBusStopsData.clear();
       log("stopSequence--------------> ${stopSequence}");
 
       for (var element in stopSequence) {
-        if (!routeBusStopsData.contains({"stop_id": "${element.stopId?.id}", "count": 0})) {
-          routeBusStopsData.add({"stop_id": "${element.stopId?.id}", "count": 0});
+        if (!routeBusStopsData
+            .contains({"stop_id": "${element.stopId?.id}", "count": 0})) {
+          routeBusStopsData
+              .add({"stop_id": "${element.stopId?.id}", "count": 0});
         }
       }
 

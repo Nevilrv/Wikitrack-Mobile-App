@@ -28,6 +28,7 @@ class SettingController extends GetxController {
 
   String stopId = "";
   String? selectedRouteId;
+  String? selectedRouteNo;
 
   ///
 
@@ -208,7 +209,7 @@ class SettingController extends GetxController {
       // searchDataResults.addAll(response.results!);
       // tempList.addAll(response.results!);
       response.results!.forEach((element) {
-        // searchDataResults.add(element);
+        searchDataResults1.add(element);
         bool hasThreeID = searchDataResults.any((mapTested) => mapTested.routeNo == element.routeNo);
         if (hasThreeID == true) {
         } else {
@@ -653,6 +654,13 @@ class SettingController extends GetxController {
 
   changeIsForward() {
     isForward = !isForward;
+    update();
+  }
+
+  bool isForward1 = false;
+
+  changeIsForward1() {
+    isForward1 = !isForward1;
     update();
   }
 

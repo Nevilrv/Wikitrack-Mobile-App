@@ -4,31 +4,38 @@
 
 import 'dart:convert';
 
-GetImeitoRegResModel getImeitoRegResModelFromJson(String str) => GetImeitoRegResModel.fromJson(json.decode(str));
+GetImeitoRegResModel getImeitoRegResModelFromJson(String str) =>
+    GetImeitoRegResModel.fromJson(json.decode(str));
 
-String getImeitoRegResModelToJson(GetImeitoRegResModel data) => json.encode(data.toJson());
+String getImeitoRegResModelToJson(GetImeitoRegResModel data) =>
+    json.encode(data.toJson());
 
 class GetImeitoRegResModel {
-  String status;
-  String message;
+  String? status;
+  String? message;
   List<Datum> data;
 
   GetImeitoRegResModel({
-    required this.status,
-    required this.message,
+    this.status,
+    this.message,
     required this.data,
   });
 
-  factory GetImeitoRegResModel.fromJson(Map<String, dynamic> json) => GetImeitoRegResModel(
+  factory GetImeitoRegResModel.fromJson(Map<String, dynamic> json) =>
+      GetImeitoRegResModel(
         status: json["status"],
         message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data.map((x) => x.toJson())),
       };
 }
 

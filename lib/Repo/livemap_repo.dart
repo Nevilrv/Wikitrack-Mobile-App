@@ -15,10 +15,12 @@ class LiveMapRepo {
   ///getDailyRouteTrip
   Future<dynamic> getDailyRouteTripFilter(String api) async {
     try {
-      var response = await APIService().getResponse(url: api, apitype: APIType.aGet);
+      var response =
+          await APIService().getResponse(url: api, apitype: APIType.aGet);
       log('response getDailyRouteTripFilter ${response}');
 
-      DailyTripRouteResModel dailyTripRouteResModel = DailyTripRouteResModel.fromJson(response);
+      DailyTripRouteResModel dailyTripRouteResModel =
+          DailyTripRouteResModel.fromJson(response);
 
       return dailyTripRouteResModel;
     } catch (e) {
@@ -34,18 +36,23 @@ class LiveMapRepo {
         Uri.parse(ApiRouts.getImeiToReg),
         body: body,
       );
-      log("result.body--------------> ${result.body}");
-      GetImeitoRegResModel getImeitoRegResModel = GetImeitoRegResModel.fromJson(jsonDecode(result.body));
+      log("ApiRouts.getImeiToReg--------------> ${ApiRouts.getImeiToReg}");
+      log("body.getImeiToReg--------------> ${body}");
+
+      log("result.body-getImeiToReg-------------> ${result.body}");
+      GetImeitoRegResModel getImeitoRegResModel =
+          GetImeitoRegResModel.fromJson(jsonDecode(result.body));
 
       return getImeitoRegResModel;
       // return result.body;
     } catch (e) {
-      log("res-----ERROR===$e");
+      log("res-getImeiToReg-getImeiToReg---ERROR===$e");
     }
     return null;
   }
 
-  Future<GetVehiclesListResModel?> getVehicleRouteTrip({required String regNo}) async {
+  Future<GetVehiclesListResModel?> getVehicleRouteTrip(
+      {required String regNo}) async {
     log('url=============>${ApiRouts.vehicleRouteTrip + regNo}');
     try {
       var headers = {'Content-Type': 'application/json'};
@@ -53,27 +60,31 @@ class LiveMapRepo {
         headers: headers,
         Uri.parse(ApiRouts.vehicleRouteTrip + regNo),
       );
-      log("result.body--------------> ${result.body}");
-      GetVehiclesListResModel geVehicleRouteTripResModel = GetVehiclesListResModel.fromJson(jsonDecode(result.body));
+      log("result.body-getVehicleRouteTrip-------------> ${result.body}");
+      GetVehiclesListResModel geVehicleRouteTripResModel =
+          GetVehiclesListResModel.fromJson(jsonDecode(result.body));
 
       return geVehicleRouteTripResModel;
       // return result.body;
     } catch (e) {
-      log("res-----ERROR===$e");
+      log("res-getVehicleRouteTrip----ERROR===$e");
     }
     return null;
   }
 
   ///getRouteList
-  Future<GetRouteListResModel?> getRouteList(String routeNo, String direction) async {
+  Future<GetRouteListResModel?> getRouteList(
+      String routeNo, String direction) async {
     try {
       log("1111111111url--------------> ${ApiRouts.routeList}?route_no=$routeNo&direction=$direction}");
 
-      var response = await APIService()
-          .getResponse(url: "${ApiRouts.routeList}?route_no=$routeNo&direction=$direction", apitype: APIType.aGet);
+      var response = await APIService().getResponse(
+          url: "${ApiRouts.routeList}?route_no=$routeNo&direction=$direction",
+          apitype: APIType.aGet);
       log('response============== ${response}');
 
-      GetRouteListResModel getRouteListResModel = GetRouteListResModel.fromJson(response);
+      GetRouteListResModel getRouteListResModel =
+          GetRouteListResModel.fromJson(response);
 
       return getRouteListResModel;
     } catch (e) {
@@ -83,7 +94,8 @@ class LiveMapRepo {
   }
 
   /// Create Stop Actual Time
-  Future<CreateStopTimeResModel?> createStopActualTime({required String body}) async {
+  Future<CreateStopTimeResModel?> createStopActualTime(
+      {required String body}) async {
     try {
       var headers = {'Content-Type': 'application/json'};
       final result = await http.post(
@@ -92,7 +104,8 @@ class LiveMapRepo {
         body: body,
       );
       log("result.body--------------> ${result.body}");
-      CreateStopTimeResModel createStopTimeResModel = CreateStopTimeResModel.fromJson(jsonDecode(result.body));
+      CreateStopTimeResModel createStopTimeResModel =
+          CreateStopTimeResModel.fromJson(jsonDecode(result.body));
 
       return createStopTimeResModel;
       // return result.body;
