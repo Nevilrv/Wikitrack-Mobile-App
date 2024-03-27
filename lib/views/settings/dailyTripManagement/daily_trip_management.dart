@@ -84,11 +84,13 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                   Container(
                     height: height * 0.07,
                     width: width,
-                    margin: EdgeInsets.only(top: height * 0.03, bottom: height * 0.035),
+                    margin: EdgeInsets.only(
+                        top: height * 0.03, bottom: height * 0.035),
                     padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.primaryColor, width: 1),
+                      border:
+                          Border.all(color: AppColors.primaryColor, width: 1),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,7 +103,8 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                           children: [
                             Text(
                               "Forward",
-                              style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                              style: blackMedium16TextStyle.copyWith(
+                                  fontWeight: FontWeight.w500),
                             ),
                             SizedBox(
                               height: height * 0.04,
@@ -118,15 +121,20 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
 
                                     if (controller.selectedDate != null) {
                                       controller.data.clear();
-                                      await controller.dailyTripManagementViewModel(
+                                      await controller
+                                          .dailyTripManagementViewModel(
                                         routeId: controller.searchDataResults
-                                            .where((element) => element.id == controller.selectedRouteId)
+                                            .where((element) =>
+                                                element.id ==
+                                                controller.selectedRouteId)
                                             .first
                                             .routeNo
                                             .toString()
                                             .replaceAll(" ", "%20"),
-                                        direction: controller.isForward ? "0" : "1",
-                                        day: DateFormat("EEEE").format(controller.selectedDate!),
+                                        direction:
+                                            controller.isForward ? "0" : "1",
+                                        day: DateFormat("EEEE")
+                                            .format(controller.selectedDate!),
                                       );
                                     }
                                   },
@@ -135,7 +143,8 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                             ),
                             Text(
                               "Reverse",
-                              style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                              style: blackMedium16TextStyle.copyWith(
+                                  fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
@@ -152,13 +161,15 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                         controller.data.clear();
                         await controller.dailyTripManagementViewModel(
                           routeId: controller.searchDataResults
-                              .where((element) => element.id == controller.selectedRouteId)
+                              .where((element) =>
+                                  element.id == controller.selectedRouteId)
                               .first
                               .routeNo
                               .toString()
                               .replaceAll(" ", "%20"),
                           direction: controller.isForward ? "0" : "1",
-                          day: DateFormat("EEEE").format(controller.selectedDate!),
+                          day: DateFormat("EEEE")
+                              .format(controller.selectedDate!),
                         );
                       }
                     },
@@ -169,7 +180,8 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.primaryColor, width: 1),
+                        border:
+                            Border.all(color: AppColors.primaryColor, width: 1),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -182,7 +194,7 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                             builder: (context) {
                               return controller.selectedDate != null
                                   ? Text(
-                                      "${DateFormat("dd/MM/yyyy").format(controller.selectedDate!)} (${DateFormat("EEEE").format(controller.selectedDate!)})",
+                                      "${DateFormat("dd/MM/yyyy").format(controller.selectedDate!)} (${DateFormat("EEEE").format(controller.selectedDate)})",
                                       style: textGreyMedium16TextStyle.copyWith(
                                         color: const Color(0xff333333),
                                         fontWeight: FontWeight.w500,
@@ -191,7 +203,8 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                                   : Text(
                                       "Select Date",
                                       style: textGreyMedium16TextStyle.copyWith(
-                                          color: const Color(0xff333333), fontWeight: FontWeight.w500),
+                                          color: const Color(0xff333333),
+                                          fontWeight: FontWeight.w500),
                                     );
                             },
                           ),
@@ -201,37 +214,63 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                   ),
                 Builder(
                   builder: (context) {
-                    if (controller.dailyTripManagementResponse.status == Status.LOADING) {
-                      return const Center(child: CircularProgressIndicator()).paddingOnly(top: height * 0.2);
-                    } else if (controller.dailyTripManagementResponse.status == Status.ERROR) {
+                    if (controller.dailyTripManagementResponse.status ==
+                        Status.LOADING) {
+                      return const Center(child: CircularProgressIndicator())
+                          .paddingOnly(top: height * 0.2);
+                    } else if (controller.dailyTripManagementResponse.status ==
+                        Status.ERROR) {
                       return const Center(child: Text("Something Went Wrong"));
-                    } else if (controller.dailyTripManagementResponse.status == Status.COMPLETE) {
+                    } else if (controller.dailyTripManagementResponse.status ==
+                        Status.COMPLETE) {
                       return controller.data.isEmpty
                           ? Center(
-                              child: const Text('No Daily Trip Data').paddingOnly(top: height * 0.2),
+                              child: const Text('No Daily Trip Data')
+                                  .paddingOnly(top: height * 0.2),
                             )
                           : ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: controller.data[0].daySlot?[0].timeSlot?.length,
+                              itemCount: controller
+                                  .data[0]
+                                  .daySlot?[controller.data[0].daySlot!
+                                      .indexWhere((element) =>
+                                          element.day ==
+                                          DateFormat("EEEE")
+                                              .format(controller.selectedDate))]
+                                  .timeSlot
+                                  ?.length,
                               itemBuilder: (context, index) {
+                                var data = controller
+                                    .data[0]
+                                    .daySlot![controller.data[0].daySlot!
+                                        .indexWhere((element) =>
+                                            element.day ==
+                                            DateFormat("EEEE").format(
+                                                controller.selectedDate))]
+                                    .timeSlot?[index];
+
                                 DateTime time = DateFormat("HH:mm")
-                                    .parse(controller.data[0].daySlot![0].timeSlot![index].time.toString());
-                                String formattedTime = DateFormat("HH:mm").format(time);
+                                    .parse(data!.time.toString());
+                                String formattedTime =
+                                    DateFormat("HH:mm").format(time);
 
                                 return Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       height: height * 0.06,
                                       width: width * 0.3,
-                                      margin: EdgeInsets.symmetric(vertical: height * 0.013),
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: height * 0.013),
                                       decoration: BoxDecoration(
                                         color: AppColors.whiteColor,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: const Color(0xff000000).withOpacity(0.1),
+                                            color: const Color(0xff000000)
+                                                .withOpacity(0.1),
                                             offset: const Offset(0, 2),
                                             blurRadius: 4,
                                           ),
@@ -251,7 +290,8 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                                           ),
                                           Text(
                                             formattedTime,
-                                            style: greyMedium14TextStyle.copyWith(
+                                            style:
+                                                greyMedium14TextStyle.copyWith(
                                               color: const Color(0xff333333),
                                             ),
                                           ),
@@ -261,13 +301,15 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                                     Container(
                                       height: height * 0.06,
                                       width: width * 0.48,
-                                      margin: EdgeInsets.symmetric(vertical: height * 0.013),
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: height * 0.013),
                                       decoration: BoxDecoration(
                                         color: AppColors.whiteColor,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: const Color(0xff000000).withOpacity(0.1),
+                                            color: const Color(0xff000000)
+                                                .withOpacity(0.1),
                                             offset: const Offset(0, 2),
                                             blurRadius: 4,
                                           ),
@@ -286,52 +328,89 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                                             width: width * 0.02,
                                           ),
                                           Builder(builder: (context) {
-                                            return controller
-                                                    .data[0].daySlot![0].timeSlot![index].dailyrouteTimeslot!.isEmpty
+                                            return data
+                                                    .dailyrouteTimeslot!.isEmpty
                                                 ? SizedBox(
                                                     width: width * 0.35,
-                                                    child: DropdownButton<Result>(
-                                                      underline: const SizedBox(),
+                                                    child:
+                                                        DropdownButton<Result>(
+                                                      underline:
+                                                          const SizedBox(),
                                                       hint: Text(
-                                                        dropdownData["index"] == index
-                                                            ? dropdownData["value"]
+                                                        dropdownData["index"] ==
+                                                                index
+                                                            ? dropdownData[
+                                                                "value"]
                                                             : "Select",
-                                                        style: const TextStyle(color: Colors.black),
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.black),
                                                       ),
                                                       isExpanded: true,
-                                                      onChanged: (Result? newValue) async {
+                                                      onChanged: (Result?
+                                                          newValue) async {
                                                         setState(() {
-                                                          dropdownValue = newValue!;
+                                                          dropdownValue =
+                                                              newValue!;
 
-                                                          dropdownData
-                                                              .addAll({"index": index, "value": dropdownValue?.regNo});
+                                                          dropdownData.addAll({
+                                                            "index": index,
+                                                            "value":
+                                                                dropdownValue
+                                                                    ?.regNo
+                                                          });
                                                         });
 
-                                                        Map<String, dynamic> body = {
+                                                        Map<String, dynamic>
+                                                            body = {
                                                           "timeslot":
-                                                              "${controller.data[0].daySlot![0].timeSlot?[index].id}",
-                                                          "vehicle": "${dropdownValue?.id}",
-                                                          "status": false
+                                                              "${data.id}",
+                                                          "vehicle":
+                                                              "${dropdownValue?.id}",
+                                                          "date": DateFormat(
+                                                                  "yyyy-MM-dd")
+                                                              .format(DateTime
+                                                                  .now()),
+                                                          "status": true,
                                                         };
-                                                        await controller.createTimeSlotViewModel(body: body);
+                                                        await controller
+                                                            .createTimeSlotViewModel(
+                                                                body: body);
 
-                                                        await controller.dailyTripManagementViewModel(
-                                                          routeId: controller.searchDataResults
-                                                              .where(
-                                                                  (element) => element.id == controller.selectedRouteId)
+                                                        await controller
+                                                            .dailyTripManagementViewModel(
+                                                          routeId: controller
+                                                              .searchDataResults
+                                                              .where((element) =>
+                                                                  element.id ==
+                                                                  controller
+                                                                      .selectedRouteId)
                                                               .first
                                                               .routeNo
                                                               .toString()
-                                                              .replaceAll(" ", "%20"),
-                                                          direction: controller.isForward ? "0" : "1",
-                                                          day: DateFormat("EEEE").format(controller.selectedDate!),
+                                                              .replaceAll(
+                                                                  " ", "%20"),
+                                                          direction: controller
+                                                                  .isForward
+                                                              ? "0"
+                                                              : "1",
+                                                          day: DateFormat(
+                                                                  "EEEE")
+                                                              .format(controller
+                                                                  .selectedDate),
                                                         );
                                                       },
-                                                      items: controller.busRegister
-                                                          .map<DropdownMenuItem<Result>>((Result value) {
-                                                        return DropdownMenuItem<Result>(
+                                                      items: controller
+                                                          .busRegister
+                                                          .map<
+                                                              DropdownMenuItem<
+                                                                  Result>>((Result
+                                                              value) {
+                                                        return DropdownMenuItem<
+                                                            Result>(
                                                           value: value,
-                                                          child: Text("${value.regNo}"),
+                                                          child: Text(
+                                                              "${value.regNo}"),
                                                         );
                                                       }).toList(),
                                                     ),
@@ -339,10 +418,14 @@ class _DailyTripManagementState extends State<DailyTripManagement> {
                                                 : SizedBox(
                                                     width: width * 0.3,
                                                     child: Text(
-                                                      '${controller.data[0].daySlot![0].timeSlot![index].dailyrouteTimeslot?[0].vehicle?.regNo}',
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: greyMedium14TextStyle.copyWith(
-                                                        color: const Color(0xff333333),
+                                                      '${data.dailyrouteTimeslot?[0].vehicle?.regNo}',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style:
+                                                          greyMedium14TextStyle
+                                                              .copyWith(
+                                                        color: const Color(
+                                                            0xff333333),
                                                       ),
                                                     ),
                                                   );

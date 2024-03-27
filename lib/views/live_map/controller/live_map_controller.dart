@@ -359,6 +359,7 @@ class LiveMapController extends GetxController {
 
     _getDailyRouteTripResponse = ApiResponse.complete(response);
     List vehicleIMEIList = [];
+
     if (getDailyRouteTripResModel != null) {
       for (var element in getDailyRouteTripResModel!.results) {
         if (element.daySlot.isNotEmpty) {
@@ -393,6 +394,8 @@ class LiveMapController extends GetxController {
 
       update();
     } else {
+      debugPrint(
+          'getImeitoRegResModel?.data===>>>${getImeitoRegResModel?.data}');
       for (var element in getImeitoRegResModel!.data) {
         allImeiList.add(element.latestDocument);
       }
@@ -414,9 +417,9 @@ class LiveMapController extends GetxController {
               double.parse(element1.stopId!.location!.split(',')[0]),
               double.parse(element1.stopId!.location!.split(',')[1]));
 
-          log("distanceInMeters--------------> ${distanceInMeters}");
+          log("distanceInMeters--------------> $distanceInMeters");
 
-          if (distanceInMeters <= 700) {
+          if (distanceInMeters <= 50) {
             String vehicleId = "";
             isDistanceMatch = true;
             for (var element0 in allData) {
@@ -448,6 +451,7 @@ class LiveMapController extends GetxController {
         // value.clear();
       }
       if (isDistanceMatch == true) {
+        print("IN HERE");
         await getStopTimeByRouteNo(routeNo: selectedRouteId);
       }
       update();
@@ -1004,19 +1008,19 @@ class LiveMapController extends GetxController {
   List<Map<String, dynamic>> routeBusStopsData = [];
   Future getStopTimeByRouteNo({required String routeNo}) async {
     routeBusStopsData.clear();
-    log("${ApiRouts.getTimeByRouteNo}$routeNo--------------> ${ApiRouts.getTimeByRouteNo}$routeNo}");
+    DateTime current = DateTime.now();
 
-    http.Response response =
-        await http.get(Uri.parse("${ApiRouts.getTimeByRouteNo}$routeNo"));
+    http.Response response = await http.get(Uri.parse(
+        "${ApiRouts.getTimeByRouteNo}$routeNo&current_date=${current.year}-${current.month}-${current.day}T${current.hour}:${current.minute}:${current.second.toString().padLeft(2, '0')}"));
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       GetStopTimeByRouteNoResModel responsee =
           GetStopTimeByRouteNoResModel.fromJson(jsonDecode(response.body));
-      log("response--------------> ${response.body}");
+      log("response-getStopTimeByRouteNo-------------> ${response.body}");
 
       routeBusData = responsee.results;
 
-      log("stopSequence--------------> ${stopSequence}");
+      log("stopSequence-getStopTimeByRouteNo-------------> ${jsonEncode(stopSequence)}");
 
       for (var element in stopSequence) {
         if (!routeBusStopsData

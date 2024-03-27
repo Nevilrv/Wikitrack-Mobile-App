@@ -457,6 +457,9 @@ class _LiveMapScreenState extends State<LiveMapScreen>
                                                                                                             log("controller.stopSequence[index].stopId?.id--------------> ${controller.stopSequence[index].stopId?.id}");
                                                                                                           });
 
+                                                                                                          log('controller.routeBusStopsData===>>>${controller.routeBusStopsData}');
+                                                                                                          log('controller.stopSequence===>>>${controller.stopSequence}');
+
                                                                                                           return Column(
                                                                                                             mainAxisAlignment: MainAxisAlignment.start,
                                                                                                             crossAxisAlignment: CrossAxisAlignment.start,

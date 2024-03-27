@@ -32,7 +32,8 @@ class AppDialog {
                 style: const TextStyle(fontSize: 24.0),
               ),
               content: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -57,10 +58,13 @@ class AppDialog {
                             itemCount: controller.searchDataResults.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              return GestureDetector(
+                              return InkWell(
                                   onTap: () {
-                                    controller.setRouteId(controller.searchDataResults[index].id.toString());
-                                    controller.selectedRouteNo = controller.searchDataResults[index].routeNo;
+                                    controller.setRouteId(controller
+                                        .searchDataResults[index].id
+                                        .toString());
+                                    controller.selectedRouteNo = controller
+                                        .searchDataResults[index].routeNo;
                                     Get.back();
                                     setState123(() {});
                                     controller.update();
@@ -70,11 +74,21 @@ class AppDialog {
                                           children: [
                                             SizedBox(height: 15),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
                                               child: Text(
-                                                (controller.searchDataResults[index].routeNo.toString().isEmpty
+                                                (controller
+                                                            .searchDataResults[
+                                                                index]
+                                                            .routeNo
+                                                            .toString()
+                                                            .isEmpty
                                                         ? "NA"
-                                                        : controller.searchDataResults[index].routeNo)
+                                                        : controller
+                                                            .searchDataResults[
+                                                                index]
+                                                            .routeNo)
                                                     .toString(),
                                               ),
                                             ),
@@ -87,11 +101,21 @@ class AppDialog {
                                               children: [
                                                 SizedBox(height: 15),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 15),
                                                   child: Text(
-                                                    (controller.searchDataResults[index].routeNo.toString().isEmpty
+                                                    (controller
+                                                                .searchDataResults[
+                                                                    index]
+                                                                .routeNo
+                                                                .toString()
+                                                                .isEmpty
                                                             ? "NA"
-                                                            : controller.searchDataResults[index].routeNo)
+                                                            : controller
+                                                                .searchDataResults[
+                                                                    index]
+                                                                .routeNo)
                                                         .toString()
                                                         .capitalizeFirst
                                                         .toString(),
@@ -104,16 +128,28 @@ class AppDialog {
                                           : /* controller.searchDataResults[index].direction == "1"
                                             ?*/
                                           Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 SizedBox(height: 15),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 15),
                                                   child: Text(
-                                                    (controller.searchDataResults[index].routeNo.toString().isEmpty
+                                                    (controller
+                                                                .searchDataResults[
+                                                                    index]
+                                                                .routeNo
+                                                                .toString()
+                                                                .isEmpty
                                                             ? "NA"
-                                                            : controller.searchDataResults[index].routeNo)
+                                                            : controller
+                                                                .searchDataResults[
+                                                                    index]
+                                                                .routeNo)
                                                         .toString()
                                                         .capitalizeFirst
                                                         .toString(),
@@ -192,7 +228,8 @@ class AppDialog {
                 style: const TextStyle(fontSize: 24.0),
               ),
               content: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -223,11 +260,15 @@ class AppDialog {
                               return ListTile(
                                 onTap: () {
                                   Get.back();
-                                  controller.stop.text = controller.stopResult[index].name;
-                                  controller.stopId = controller.stopResult[index].id;
+                                  controller.stop.text =
+                                      controller.stopResult[index].name;
+                                  controller.stopId =
+                                      controller.stopResult[index].id;
                                 },
                                 title: Text(
-                                  (controller.stopResult[index].name.isEmpty ? 'NA' : controller.stopResult[index].name)
+                                  (controller.stopResult[index].name.isEmpty
+                                          ? 'NA'
+                                          : controller.stopResult[index].name)
                                       .toString()
                                       .capitalizeFirst
                                       .toString(),
@@ -270,7 +311,8 @@ class AppDialog {
                 style: const TextStyle(fontSize: 24.0),
               ),
               content: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -301,13 +343,17 @@ class AppDialog {
                               return ListTile(
                                 onTap: () {
                                   Get.back();
-                                  controller.stopDevice.text = controller.stopDisplayResult[index].imei;
-                                  controller.stopDisplayId = controller.stopDisplayResult[index].id;
+                                  controller.stopDevice.text =
+                                      controller.stopDisplayResult[index].imei;
+                                  controller.stopDisplayId =
+                                      controller.stopDisplayResult[index].id;
                                 },
                                 title: Text(
-                                  (controller.stopDisplayResult[index].imei.isEmpty
+                                  (controller.stopDisplayResult[index].imei
+                                              .isEmpty
                                           ? "NA"
-                                          : controller.stopDisplayResult[index].imei)
+                                          : controller
+                                              .stopDisplayResult[index].imei)
                                       .toString()
                                       .capitalizeFirst
                                       .toString(),
