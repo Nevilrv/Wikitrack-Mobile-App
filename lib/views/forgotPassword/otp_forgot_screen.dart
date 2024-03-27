@@ -6,7 +6,6 @@ import 'package:pinput/pinput.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/preference_manager/preference_Manager.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppRoutes.dart';
@@ -105,7 +104,8 @@ class _OTPForgotScreenState extends State<OTPForgotScreen> {
                 Pinput(
                   controller: pinController,
                   focusNode: focusNode,
-                  androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
+                  androidSmsAutofillMethod:
+                      AndroidSmsAutofillMethod.smsUserConsentApi,
                   listenForMultipleSmsOnAndroid: true,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   defaultPinTheme: defaultPinTheme,
@@ -166,7 +166,8 @@ class _OTPForgotScreenState extends State<OTPForgotScreen> {
                         AppStrings.resend,
                         style: controller.second == 120
                             ? primaryBold12TextStyle
-                            : primaryBold12TextStyle.copyWith(color: AppColors.primaryColor.withOpacity(0.1)),
+                            : primaryBold12TextStyle.copyWith(
+                                color: AppColors.primaryColor.withOpacity(0.1)),
                       ),
                     ),
                   ],
@@ -179,8 +180,11 @@ class _OTPForgotScreenState extends State<OTPForgotScreen> {
                         height: Get.height * 0.065,
                         width: Get.width,
                         decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                        child: Center(child: Text(AppStrings.submit, style: whiteMedium16TextStyle)),
+                            color: AppColors.primaryColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Center(
+                            child: Text(AppStrings.submit,
+                                style: whiteMedium16TextStyle)),
                       )
                     : CommonButton(
                         onTap: () {
@@ -189,8 +193,10 @@ class _OTPForgotScreenState extends State<OTPForgotScreen> {
                           } else {
                             // controller.second = 120;
                             // controller.timer!.cancel();
-                            Get.toNamed(Routes.forgotAddPassword,
-                                arguments: {"email": Get.arguments["email"], "password": pinController.text});
+                            Get.toNamed(Routes.forgotAddPassword, arguments: {
+                              "email": Get.arguments["email"],
+                              "password": pinController.text
+                            });
                           }
                         },
                         title: AppStrings.submit),

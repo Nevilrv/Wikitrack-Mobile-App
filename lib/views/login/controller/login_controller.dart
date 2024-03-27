@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wikitrack/Apis/api_response.dart';
-import 'package:wikitrack/Repo/auth_repo.dart';
 import 'package:wikitrack/Services/base_service.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/preference_manager/preference_Manager.dart';
@@ -56,10 +53,12 @@ class LoginController extends GetxController {
   Future<void> loginApiCall({required Map<String, dynamic> body}) async {
     isLoading = true;
     update();
-    http.Response response = await http.post(Uri.parse(ApiRouts.login), body: body);
+    http.Response response =
+        await http.post(Uri.parse(ApiRouts.login), body: body);
 
     if (response.statusCode == 200) {
-      LoginResponseModel responsee = LoginResponseModel.fromJson(jsonDecode(response.body));
+      LoginResponseModel responsee =
+          LoginResponseModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
       PreferenceManager.setLogin(true);
@@ -71,7 +70,8 @@ class LoginController extends GetxController {
     } else {
       log("response---e-----------> ${response.body}");
 
-      LoginResponseModel responsee = LoginResponseModel.fromJson(jsonDecode(response.body));
+      LoginResponseModel responsee =
+          LoginResponseModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
       commonSnackBar(message: responsee.error);

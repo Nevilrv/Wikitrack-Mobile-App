@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
-import 'package:wikitrack/response_model/dailytripregister_response_model.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppDialog.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';

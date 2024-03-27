@@ -7,12 +7,11 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:wikitrack/Repo/livemap_repo.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/response_model/dailt_route_trip_Response_model.dart';
-import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart' as vehicle;
+import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
+    as vehicle;
 
-import 'package:wikitrack/socket/socket_service.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppImages.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
@@ -74,7 +73,8 @@ class TripHistoryController extends GetxController {
       log("fromDateController.text--------------> ${fromDateController.text}");
       log("toDateController.text--------------> ${toDateController.text}");
 
-      if (fromDateController.text.isNotEmpty && toDateController.text.isNotEmpty) {
+      if (fromDateController.text.isNotEmpty &&
+          toDateController.text.isNotEmpty) {
         getDaysInBetween(fromDate, toDate);
         if (date != "") {
           if (isForward == true) {
@@ -124,7 +124,8 @@ class TripHistoryController extends GetxController {
       update();
       log('selectedDate==========>>>>>${toDate}');
 
-      if (toDateController.text.isNotEmpty && fromDateController.text.isNotEmpty) {
+      if (toDateController.text.isNotEmpty &&
+          fromDateController.text.isNotEmpty) {
         getDaysInBetween(fromDate, toDate);
         if (date != "") {
           if (isForward == true) {
@@ -176,7 +177,8 @@ class TripHistoryController extends GetxController {
       getRouteListResModel = await HistoryRepo().getRouteList();
       getRouteListResModel!.results!.forEach((element) {
         // searchDataResults.add(element);
-        bool hasThreeID = routes.any((mapTested) => mapTested.routeNo == element.routeNo);
+        bool hasThreeID =
+            routes.any((mapTested) => mapTested.routeNo == element.routeNo);
         if (hasThreeID == true) {
         } else {
           routes.add(element);
@@ -212,7 +214,8 @@ class TripHistoryController extends GetxController {
     setter(() {});
     timeSlotList.clear();
     try {
-      DailyRouteTripResponseModel dailyRouteTripResponseModel = await HistoryRepo().dailyTripManagementRepo(
+      DailyRouteTripResponseModel dailyRouteTripResponseModel =
+          await HistoryRepo().dailyTripManagementRepo(
         url:
             "${ApiRouts.dailyRouteTripList}?route_no=${dropdownValue!.routeNo!}&direction=${isForward1 == true ? '0' : '1'}&date=$date",
       );
@@ -261,8 +264,10 @@ class TripHistoryController extends GetxController {
     setter(() {});
 
     try {
-      vehicle.GetVehiclesListResModel getVehiclesListResModel = await HistoryRepo()
-          .getVehicleRouteTrip(url: "${ApiRouts.vehicleRouteTrip}${selectedVehicle!.regNo}&date=$date");
+      vehicle.GetVehiclesListResModel getVehiclesListResModel =
+          await HistoryRepo().getVehicleRouteTrip(
+              url:
+                  "${ApiRouts.vehicleRouteTrip}${selectedVehicle!.regNo}&date=$date");
       if (getVehiclesListResModel.results!.isNotEmpty) {
         getVehiclesListResModel.results!.forEach((element) {
           if (element.dailyrouteVehicle!.isNotEmpty) {
@@ -324,9 +329,12 @@ class TripHistoryController extends GetxController {
 
   Future<Uint8List> getImages(String path, int width) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetHeight: width);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetHeight: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 
   int stopIndex = 0;
@@ -335,8 +343,10 @@ class TripHistoryController extends GetxController {
     results.clear();
     stopIndex = 0;
     update();
-    vehicle.GetVehiclesListResModel getVehiclesListResModel = await HistoryRepo()
-        .getVehicleRouteTrip(url: "${ApiRouts.vehicleRouteTrip}${selectedVehicle!.regNo}&date=$date&time=$time");
+    vehicle.GetVehiclesListResModel getVehiclesListResModel =
+        await HistoryRepo().getVehicleRouteTrip(
+            url:
+                "${ApiRouts.vehicleRouteTrip}${selectedVehicle!.regNo}&date=$date&time=$time");
 
     if (getVehiclesListResModel.results!.isNotEmpty) {
       results.addAll(getVehiclesListResModel.results!);
@@ -351,7 +361,8 @@ class TripHistoryController extends GetxController {
     routesVehicleResult.clear();
     stopIndex = 0;
     update();
-    DailyRouteTripResponseModel dailyRouteTripResponseModel = await HistoryRepo().dailyTripManagementRepo(
+    DailyRouteTripResponseModel dailyRouteTripResponseModel =
+        await HistoryRepo().dailyTripManagementRepo(
       url:
           "${ApiRouts.dailyRouteTripList}?route_no=${dropdownValue!.routeNo!}&direction=${isForward1 == true ? '0' : '1'}&date=$date&time=$time",
     );
@@ -403,7 +414,8 @@ class TripHistoryController extends GetxController {
                     log('empty---------ed-');
 
                     element1.actualTime!.forEach((element2) async {
-                      List data = element2.stopSeq!.stopId!.location!.split(',');
+                      List data =
+                          element2.stopSeq!.stopId!.location!.split(',');
                       String lat;
                       String lang;
                       if (data.length == 2) {
@@ -414,7 +426,10 @@ class TripHistoryController extends GetxController {
                         lang = data[2];
                       }
                       if (stopIndex == 0) {
-                        String time = routesVehicleResult[0].daySlot![0].timeSlot![0].time!;
+                        String time = routesVehicleResult[0]
+                            .daySlot![0]
+                            .timeSlot![0]
+                            .time!;
                         String actualTime = element2.time!;
                         if (element2.time == "00") {
                           estimatedTime =
@@ -424,10 +439,11 @@ class TripHistoryController extends GetxController {
                               "${DateTime.parse('${element1.date}').add(Duration(hours: int.parse(time.split(":")[0]), minutes: int.parse(time.split(":")[1]), seconds: int.parse(time.split(":")[2])))}";
                         }
                         log("estimatedTime--------------> ${estimatedTime}");
-                        DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
-                            hours: int.parse(actualTime.split(":")[0]),
-                            minutes: int.parse(actualTime.split(":")[1]),
-                            seconds: int.parse(actualTime.split(":")[2])));
+                        DateTime actualFinalTime =
+                            DateTime.parse('${element1.date}').add(Duration(
+                                hours: int.parse(actualTime.split(":")[0]),
+                                minutes: int.parse(actualTime.split(":")[1]),
+                                seconds: int.parse(actualTime.split(":")[2])));
 
                         log("actualFinalTime--------------> ${actualFinalTime}");
 
@@ -439,22 +455,26 @@ class TripHistoryController extends GetxController {
                           // given marker icon
                           icon: BitmapDescriptor.fromBytes(stopsIcons),
                           // given position
-                          position: LatLng(double.parse(lat), double.parse(lang)),
+                          position:
+                              LatLng(double.parse(lat), double.parse(lang)),
                           infoWindow: InfoWindow(
                               // given title for marker
-                              title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
+                              title: 'Stop: ' +
+                                  element2.stopSeq!.stopId!.name.toString(),
                               snippet:
                                   "ActualTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))} EstimatedTime:${DateFormat('hh:mm a').format(actualFinalTime)}"),
                         ));
                       } else {
                         String actualTime = element2.time!;
                         String time = element2.stopSeq!.travalTime!;
-                        estimatedTime = "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
+                        estimatedTime =
+                            "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
                         log("estimatedTime-----dsede---------> ${estimatedTime}");
-                        DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
-                            hours: int.parse(actualTime.split(":")[0]),
-                            minutes: int.parse(actualTime.split(":")[1]),
-                            seconds: int.parse(actualTime.split(":")[2])));
+                        DateTime actualFinalTime =
+                            DateTime.parse('${element1.date}').add(Duration(
+                                hours: int.parse(actualTime.split(":")[0]),
+                                minutes: int.parse(actualTime.split(":")[1]),
+                                seconds: int.parse(actualTime.split(":")[2])));
                         log("actualFinalTime-------d-------> ${actualFinalTime}");
 
                         markers.add(Marker(
@@ -463,10 +483,12 @@ class TripHistoryController extends GetxController {
                           // given marker icon
                           icon: BitmapDescriptor.fromBytes(stopsIcons),
                           // given position
-                          position: LatLng(double.parse(lat), double.parse(lang)),
+                          position:
+                              LatLng(double.parse(lat), double.parse(lang)),
                           infoWindow: InfoWindow(
                               // given title for marker
-                              title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
+                              title: 'Stop: ' +
+                                  element2.stopSeq!.stopId!.name.toString(),
                               snippet:
                                   "ActualTime:${DateFormat('hh:mm a').format(actualFinalTime)} EstimatedTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))}"),
                         ));
@@ -475,7 +497,8 @@ class TripHistoryController extends GetxController {
                       stopIndex++;
                     });
 
-                    GoogleMapController controller = await googleMapController.future;
+                    GoogleMapController controller =
+                        await googleMapController.future;
                     controller.animateCamera(CameraUpdate.newCameraPosition(
                         // on below line we have given positions of Location 5
                         CameraPosition(
@@ -515,8 +538,12 @@ class TripHistoryController extends GetxController {
                       } else {
                         log("changeIndex-------------->${changeIndex - 1} -- ${changeIndex}");
 
-                        List data = element1.actualTime![changeIndex - 1].stopSeq!.stopId!.location!.split(',');
-                        List data1 = element1.actualTime![changeIndex].stopSeq!.stopId!.location!.split(',');
+                        List data = element1.actualTime![changeIndex - 1]
+                            .stopSeq!.stopId!.location!
+                            .split(',');
+                        List data1 = element1
+                            .actualTime![changeIndex].stopSeq!.stopId!.location!
+                            .split(',');
                         log("data--------------> ${data}");
                         log("data--------------> ${data1}");
 
@@ -542,7 +569,8 @@ class TripHistoryController extends GetxController {
                         log("lat1--lang1------------> ${lat1} ${lang1}");
 
                         // makers added according to index
-                        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+                        PolylineResult result =
+                            await polylinePoints.getRouteBetweenCoordinates(
                           'AIzaSyA_S7GfAh6rJYWQ5X4n4X-3poo3vymuspU',
                           PointLatLng(double.parse(lat), double.parse(lang)),
                           PointLatLng(double.parse(lat1), double.parse(lang1)),
@@ -550,7 +578,8 @@ class TripHistoryController extends GetxController {
                         );
                         if (result.points.isNotEmpty) {
                           for (var point in result.points) {
-                            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+                            polylineCoordinates
+                                .add(LatLng(point.latitude, point.longitude));
                             log("point.latitude--------------> ${point.latitude}");
                             log("point.longitude--------------> ${point.longitude}");
                           }
@@ -634,10 +663,11 @@ class TripHistoryController extends GetxController {
                       "${DateTime.parse('${element1.date}').add(Duration(hours: int.parse(time.split(":")[0]), minutes: int.parse(time.split(":")[1]), seconds: int.parse(time.split(":")[2])))}";
                 }
                 log("estimatedTime--------------> ${estimatedTime}");
-                DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
-                    hours: int.parse(actualTime.split(":")[0]),
-                    minutes: int.parse(actualTime.split(":")[1]),
-                    seconds: int.parse(actualTime.split(":")[2])));
+                DateTime actualFinalTime = DateTime.parse('${element1.date}')
+                    .add(Duration(
+                        hours: int.parse(actualTime.split(":")[0]),
+                        minutes: int.parse(actualTime.split(":")[1]),
+                        seconds: int.parse(actualTime.split(":")[2])));
 
                 log("actualFinalTime--------------> ${actualFinalTime}");
 
@@ -652,19 +682,22 @@ class TripHistoryController extends GetxController {
                   position: LatLng(double.parse(lat), double.parse(lang)),
                   infoWindow: InfoWindow(
                       // given title for marker
-                      title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
+                      title:
+                          'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
                       snippet:
                           "ActualTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))} EstimatedTime:${DateFormat('hh:mm a').format(actualFinalTime)}"),
                 ));
               } else {
                 String actualTime = element2.time!;
                 String time = element2.stopSeq!.travalTime!;
-                estimatedTime = "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
+                estimatedTime =
+                    "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
                 log("estimatedTime-----dsede---------> ${estimatedTime}");
-                DateTime actualFinalTime = DateTime.parse('${element1.date}').add(Duration(
-                    hours: int.parse(actualTime.split(":")[0]),
-                    minutes: int.parse(actualTime.split(":")[1]),
-                    seconds: int.parse(actualTime.split(":")[2])));
+                DateTime actualFinalTime = DateTime.parse('${element1.date}')
+                    .add(Duration(
+                        hours: int.parse(actualTime.split(":")[0]),
+                        minutes: int.parse(actualTime.split(":")[1]),
+                        seconds: int.parse(actualTime.split(":")[2])));
                 log("actualFinalTime-------d-------> ${actualFinalTime}");
 
                 markers.add(Marker(
@@ -676,7 +709,8 @@ class TripHistoryController extends GetxController {
                   position: LatLng(double.parse(lat), double.parse(lang)),
                   infoWindow: InfoWindow(
                       // given title for marker
-                      title: 'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
+                      title:
+                          'Stop: ' + element2.stopSeq!.stopId!.name.toString(),
                       snippet:
                           "ActualTime:${DateFormat('hh:mm a').format(actualFinalTime)} EstimatedTime:${DateFormat('hh:mm a').format(DateTime.parse(estimatedTime))}"),
                 ));
@@ -714,8 +748,12 @@ class TripHistoryController extends GetxController {
               } else {
                 log("changeIndex-------------->${changeIndex - 1} -- ${changeIndex}");
 
-                List data = element.actualTime![changeIndex - 1].stopSeq!.stopId!.location!.split(',');
-                List data1 = element.actualTime![changeIndex].stopSeq!.stopId!.location!.split(',');
+                List data = element
+                    .actualTime![changeIndex - 1].stopSeq!.stopId!.location!
+                    .split(',');
+                List data1 = element
+                    .actualTime![changeIndex].stopSeq!.stopId!.location!
+                    .split(',');
                 log("data--------------> ${data}");
                 log("data--------------> ${data1}");
 
@@ -741,7 +779,8 @@ class TripHistoryController extends GetxController {
                 log("lat1--lang1------------> ${lat1} ${lang1}");
 
                 // makers added according to index
-                PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+                PolylineResult result =
+                    await polylinePoints.getRouteBetweenCoordinates(
                   'AIzaSyA_S7GfAh6rJYWQ5X4n4X-3poo3vymuspU',
                   PointLatLng(double.parse(lat), double.parse(lang)),
                   PointLatLng(double.parse(lat1), double.parse(lang1)),
@@ -749,7 +788,8 @@ class TripHistoryController extends GetxController {
                 );
                 if (result.points.isNotEmpty) {
                   for (var point in result.points) {
-                    polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+                    polylineCoordinates
+                        .add(LatLng(point.latitude, point.longitude));
                     log("point.latitude--------------> ${point.latitude}");
                     log("point.longitude--------------> ${point.longitude}");
                   }
@@ -782,7 +822,11 @@ class TripHistoryController extends GetxController {
 
   _addPolyLine(int i) {
     PolylineId id = PolylineId("poly $i");
-    Polyline polyline = Polyline(polylineId: id, color: AppColors.primaryColor, points: polylineCoordinates, width: 3);
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: AppColors.primaryColor,
+        points: polylineCoordinates,
+        width: 3);
     polylines[id] = polyline;
     update();
   }

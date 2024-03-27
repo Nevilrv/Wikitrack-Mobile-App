@@ -9,7 +9,6 @@ import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppImages.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
 import 'package:wikitrack/views/bus_display/controller/bus_display_controller.dart';
-import 'package:wikitrack/views/live_map/controller/live_map_controller.dart';
 
 class BusDisplayScreen extends StatefulWidget {
   const BusDisplayScreen({super.key});
@@ -81,23 +80,30 @@ class _BusDisplayScreenState extends State<BusDisplayScreen> {
                                 ),
                                 content: SingleChildScrollView(
                                   child: SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.5,
-                                    width: MediaQuery.of(context).size.width * 0.9,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
                                     child: Stack(
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 10),
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
                                               commonTextField(
                                                 controller: search,
-                                                prefixIcon: const Icon(Icons.search),
+                                                prefixIcon:
+                                                    const Icon(Icons.search),
                                                 textColor: AppColors.blackColor,
                                                 color: AppColors.iconGreyColor,
                                                 onChanged: (value) {
-                                                  controller.searchStopResult(value);
+                                                  controller
+                                                      .searchStopResult(value);
                                                   setState1(() {});
                                                 },
                                               ),
@@ -106,24 +112,48 @@ class _BusDisplayScreenState extends State<BusDisplayScreen> {
                                               ),
                                               Expanded(
                                                 child: ListView.separated(
-                                                  separatorBuilder: (context, index) {
-                                                    return const Divider(height: 0);
+                                                  separatorBuilder:
+                                                      (context, index) {
+                                                    return const Divider(
+                                                        height: 0);
                                                   },
-                                                  itemCount: controller.searchData.length,
+                                                  itemCount: controller
+                                                      .searchData.length,
                                                   shrinkWrap: true,
-                                                  itemBuilder: (context, index) {
+                                                  itemBuilder:
+                                                      (context, index) {
                                                     return ListTile(
                                                       onTap: () async {
-                                                        controller.searchId = controller.searchData[index].regNo ?? '';
+                                                        controller.searchId =
+                                                            controller
+                                                                    .searchData[
+                                                                        index]
+                                                                    .regNo ??
+                                                                '';
 
-                                                        controller.selector = controller.searchData.indexWhere(
-                                                            (element) => element.id == controller.searchData[index].id);
-                                                        controller.loading3 = false;
+                                                        controller.selector = controller
+                                                            .searchData
+                                                            .indexWhere((element) =>
+                                                                element.id ==
+                                                                controller
+                                                                    .searchData[
+                                                                        index]
+                                                                    .id);
+                                                        controller.loading3 =
+                                                            false;
                                                         setState(() {});
-                                                        await controller.getStopTimeByRouteNo(
-                                                            routeNo: controller.searchId, setter: setState1);
+                                                        await controller
+                                                            .getStopTimeByRouteNo(
+                                                                routeNo:
+                                                                    controller
+                                                                        .searchId,
+                                                                setter:
+                                                                    setState1);
                                                       },
-                                                      title: Text(controller.searchData[index].regNo ?? ''),
+                                                      title: Text(controller
+                                                              .searchData[index]
+                                                              .regNo ??
+                                                          ''),
                                                     );
                                                   },
                                                 ),
@@ -138,7 +168,8 @@ class _BusDisplayScreenState extends State<BusDisplayScreen> {
                                                 // width: w,
                                                 color: Colors.black12,
                                                 child: const Center(
-                                                    child: CircularProgressIndicator(
+                                                    child:
+                                                        CircularProgressIndicator(
                                                   color: AppColors.primaryColor,
                                                 )))
                                             : const SizedBox()
@@ -166,7 +197,8 @@ class _BusDisplayScreenState extends State<BusDisplayScreen> {
                         children: [
                           Row(
                             children: [
-                              SvgPicture.asset(AppImages.routeManage, height: h * 0.03, width: w * 0.03),
+                              SvgPicture.asset(AppImages.routeManage,
+                                  height: h * 0.03, width: w * 0.03),
                               SizedBox(
                                 width: w * 0.02,
                               ),

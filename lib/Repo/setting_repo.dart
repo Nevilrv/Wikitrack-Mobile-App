@@ -8,7 +8,6 @@ import 'package:wikitrack/Services/api_service.dart';
 import 'package:wikitrack/Services/base_service.dart';
 import 'package:wikitrack/response_model/bus_display_res_model.dart';
 import 'package:wikitrack/response_model/dailt_route_trip_Response_model.dart';
-import 'package:wikitrack/response_model/dailytripregister_response_model.dart';
 import 'package:wikitrack/response_model/get_bus_time_table_res_model.dart';
 import 'package:wikitrack/response_model/get_daily_route_trip_res_model.dart';
 import 'package:wikitrack/response_model/get_route_list_res_model.dart';
@@ -22,10 +21,12 @@ class SettingRepo {
   ///getVehicleList
   Future<dynamic> getVehicleList() async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.vehicleList, apitype: APIType.aGet);
+      var response = await APIService()
+          .getResponse(url: ApiRouts.vehicleList, apitype: APIType.aGet);
       log('response $response');
 
-      GetVehiclesListResModel getVehicleListResModel = GetVehiclesListResModel.fromJson(response);
+      GetVehiclesListResModel getVehicleListResModel =
+          GetVehiclesListResModel.fromJson(response);
 
       return getVehicleListResModel;
     } catch (e) {
@@ -36,10 +37,12 @@ class SettingRepo {
   ///getVehicleList
   Future<dynamic> getStopList() async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.stopsList, apitype: APIType.aGet);
+      var response = await APIService()
+          .getResponse(url: ApiRouts.stopsList, apitype: APIType.aGet);
       log('response $response');
 
-      GetStopListResModel getStopListResModel = GetStopListResModel.fromJson(response);
+      GetStopListResModel getStopListResModel =
+          GetStopListResModel.fromJson(response);
 
       return getStopListResModel;
     } catch (e) {
@@ -50,10 +53,12 @@ class SettingRepo {
   ///busDisplayList
   Future<dynamic> getBusDisplayList() async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.busDisplayList, apitype: APIType.aGet);
+      var response = await APIService()
+          .getResponse(url: ApiRouts.busDisplayList, apitype: APIType.aGet);
       log('response $response');
 
-      BusDisplayResModel busDisplayResModel = BusDisplayResModel.fromJson(response);
+      BusDisplayResModel busDisplayResModel =
+          BusDisplayResModel.fromJson(response);
 
       return busDisplayResModel;
     } catch (e) {
@@ -64,10 +69,12 @@ class SettingRepo {
   ///gpsImeiList
   Future<dynamic> getGPSImeiList() async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.gpsImeiList, apitype: APIType.aGet);
+      var response = await APIService()
+          .getResponse(url: ApiRouts.gpsImeiList, apitype: APIType.aGet);
       log('response $response');
 
-      GpsImeiListResModel gpsImeiListResModel = GpsImeiListResModel.fromJson(response);
+      GpsImeiListResModel gpsImeiListResModel =
+          GpsImeiListResModel.fromJson(response);
 
       return gpsImeiListResModel;
     } catch (e) {
@@ -78,10 +85,12 @@ class SettingRepo {
   ///getStopDisplayList
   Future<dynamic> getStopDisplayList() async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.stopDisplayList, apitype: APIType.aGet);
+      var response = await APIService()
+          .getResponse(url: ApiRouts.stopDisplayList, apitype: APIType.aGet);
       log('response $response');
 
-      GetStopDisplayListResModel getStopDisplayListResModel = GetStopDisplayListResModel.fromJson(response);
+      GetStopDisplayListResModel getStopDisplayListResModel =
+          GetStopDisplayListResModel.fromJson(response);
 
       return getStopDisplayListResModel;
     } catch (e) {
@@ -92,10 +101,12 @@ class SettingRepo {
   ///getTimeTableList
   Future<dynamic> getTimeTableList() async {
     try {
-      var response = await APIService().getResponse(url: ApiRouts.getTimeTableList, apitype: APIType.aGet);
+      var response = await APIService()
+          .getResponse(url: ApiRouts.getTimeTableList, apitype: APIType.aGet);
       log('response $response');
 
-      GetTimeTableListResModel getTimeTableListResModel = GetTimeTableListResModel.fromJson(response);
+      GetTimeTableListResModel getTimeTableListResModel =
+          GetTimeTableListResModel.fromJson(response);
 
       return getTimeTableListResModel;
     } catch (e) {
@@ -106,10 +117,12 @@ class SettingRepo {
   ///getRouteList
   Future<dynamic> getRouteList(String url) async {
     try {
-      var response = await APIService().getResponse(url: url, apitype: APIType.aGet);
+      var response =
+          await APIService().getResponse(url: url, apitype: APIType.aGet);
       log('response $response');
 
-      GetRouteListResModel getRouteListResModel = GetRouteListResModel.fromJson(response);
+      GetRouteListResModel getRouteListResModel =
+          GetRouteListResModel.fromJson(response);
 
       return getRouteListResModel;
     } catch (e) {
@@ -119,15 +132,19 @@ class SettingRepo {
 
   ///dailyRouteTripRoutesList
   bool isLoading = false;
-  Future<dynamic> getDailyRouteTripRouteList({String? routeNo, String? direction, String? day}) async {
+  Future<dynamic> getDailyRouteTripRouteList(
+      {String? routeNo, String? direction, String? day}) async {
     try {
       log("${ApiRouts.getDailyRouteTripFilter}--------------> ${ApiRouts.getDailyRouteTripFilter}route_no=$routeNo&direction=$direction}");
 
       var response = await APIService().getResponse(
-          url: "${ApiRouts.getDailyRouteTripFilter}route_no=$routeNo&direction=$direction", apitype: APIType.aGet);
+          url:
+              "${ApiRouts.getDailyRouteTripFilter}route_no=$routeNo&direction=$direction",
+          apitype: APIType.aGet);
       log('response>getDailyRouteTripFilter>>> $response');
 
-      GetDailyRouteTripResModel getDailyRouteTripResModel = GetDailyRouteTripResModel.fromJson(response);
+      GetDailyRouteTripResModel getDailyRouteTripResModel =
+          GetDailyRouteTripResModel.fromJson(response);
 
       return getDailyRouteTripResModel;
     } catch (e) {
@@ -136,7 +153,8 @@ class SettingRepo {
     }
   }
 
-  Future<dynamic> createStopSequence({required Map<String, dynamic> body}) async {
+  Future<dynamic> createStopSequence(
+      {required Map<String, dynamic> body}) async {
     try {
       var headers = {'Content-Type': 'application/json'};
       final result = await http.post(
@@ -200,7 +218,9 @@ class SettingRepo {
   }
 
   Future<dynamic> updateVehicle(
-      {required Map<String, String> body, required String uuid, required String vehicleImage}) async {
+      {required Map<String, String> body,
+      required String uuid,
+      required String vehicleImage}) async {
     try {
       var headers = {'Content-Type': 'application/json'};
 
@@ -241,7 +261,8 @@ class SettingRepo {
   }
 
   ///create Vehicle
-  Future<dynamic> createVehicle({required Map<String, String> body, required String imagePath}) async {
+  Future<dynamic> createVehicle(
+      {required Map<String, String> body, required String imagePath}) async {
     try {
       var headers = {'Content-Type': 'application/json'};
 
@@ -285,7 +306,8 @@ class SettingRepo {
 
   ///create time slot
 
-  Future<dynamic> createTimeSlotRepo({required Map<String, dynamic> body}) async {
+  Future<dynamic> createTimeSlotRepo(
+      {required Map<String, dynamic> body}) async {
     try {
       var headers = {'Content-Type': 'application/json'};
       final result = await http.post(
@@ -300,13 +322,17 @@ class SettingRepo {
     }
   }
 
-  Future<dynamic> dailyTripManagementRepo({String? routeId, String? direction, String? day}) async {
+  Future<dynamic> dailyTripManagementRepo(
+      {String? routeId, String? direction, String? day}) async {
     try {
       var response = await APIService().getResponse(
-          url: "${ApiRouts.dailyRouteTripList}?route_no=$routeId&direction=$direction&day=$day", apitype: APIType.aGet);
+          url:
+              "${ApiRouts.dailyRouteTripList}?route_no=$routeId&direction=$direction&day=$day",
+          apitype: APIType.aGet);
       log('dailyRouteTripResponseModel  $response');
 
-      DailyRouteTripResponseModel dailyRouteTripResponseModel = DailyRouteTripResponseModel.fromJson(response);
+      DailyRouteTripResponseModel dailyRouteTripResponseModel =
+          DailyRouteTripResponseModel.fromJson(response);
 
       return dailyRouteTripResponseModel;
     } catch (e) {
@@ -317,11 +343,13 @@ class SettingRepo {
   Future<dynamic> busTimeTableRepo({String? routeId, String? direction}) async {
     try {
       var response = await APIService().getResponse(
-          url: "http://134.209.145.234/api/v1/vehicles/timetable/list/?route_no=$routeId&direction=$direction",
+          url:
+              "http://134.209.145.234/api/v1/vehicles/timetable/list/?route_no=$routeId&direction=$direction",
           apitype: APIType.aGet);
       log('busTimeTableResModel  $response');
 
-      GetBusTimeTableResModel busTimeTableResModel = GetBusTimeTableResModel.fromJson(response);
+      GetBusTimeTableResModel busTimeTableResModel =
+          GetBusTimeTableResModel.fromJson(response);
 
       return busTimeTableResModel;
     } catch (e) {
@@ -331,7 +359,8 @@ class SettingRepo {
 
   ///create bus time slot
 
-  Future<dynamic> createBusTimeSlotRepo({required Map<String, dynamic> body}) async {
+  Future<dynamic> createBusTimeSlotRepo(
+      {required Map<String, dynamic> body}) async {
     try {
       var headers = {'Content-Type': 'application/json'};
       final result = await http.post(
@@ -348,7 +377,8 @@ class SettingRepo {
 
   ///create bus time slot
 
-  Future<dynamic> createBusDaySlotRepo({required Map<String, dynamic> body}) async {
+  Future<dynamic> createBusDaySlotRepo(
+      {required Map<String, dynamic> body}) async {
     try {
       var headers = {'Content-Type': 'application/json'};
       final result = await http.post(

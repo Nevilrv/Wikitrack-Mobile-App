@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
 
 AppBar commonAppBar({String? title, Function()? onTap}) {
   final height = Get.height;

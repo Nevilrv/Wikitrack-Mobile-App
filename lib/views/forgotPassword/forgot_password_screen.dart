@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/common/commontextfield.dart';
-import 'package:wikitrack/preference_manager/preference_Manager.dart';
-import 'package:wikitrack/response_model/forgot_password_res_model.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppRoutes.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
 import 'package:wikitrack/views/forgotPassword/controller/forgot_password_controller.dart';
-import 'dart:io';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);

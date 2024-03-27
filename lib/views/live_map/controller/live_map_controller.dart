@@ -14,7 +14,6 @@ import 'package:wikitrack/Repo/livemap_repo.dart';
 import 'package:wikitrack/Repo/setting_repo.dart';
 import 'package:wikitrack/Services/base_service.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/package/core/i_animarker_controller.dart';
 import 'package:wikitrack/response_model/create_stop_time_res_model.dart';
 import 'package:wikitrack/response_model/get_daily_route_trip_res_model.dart';
 import 'package:wikitrack/response_model/get_imeiToReg_res_model.dart';
@@ -28,7 +27,6 @@ import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppImages.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_map_marker_animation/google_map_marker_animation.dart';
 
 class LiveMapController extends GetxController {
   double? lat;
@@ -51,8 +49,8 @@ class LiveMapController extends GetxController {
 
   ///socket on
   getSocketAllAngleOn() {
-    SocketConnection.socket!.on("locationinfo", (data) {
-      log('locationinfo>>> ${data.runtimeType}');
+    SocketConnection.socket!.on("locationinfo", (data) async {
+      log('>locationinfo>> ${data.runtimeType}');
       log('locationinfo>>> ${data}');
       LatestDocument result;
       if (data.runtimeType == List<dynamic>) {
@@ -75,8 +73,9 @@ class LiveMapController extends GetxController {
       log("ind--------------> ${ind}");
 
       if (ind != -1) {
-        log("ind--------------> ${ind}");
+        log("ind-SUCCESS-------------> ${ind}");
         lng = LatLng(allImeiList[ind].lat, allImeiList[ind].lng);
+
         log("lng--------------> ${lng.longitude}");
         log("lng--------------> ${lng.latitude}");
 
@@ -85,6 +84,7 @@ class LiveMapController extends GetxController {
         log("allImeiList--------------> b ${allImeiList}");
         update();
         allImeiList.insert(ind, result);
+
         update();
         log("allImeiList[ind].lat--------------> ${allImeiList[ind].lat}");
         log("allImeiList[ind].lng--------------> ${allImeiList[ind].lng}");
@@ -105,6 +105,10 @@ class LiveMapController extends GetxController {
         // transition([allImeiList[ind].lat, allImeiList[ind].lng], [lng.latitude, lng.longitude], ind);
         update();
         log("allImeiList--------------> a ${allImeiList}");
+
+        if (stopSequence.isNotEmpty && selectedRouteId.isNotEmpty) {
+          await getDailyRouteTripViewModel();
+        }
       }
       //
 
@@ -276,6 +280,7 @@ class LiveMapController extends GetxController {
   VehicleList.GetVehiclesListResModel? response;
   List<VehicleList.Result> allData = [];
   List<LatestDocument> allImeiList = [];
+  List<LatestDocument> vehicleData = [];
   List<Marker> markers = <Marker>[];
 
   // List<Marker> markers = <Marker>[];
@@ -308,14 +313,14 @@ class LiveMapController extends GetxController {
         log("element--------------> ${element.gpsDevice!.imei}");
       }
     }
-    log("imeiList--------------> ${imeiList}");
+    log("imeiList--------------> $imeiList");
 
     var body = json.encode({"imei": imeiList, "type": "one"});
-    log("body--------------> ${body}");
+    log("body--------------> $body");
     if (imeiList.isNotEmpty) {
       getImeitoRegResModel = await LiveMapRepo().getImeiToReg(body: body);
       for (var element in getImeitoRegResModel!.data) {
-        allImeiList.add(element.latestDocument!);
+        allImeiList.add(element.latestDocument);
       }
     }
     if (allImeiList.isNotEmpty) {
@@ -333,7 +338,7 @@ class LiveMapController extends GetxController {
 
     update();
     log("data--------------> ${getImeitoRegResModel!.data}");
-    log("allImeiList--------------> ${allImeiList}");
+    log("allImeiList--------------> ${jsonEncode(allImeiList)}");
     loadMarkers();
     update();
   }
@@ -345,13 +350,14 @@ class LiveMapController extends GetxController {
 
   ApiResponse get getDailyRouteTripResponse => _getDailyRouteTripResponse;
   bool isLoading1 = false;
-  Future getDailyRouteTripViewModel(StateSetter setter) async {
-    isLoading1 = true;
-
-    setter(() {});
+  Future getDailyRouteTripViewModel({StateSetter? setter}) async {
+    setter!(() {
+      isLoading1 = true;
+    });
     update();
     _getDailyRouteTripResponse = ApiResponse.loading(message: 'Loading');
     update();
+
     getDailyRouteTripResModel = await SettingRepo().getDailyRouteTripRouteList(
         routeNo: selectedRouteId,
         direction: isForward ? '1' : '0',
@@ -428,7 +434,7 @@ class LiveMapController extends GetxController {
 
               if (element0.gpsDevice?.imei == element.imei) {
                 vehicleId = element0.id ?? "";
-                log("vehicleId--------------> ${vehicleId}");
+                log("vehicleId--------------> $vehicleId");
               }
             }
 
@@ -441,7 +447,7 @@ class LiveMapController extends GetxController {
               "current_date":
                   "${current.year}-${current.month}-${current.day}T${current.hour}:${current.minute}:${current.second}"
             });
-            log("selectedRouteId--------------> ${selectedRouteId}");
+            log("selectedRouteId--------------> $selectedRouteId");
           }
           // log("distanceInMeters--------------> ${distanceInMeters}");
           // value.add(distanceInMeters.round());
@@ -592,7 +598,9 @@ class LiveMapController extends GetxController {
   }
 
   Future getRouteListByDirectionViewModel(
-      String stopNo, String direction) async {
+      String stopNo, String direction, StateSetter setter) async {
+    isLoading1 = true;
+    setter(() {});
     stopSequence.clear();
     update();
     log("${ApiRouts.routeList}--------------> ${ApiRouts.routeList}?route_no=$stopNo&direction=$direction}");

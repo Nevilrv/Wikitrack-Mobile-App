@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:google_map_marker_animation/widgets/animarker.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +13,6 @@ import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/common/commontextfield.dart';
 
-import 'package:wikitrack/response_model/get_route_list_res_model.dart';
 import 'package:wikitrack/socket/socket_service.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
@@ -382,9 +378,12 @@ class _LiveMapScreenState extends State<LiveMapScreen>
                                                                               "") {
                                                                             commonSnackBar(message: 'Please select route');
                                                                           } else {
-                                                                            await controller.getRouteListByDirectionViewModel(controller.selectedRouteId,
-                                                                                controller.isForward ? '1' : '0');
-                                                                            await controller.getDailyRouteTripViewModel(setState123);
+                                                                            await controller.getRouteListByDirectionViewModel(
+                                                                              controller.selectedRouteId,
+                                                                              controller.isForward ? '1' : '0',
+                                                                              setState123,
+                                                                            );
+                                                                            await controller.getDailyRouteTripViewModel(setter: setState123);
 
                                                                             if (controller.isLoading1 ==
                                                                                 false) {

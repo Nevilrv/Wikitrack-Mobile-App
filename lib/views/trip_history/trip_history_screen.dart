@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -11,12 +10,10 @@ import 'package:intl/intl.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/socket/socket_service.dart';
 import 'package:wikitrack/utils/AppColors.dart';
 import 'package:wikitrack/utils/AppFontStyle.dart';
 import 'package:wikitrack/utils/AppImages.dart';
 import 'package:wikitrack/utils/AppStrings.dart';
-import 'package:wikitrack/utils/FontSize.dart';
 import 'package:wikitrack/views/trip_history/controller/trip_history_controller.dart';
 import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
     as vehicle;

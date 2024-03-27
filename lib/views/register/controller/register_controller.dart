@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wikitrack/Apis/api_response.dart';
-import 'package:wikitrack/Repo/auth_repo.dart';
 import 'package:wikitrack/Services/base_service.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/preference_manager/preference_Manager.dart';

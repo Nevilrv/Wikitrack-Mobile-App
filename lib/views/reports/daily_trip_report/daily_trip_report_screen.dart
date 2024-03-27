@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
@@ -72,46 +70,65 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                     Radius.circular(20.0),
                                   ),
                                 ),
-                                contentPadding: const EdgeInsets.only(top: 10.0),
+                                contentPadding:
+                                    const EdgeInsets.only(top: 10.0),
                                 title: const Text(
                                   AppStrings.selectRoute,
                                   style: TextStyle(fontSize: 24.0),
                                 ),
                                 content: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
                                   child: SingleChildScrollView(
                                     child: SizedBox(
-                                      height: MediaQuery.of(context).size.height * 0.5,
-                                      width: MediaQuery.of(context).size.width * 0.9,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.5,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           commonTextField(
                                             onChanged: (p0) {
                                               controller.searchResult(p0);
                                               setState123(() {});
                                             },
-                                            controller: controller.searchController,
+                                            controller:
+                                                controller.searchController,
                                             textColor: AppColors.blackColor,
                                             color: AppColors.iconGreyColor,
-                                            prefixIcon: const Icon(Icons.search),
+                                            prefixIcon:
+                                                const Icon(Icons.search),
                                           ),
                                           const SizedBox(height: 10),
                                           Expanded(
                                             child: ListView.separated(
-                                              separatorBuilder: (context, index) {
+                                              separatorBuilder:
+                                                  (context, index) {
                                                 return const Divider(height: 0);
                                               },
-                                              itemCount: controller.searchDataResults.length,
+                                              itemCount: controller
+                                                  .searchDataResults.length,
                                               shrinkWrap: true,
                                               itemBuilder: (context, index) {
                                                 return ListTile(
                                                   onTap: () {
                                                     // Get.back();
                                                     controller.setRouteId(
-                                                      controller.searchDataResults[index].routeNo.toString(),
-                                                      controller.searchDataResults[index].id.toString(),
+                                                      controller
+                                                          .searchDataResults[
+                                                              index]
+                                                          .routeNo
+                                                          .toString(),
+                                                      controller
+                                                          .searchDataResults[
+                                                              index]
+                                                          .id
+                                                          .toString(),
                                                     );
 
                                                     setState123(() {});
@@ -119,34 +136,57 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                                   title: Builder(
                                                     builder: (context) {
                                                       return Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
                                                         children: [
                                                           Flexible(
                                                             child: Text(
-                                                              (controller.searchDataResults[index].routeNo
+                                                              (controller
+                                                                          .searchDataResults[
+                                                                              index]
+                                                                          .routeNo
                                                                           .toString()
                                                                           .isEmpty
                                                                       ? "NA"
-                                                                      : controller.searchDataResults[index].routeNo)
+                                                                      : controller
+                                                                          .searchDataResults[
+                                                                              index]
+                                                                          .routeNo)
                                                                   .toString()
                                                                   .capitalizeFirst
                                                                   .toString(),
                                                             ),
                                                           ),
-                                                          const SizedBox(width: 5),
+                                                          const SizedBox(
+                                                              width: 5),
                                                           Container(
                                                             height: 17,
                                                             width: 17,
-                                                            padding: const EdgeInsets.all(2),
-                                                            decoration: BoxDecoration(
-                                                              shape: BoxShape.circle,
-                                                              border: Border.all(
-                                                                color: controller.searchDataResults[index].routeNo
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              border:
+                                                                  Border.all(
+                                                                color: controller
+                                                                            .searchDataResults[
+                                                                                index]
+                                                                            .routeNo
                                                                             .toString() ==
-                                                                        controller.selectedRouteId.toString()
-                                                                    ? AppColors.primaryColor
-                                                                    : AppColors.textGreyColor,
+                                                                        controller
+                                                                            .selectedRouteId
+                                                                            .toString()
+                                                                    ? AppColors
+                                                                        .primaryColor
+                                                                    : AppColors
+                                                                        .textGreyColor,
                                                                 width: 2,
                                                               ),
                                                             ),
@@ -154,13 +194,22 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                                               child: Container(
                                                                 height: 17,
                                                                 width: 17,
-                                                                decoration: BoxDecoration(
-                                                                  shape: BoxShape.circle,
-                                                                  color: controller.searchDataResults[index].routeNo
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  color: controller
+                                                                              .searchDataResults[
+                                                                                  index]
+                                                                              .routeNo
                                                                               .toString() ==
-                                                                          controller.selectedRouteId.toString()
-                                                                      ? AppColors.primaryColor
-                                                                      : Colors.transparent,
+                                                                          controller
+                                                                              .selectedRouteId
+                                                                              .toString()
+                                                                      ? AppColors
+                                                                          .primaryColor
+                                                                      : Colors
+                                                                          .transparent,
                                                                 ),
                                                               ),
                                                             ),
@@ -188,12 +237,21 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                             child: CommonButton(
                                               title: AppStrings.submit,
                                               onTap: () async {
-                                                if (controller.selectedRouteId == "") {
-                                                  commonSnackBar(message: 'Please select route');
+                                                if (controller
+                                                        .selectedRouteId ==
+                                                    "") {
+                                                  commonSnackBar(
+                                                      message:
+                                                          'Please select route');
                                                 } else {
-                                                  if (controller.toDateController.text.isNotEmpty) {
+                                                  if (controller
+                                                      .toDateController
+                                                      .text
+                                                      .isNotEmpty) {
                                                     Get.back();
-                                                    controller.getRoutesSchedules(isDialog: true);
+                                                    controller
+                                                        .getRoutesSchedules(
+                                                            isDialog: true);
                                                   } else {
                                                     Get.back();
                                                   }
@@ -226,7 +284,8 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: AppColors.lightGreyColor, width: 1.5)),
+                              border: Border.all(
+                                  color: AppColors.lightGreyColor, width: 1.5)),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(
                               vertical: 5,
@@ -263,7 +322,8 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                             children: [
                               Text(
                                 "314.0",
-                                style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                                style: blackMedium16TextStyle.copyWith(
+                                    fontWeight: FontWeight.w500),
                               ),
                               SizedBox(
                                 height: h * 0.04,
@@ -277,9 +337,12 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                     value: controller.isForward,
                                     onChanged: (_) async {
                                       if (controller.selectedRouteId == "") {
-                                        commonSnackBar(message: "Please select route");
-                                      } else if (controller.toDateController.text.isEmpty) {
-                                        commonSnackBar(message: "Please select date");
+                                        commonSnackBar(
+                                            message: "Please select route");
+                                      } else if (controller
+                                          .toDateController.text.isEmpty) {
+                                        commonSnackBar(
+                                            message: "Please select date");
                                       } else {
                                         controller.changeIsForward();
                                         controller.getRoutesSchedules();
@@ -290,7 +353,8 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                               ),
                               Text(
                                 "314.1",
-                                style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                                style: blackMedium16TextStyle.copyWith(
+                                    fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
@@ -323,15 +387,18 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                   child: Container(
                                     height: h * 0.06,
                                     width: w * 0.3,
-                                    margin: EdgeInsets.symmetric(vertical: h * 0.013),
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: h * 0.013),
                                     decoration: BoxDecoration(
                                       color: controller.selectedSlot == index
-                                          ? AppColors.primaryColor.withOpacity(0.2)
+                                          ? AppColors.primaryColor
+                                              .withOpacity(0.2)
                                           : AppColors.whiteColor,
                                       borderRadius: BorderRadius.circular(8),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(0xff000000).withOpacity(0.1),
+                                          color: const Color(0xff000000)
+                                              .withOpacity(0.1),
                                           offset: const Offset(0, 2),
                                           blurRadius: 4,
                                         ),
@@ -344,9 +411,10 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                         ),
                                         SvgPicture.asset(
                                           AppImages.time,
-                                          color: controller.selectedSlot == index
-                                              ? AppColors.primaryColor
-                                              : AppColors.textGreyColor,
+                                          color:
+                                              controller.selectedSlot == index
+                                                  ? AppColors.primaryColor
+                                                  : AppColors.textGreyColor,
                                         ),
                                         SizedBox(
                                           width: w * 0.02,
@@ -377,43 +445,54 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                 : ListView.builder(
                                     itemCount: controller.stopsTimeData.length,
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
                                       return Row(
                                         children: [
                                           Align(
                                             alignment: Alignment.centerLeft,
                                             child: Padding(
-                                              padding: EdgeInsets.only(left: w * 0.03),
+                                              padding: EdgeInsets.only(
+                                                  left: w * 0.03),
                                               child: Row(
                                                 children: [
                                                   Column(
                                                     children: [
                                                       Row(
                                                         children: [
-                                                          Stack(clipBehavior: Clip.none, children: [
-                                                            const Icon(
-                                                              Icons.circle_outlined,
-                                                              color: AppColors.primaryColor,
-                                                              size: 15,
-                                                            ),
-                                                            Positioned(
-                                                              top: -6,
-                                                              left: w * 0.05,
-                                                              child: Text(
-                                                                "${controller.stopsTimeData[index]['stopName']}",
-                                                                style: primaryBold12TextStyle.copyWith(
-                                                                    fontSize: FontSize().font16),
-                                                              ),
-                                                            ),
-                                                          ]),
+                                                          Stack(
+                                                              clipBehavior:
+                                                                  Clip.none,
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons
+                                                                      .circle_outlined,
+                                                                  color: AppColors
+                                                                      .primaryColor,
+                                                                  size: 15,
+                                                                ),
+                                                                Positioned(
+                                                                  top: -6,
+                                                                  left:
+                                                                      w * 0.05,
+                                                                  child: Text(
+                                                                    "${controller.stopsTimeData[index]['stopName']}",
+                                                                    style: primaryBold12TextStyle.copyWith(
+                                                                        fontSize:
+                                                                            FontSize().font16),
+                                                                  ),
+                                                                ),
+                                                              ]),
                                                         ],
                                                       ),
                                                       const Dash(
-                                                          direction: Axis.vertical,
+                                                          direction:
+                                                              Axis.vertical,
                                                           length: 70,
                                                           dashLength: 10,
-                                                          dashColor: AppColors.lightGreyColor,
+                                                          dashColor: AppColors
+                                                              .lightGreyColor,
                                                           dashGap: 6),
                                                     ],
                                                   ),
@@ -423,22 +502,35 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                                   Row(
                                                     children: [
                                                       Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           Text(
                                                             "Est.",
-                                                            style: greyMedium12TextStyle,
+                                                            style:
+                                                                greyMedium12TextStyle,
                                                           ),
                                                           Container(
                                                             decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(5),
-                                                                border: Border.all(color: AppColors.lightGreyColor)),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                border: Border.all(
+                                                                    color: AppColors
+                                                                        .lightGreyColor)),
                                                             child: Padding(
-                                                              padding: EdgeInsets.symmetric(
-                                                                  horizontal: w * 0.015, vertical: h * 0.003),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal: w *
+                                                                          0.015,
+                                                                      vertical: h *
+                                                                          0.003),
                                                               child: Text(
                                                                 "${DateFormat('hh:mm a').format(DateTime.parse(controller.stopsTimeData[index]['estimetedTime']))}",
-                                                                style: greyMedium12TextStyle,
+                                                                style:
+                                                                    greyMedium12TextStyle,
                                                               ),
                                                             ),
                                                           )
@@ -448,22 +540,35 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                                         width: w * 0.02,
                                                       ),
                                                       Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           Text(
                                                             "Act.",
-                                                            style: greyMedium12TextStyle,
+                                                            style:
+                                                                greyMedium12TextStyle,
                                                           ),
                                                           Container(
                                                             decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(5),
-                                                                border: Border.all(color: AppColors.lightGreyColor)),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                border: Border.all(
+                                                                    color: AppColors
+                                                                        .lightGreyColor)),
                                                             child: Padding(
-                                                              padding: EdgeInsets.symmetric(
-                                                                  horizontal: w * 0.015, vertical: h * 0.003),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal: w *
+                                                                          0.015,
+                                                                      vertical: h *
+                                                                          0.003),
                                                               child: Text(
                                                                 "${DateFormat('hh:mm a').format(controller.stopsTimeData[index]['actualTime'])}",
-                                                                style: greyMedium12TextStyle,
+                                                                style:
+                                                                    greyMedium12TextStyle,
                                                               ),
                                                             ),
                                                           )
