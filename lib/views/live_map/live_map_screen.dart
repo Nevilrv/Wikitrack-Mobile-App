@@ -14,10 +14,10 @@ import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/common/commontextfield.dart';
 
 import 'package:wikitrack/socket/socket_service.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_images.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/live_map/controller/live_map_controller.dart';
 
 class LiveMapScreen extends StatefulWidget {
@@ -376,14 +376,15 @@ class _LiveMapScreenState extends State<LiveMapScreen>
                                                                             () async {
                                                                           if (controller.selectedRouteId ==
                                                                               "") {
-                                                                            commonSnackBar(message: 'Please select route');
+                                                                            commonSnackBar('Please select route');
                                                                           } else {
                                                                             await controller.getRouteListByDirectionViewModel(
                                                                               controller.selectedRouteId,
                                                                               controller.isForward ? '1' : '0',
                                                                               setState123,
                                                                             );
-                                                                            await controller.getDailyRouteTripViewModel(setter: setState123);
+
+                                                                            await controller.getDailyRouteTripViewModel(setState123);
 
                                                                             if (controller.isLoading1 ==
                                                                                 false) {

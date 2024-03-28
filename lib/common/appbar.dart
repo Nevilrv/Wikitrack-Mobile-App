@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_images.dart';
 
 AppBar commonAppBar({String? title, Function()? onTap}) {
   final height = Get.height;

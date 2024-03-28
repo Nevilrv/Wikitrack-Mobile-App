@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppDialog.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_dialog.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_images.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/settings/controller/setting_controller.dart';
 
 import '../../../response_model/get_vehicle_list_res_model.dart';

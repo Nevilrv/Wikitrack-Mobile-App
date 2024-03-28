@@ -12,9 +12,9 @@ import 'package:wikitrack/response_model/dailt_route_trip_Response_model.dart';
 import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
     as vehicle;
 
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_images.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'dart:ui' as ui;
 import '../../../Repo/history_repo.dart';
 import '../../../Services/base_service.dart';
@@ -352,7 +352,7 @@ class TripHistoryController extends GetxController {
       results.addAll(getVehiclesListResModel.results!);
       update();
     } else {
-      commonSnackBar(message: "No routes found");
+      commonSnackBar("No routes found");
     }
   }
 
@@ -369,8 +369,11 @@ class TripHistoryController extends GetxController {
     if (dailyRouteTripResponseModel.results!.isNotEmpty) {
       routesVehicleResult.addAll(dailyRouteTripResponseModel.results!);
     } else {
-      commonSnackBar(message: "No routes found");
+      isLoading1 = false;
+      stateSetter(() {});
+      commonSnackBar("No routes found");
     }
+    isLoading1 = false;
     stateSetter(() {});
     update();
   }
@@ -390,19 +393,19 @@ class TripHistoryController extends GetxController {
       Get.back();
       isLoading1 = false;
       stateSetter(() {});
-      commonSnackBar(message: "No routes found");
+      commonSnackBar("No routes found");
     } else {
       log("results---------vfd-----> ${results}");
 
       if (routesVehicleResult[0].daySlot!.isEmpty) {
-        commonSnackBar(message: "No routes found");
+        commonSnackBar("No routes found");
       } else {
         if (routesVehicleResult[0].daySlot![0].timeSlot!.isEmpty) {
-          commonSnackBar(message: "No routes found");
+          commonSnackBar("No routes found");
         } else {
           routesVehicleResult[0].daySlot![0].timeSlot!.forEach((element2) {
             if (element2.dailyrouteTimeslot!.isEmpty) {
-              commonSnackBar(message: "No routes found");
+              commonSnackBar("No routes found");
             } else {
               element2.dailyrouteTimeslot!.forEach((element1) async {
                 String flat = '';
@@ -512,7 +515,7 @@ class TripHistoryController extends GetxController {
                     isLoading1 = false;
                     stateSetter(() {});
                     // stateSetter(() {});
-                    commonSnackBar(message: "No actual time found");
+                    commonSnackBar("No actual time found");
                     // Get.snackbar("Wikitrack", "No actual time found",
                     //     backgroundColor: AppColors.primaryColor,
                     //     colorText: AppColors.whiteColor,
@@ -528,7 +531,7 @@ class TripHistoryController extends GetxController {
                   int changeIndex = 0;
 
                   if (element1.actualTime!.isEmpty) {
-                    // commonSnackBar(message: "No actual time found");
+                    // commonSnackBar( "No actual time found");
                     // Get.back();
                     // stateSetter(() {});
                   } else {
@@ -610,6 +613,7 @@ class TripHistoryController extends GetxController {
     log("markers--------------> ${markers}");
 
     update();
+    isLoading1 = false;
     stateSetter(() {});
   }
 
@@ -626,7 +630,7 @@ class TripHistoryController extends GetxController {
       Get.back();
       isLoading1 = false;
       stateSetter(() {});
-      commonSnackBar(message: "No routes found");
+      commonSnackBar("No routes found");
     } else {
       log("results---------vfd-----> ${results}");
       if (results[0].dailyrouteVehicle!.isNotEmpty) {
@@ -733,7 +737,7 @@ class TripHistoryController extends GetxController {
             Get.back();
             isLoading1 = false;
             stateSetter(() {});
-            commonSnackBar(message: "No actual time found");
+            commonSnackBar("No actual time found");
           }
         });
         results[0].dailyrouteVehicle!.forEach((element) async {
@@ -812,7 +816,9 @@ class TripHistoryController extends GetxController {
           }
         });
       } else {
-        commonSnackBar(message: "No routes found");
+        isLoading1 = false;
+        stateSetter(() {});
+        commonSnackBar("No routes found");
       }
     }
 

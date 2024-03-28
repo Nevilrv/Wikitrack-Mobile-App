@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/forgotPassword/controller/forgot_password_controller.dart';
 
 class ForgotAddPasswordScreen extends StatefulWidget {
@@ -140,13 +140,11 @@ class _ForgotAddPasswordScreenState extends State<ForgotAddPasswordScreen> {
                             controller.addPassApiCall(body: body);
                           } else {
                             commonSnackBar(
-                                message:
-                                    "New password and confirm password are not match!");
+                                "New password and confirm password are not match!");
                           }
                         } else {
                           commonSnackBar(
-                              message:
-                                  "Password and confirm password are not matched!");
+                              "Password and confirm password are not matched!");
                         }
                       },
                       title: AppStrings.forgotPassword),

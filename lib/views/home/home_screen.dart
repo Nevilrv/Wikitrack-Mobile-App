@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/preference_manager/preference_Manager.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppRoutes.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_images.dart';
+import 'package:wikitrack/utils/app_routes.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/home/controller/home_controller.dart';
 import 'package:wikitrack/views/reports/report_screen.dart';
 
@@ -121,7 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       width: 20,
                     ),
-                    Center(child: SvgPicture.asset(AppImages.whiteLogo, height: height * 0.037, width: height * 0.037)),
+                    Center(
+                        child: SvgPicture.asset(AppImages.whiteLogo,
+                            height: height * 0.037, width: height * 0.037)),
                   ],
                 ),
                 SizedBox(
@@ -132,35 +134,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
                     children: [
-                      commonDrawerTile(height, AppStrings.busStopDisplay, AppImages.busStop, () {
+                      commonDrawerTile(
+                          height, AppStrings.busStopDisplay, AppImages.busStop,
+                          () {
                         _key.currentState!.closeDrawer();
                         Get.toNamed(Routes.busStopDisplayScreen);
                       }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.busDisplay, AppImages.busDisplay, () {
+                      commonDrawerTile(
+                          height, AppStrings.busDisplay, AppImages.busDisplay,
+                          () {
                         _key.currentState!.closeDrawer();
                         Get.toNamed(Routes.busDisplayScreen);
                       }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.liveMap, AppImages.liveMap, () {
+                      commonDrawerTile(
+                          height, AppStrings.liveMap, AppImages.liveMap, () {
                         _key.currentState!.closeDrawer();
                         Get.toNamed(Routes.liveMapScreen);
                       }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.tripHistory, AppImages.tripHistory, () {
+                      commonDrawerTile(
+                          height, AppStrings.tripHistory, AppImages.tripHistory,
+                          () {
                         _key.currentState!.closeDrawer();
                         Get.toNamed(Routes.tripHistoryScreen);
                       }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.reports, AppImages.report, () {
+                      commonDrawerTile(
+                          height, AppStrings.reports, AppImages.report, () {
                         _key.currentState!.closeDrawer();
                         Navigator.push(context, MaterialPageRoute(
                           builder: (context) {
@@ -172,14 +182,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.settings, AppImages.setting, () {
+                      commonDrawerTile(
+                          height, AppStrings.settings, AppImages.setting, () {
                         _key.currentState!.closeDrawer();
                         Get.toNamed(Routes.settingScreen);
                       }),
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      commonDrawerTile(height, AppStrings.logout, AppImages.logout, () {
+                      commonDrawerTile(
+                          height, AppStrings.logout, AppImages.logout, () {
                         PreferenceManager.clearAll();
                         Get.offAllNamed(Routes.loginScreen);
                       }),
@@ -192,18 +204,22 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  GestureDetector commonDrawerTile(double height, String title, String image, Function() onTap) {
+  GestureDetector commonDrawerTile(
+      double height, String title, String image, Function() onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         height: height * 0.15,
-        decoration: BoxDecoration(color: AppColors.whiteColor, borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+            color: AppColors.whiteColor,
+            borderRadius: BorderRadius.circular(8)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(image, height: height * 0.06, width: height * 0.06),
+              SvgPicture.asset(image,
+                  height: height * 0.06, width: height * 0.06),
               SizedBox(
                 height: height * 0.005,
               ),
@@ -218,14 +234,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Expanded commonContainer(double height, double width, String image, String title, String count) {
+  Expanded commonContainer(
+      double height, double width, String image, String title, String count) {
     return Expanded(
       child: Container(
         height: height * 0.09,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
-            BoxShadow(color: AppColors.blackColor.withOpacity(0.1), blurRadius: 4, offset: const Offset(0, 2))
+            BoxShadow(
+                color: AppColors.blackColor.withOpacity(0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2))
           ],
           color: Colors.white,
         ),
@@ -239,7 +259,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(image, height: height * 0.025, width: height * 0.025),
+                    SvgPicture.asset(image,
+                        height: height * 0.025, width: height * 0.025),
                     SizedBox(
                       width: width * 0.02,
                     ),

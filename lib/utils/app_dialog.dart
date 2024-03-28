@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:wikitrack/common/commontextfield.dart';
-import 'package:wikitrack/utils/AppColors.dart';
+import 'package:wikitrack/utils/app_colors.dart';
 import 'package:wikitrack/views/settings/controller/setting_controller.dart';
 
 class AppDialog {

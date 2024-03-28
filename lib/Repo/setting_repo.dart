@@ -139,7 +139,7 @@ class SettingRepo {
 
       var response = await APIService().getResponse(
           url:
-              "${ApiRouts.getDailyRouteTripFilter}route_no=$routeNo&direction=$direction",
+              "${ApiRouts.getDailyRouteTripFilter}route_no=$routeNo&direction=$direction&day=$day",
           apitype: APIType.aGet);
       log('response>getDailyRouteTripFilter>>> $response');
 

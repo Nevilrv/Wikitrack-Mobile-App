@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/commontextfield.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_images.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/bus_display/controller/bus_display_controller.dart';
 
 class BusDisplayScreen extends StatefulWidget {

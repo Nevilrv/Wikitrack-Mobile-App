@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
 
-Widget CommonButton({String? title, Function()? onTap}) {
+Widget CommonButton(
+    {String? title,
+    Function()? onTap,
+    double? width,
+    double? height,
+    Color? buttonColor,
+    TextStyle? style}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      height: Get.height * 0.065,
-      width: Get.width,
-      decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(8)),
-      child: Center(child: Text(title!, style: whiteMedium16TextStyle)),
+      height: height ?? Get.height * 0.065,
+      width: width ?? Get.width,
+      decoration: BoxDecoration(
+          color: buttonColor ?? AppColors.primaryColor,
+          borderRadius: BorderRadius.circular(8)),
+      child:
+          Center(child: Text(title!, style: style ?? whiteMedium16TextStyle)),
     ),
   );
 }
@@ -38,7 +47,8 @@ Widget commonBorderButton(
           Center(
               child: Text(title!,
                   style: whiteMedium16TextStyle.copyWith(
-                      color: textColor ?? AppColors.primaryColor, fontWeight: FontWeight.w600))),
+                      color: textColor ?? AppColors.primaryColor,
+                      fontWeight: FontWeight.w600))),
     ),
   );
 }

@@ -4,9 +4,9 @@ import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/common/commontextfield.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/forgotPassword/controller/forgot_password_controller.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -98,10 +98,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 "email": emailController.text,
                               });
                             } else if (emailController.text.isEmpty) {
-                              commonSnackBar(message: "Please enter email");
+                              commonSnackBar("Please enter email");
                             } else {
-                              commonSnackBar(
-                                  message: "Please enter valid email");
+                              commonSnackBar("Please enter valid email");
                             }
                           },
                           title: AppStrings.forgotPassword);

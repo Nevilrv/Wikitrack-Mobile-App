@@ -29,6 +29,10 @@ class SettingController extends GetxController {
   TextEditingController stopDevice = TextEditingController();
   TextEditingController stop = TextEditingController();
 
+  TextEditingController travelTimeHour = TextEditingController();
+  TextEditingController travelTimeMin = TextEditingController();
+  TextEditingController travelTimeSec = TextEditingController();
+
   String stopId = "";
   String? selectedRouteId;
   String? selectedRouteNo;
@@ -440,7 +444,7 @@ class SettingController extends GetxController {
 
       getVehicleListViewModel();
       Get.back();
-      commonSnackBar(message: 'Vehicle Created Successfully');
+      commonSnackBar('Vehicle Created Successfully');
       log("<==response==>$response");
 
       update();
@@ -484,7 +488,7 @@ class SettingController extends GetxController {
       _updateVehicleResponse = ApiResponse.complete(response);
 
       getVehicleListViewModel();
-      commonSnackBar(message: 'Details Updated Successfully');
+      commonSnackBar('Details Updated Successfully');
       log("<==response==>$response");
 
       update();
@@ -618,7 +622,7 @@ class SettingController extends GetxController {
       );
       _createTimeSlotResponse = ApiResponse.complete(response);
 
-      commonSnackBar(message: 'Time Slot Created Successfully');
+      commonSnackBar('Time Slot Created Successfully');
       log("<==response==>$response");
 
       update();
@@ -763,7 +767,7 @@ class SettingController extends GetxController {
 
       log('response==========>>>>>${response}');
 
-      commonSnackBar(message: 'Time Slot Created Successfully');
+      commonSnackBar('Time Slot Created Successfully');
       log("<==response==>$response");
 
       update();
@@ -789,7 +793,7 @@ class SettingController extends GetxController {
       var response = await SettingRepo().createBusDaySlotRepo(body: body);
       _createBusDaySlotResponse = ApiResponse.complete(response);
 
-      // commonSnackBar(message: 'Day Slot Created Successfully');
+      // commonSnackBar( 'Day Slot Created Successfully');
       log("<==response==>$response");
 
       update();

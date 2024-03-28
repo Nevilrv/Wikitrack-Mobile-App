@@ -7,10 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppDialog.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_dialog.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/settings/controller/setting_controller.dart';
 
 import '../../../common/common_snackbar.dart';
@@ -106,7 +106,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                       children: [
                         Text(
                           "Forward",
-                          style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                          style: blackMedium16TextStyle.copyWith(
+                              fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
                           height: height * 0.04,
@@ -124,7 +125,9 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                   controller.busTimeTableData.clear();
                                   await controller.busTimeTableViewModel(
                                     routeId: controller.searchDataResults1
-                                        .where((element) => element.id == controller.selectedRouteId)
+                                        .where((element) =>
+                                            element.id ==
+                                            controller.selectedRouteId)
                                         .first
                                         .routeNo
                                         .toString()
@@ -141,7 +144,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                         ),
                         Text(
                           "Reverse",
-                          style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
+                          style: blackMedium16TextStyle.copyWith(
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -149,14 +153,18 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                   if (controller.selectedRouteId != null)
                     Builder(
                       builder: (context) {
-                        if (controller.getBusTimeTableResponse.status == Status.LOADING) {
+                        if (controller.getBusTimeTableResponse.status ==
+                            Status.LOADING) {
                           return const Center(
                               child: CircularProgressIndicator(
                             color: AppColors.primaryColor,
                           )).paddingOnly(top: height * 0.3);
-                        } else if (controller.getBusTimeTableResponse.status == Status.ERROR) {
-                          return const Center(child: Text("Server Error")).paddingOnly(top: height * 0.3);
-                        } else if (controller.getBusTimeTableResponse.status == Status.COMPLETE) {
+                        } else if (controller.getBusTimeTableResponse.status ==
+                            Status.ERROR) {
+                          return const Center(child: Text("Server Error"))
+                              .paddingOnly(top: height * 0.3);
+                        } else if (controller.getBusTimeTableResponse.status ==
+                            Status.COMPLETE) {
                           return controller.busTimeTableData.isNotEmpty
                               ? Column(
                                   children: [
@@ -164,9 +172,11 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                       separatorBuilder: (context, index) {
                                         return SizedBox(height: height * 0.02);
                                       },
-                                      itemCount: controller.busTimeTableData.first.daySlot!.length,
+                                      itemCount: controller.busTimeTableData
+                                          .first.daySlot!.length,
                                       shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return Column(
                                           children: [
@@ -175,12 +185,20 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                                 Expanded(
                                                   flex: 12,
                                                   child: commonBorderButton(
-                                                    borderColor: AppColors.lightGreyColor,
-                                                    color: AppColors.lightGreyColor,
-                                                    title: controller.busTimeTableData.first.daySlot![index].day,
-                                                    textColor: AppColors.blackColor,
+                                                    borderColor: AppColors
+                                                        .lightGreyColor,
+                                                    color: AppColors
+                                                        .lightGreyColor,
+                                                    title: controller
+                                                        .busTimeTableData
+                                                        .first
+                                                        .daySlot![index]
+                                                        .day,
+                                                    textColor:
+                                                        AppColors.blackColor,
                                                     onTap: () {
-                                                      controller.isVisible(index);
+                                                      controller
+                                                          .isVisible(index);
                                                     },
                                                   ),
                                                 ),
@@ -188,39 +206,62 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                                   flex: 2,
                                                   child: GestureDetector(
                                                     onTap: () async {
-                                                      await controller.selectTime(context);
+                                                      await controller
+                                                          .selectTime(context);
 
-                                                      if (controller.selectedTime == null) {
+                                                      if (controller
+                                                              .selectedTime ==
+                                                          null) {
                                                         return;
                                                       }
 
-                                                      await controller.createBusTimeSlotViewModel(body: {
-                                                        "dayslot": controller.busTimeTableData.first.daySlot?[index].id,
-                                                        "time":
-                                                            "${controller.selectedTime?.hour}:${controller.selectedTime?.minute}",
-                                                        "status": false
-                                                      });
-                                                      controller.selectedTime = null;
-                                                      controller.busTimeTableData.clear();
-                                                      await controller.busTimeTableViewModel(
-                                                        routeId: controller.searchDataResults
-                                                            .where(
-                                                                (element) => element.id == controller.selectedRouteId)
+                                                      await controller
+                                                          .createBusTimeSlotViewModel(
+                                                              body: {
+                                                            "dayslot": controller
+                                                                .busTimeTableData
+                                                                .first
+                                                                .daySlot?[index]
+                                                                .id,
+                                                            "time":
+                                                                "${controller.selectedTime?.hour}:${controller.selectedTime?.minute}",
+                                                            "status": false
+                                                          });
+                                                      controller.selectedTime =
+                                                          null;
+                                                      controller
+                                                          .busTimeTableData
+                                                          .clear();
+                                                      await controller
+                                                          .busTimeTableViewModel(
+                                                        routeId: controller
+                                                            .searchDataResults
+                                                            .where((element) =>
+                                                                element.id ==
+                                                                controller
+                                                                    .selectedRouteId)
                                                             .first
                                                             .routeNo
                                                             .toString()
-                                                            .replaceAll(" ", "%20"),
-                                                        direction: controller.isForward ? "0" : "1",
+                                                            .replaceAll(
+                                                                " ", "%20"),
+                                                        direction:
+                                                            controller.isForward
+                                                                ? "0"
+                                                                : "1",
                                                       );
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
                                                         shape: BoxShape.circle,
-                                                        border: Border.all(color: AppColors.primaryColor),
+                                                        border: Border.all(
+                                                            color: AppColors
+                                                                .primaryColor),
                                                       ),
                                                       child: const Icon(
                                                         Icons.add,
-                                                        color: AppColors.primaryColor,
+                                                        color: AppColors
+                                                            .primaryColor,
                                                       ),
                                                     ),
                                                   ),
@@ -228,50 +269,103 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                               ],
                                             ),
                                             Visibility(
-                                              visible: controller.busTimeTableData.first.daySlot![index].isVisible,
-                                              child: controller.busTimeTableData.first.daySlot![index].timeSlot!.isEmpty
-                                                  ? const Center(child: Text("No Time Slot"))
-                                                      .paddingOnly(top: height * 0.02)
+                                              visible: controller
+                                                  .busTimeTableData
+                                                  .first
+                                                  .daySlot![index]
+                                                  .isVisible,
+                                              child: controller
+                                                      .busTimeTableData
+                                                      .first
+                                                      .daySlot![index]
+                                                      .timeSlot!
+                                                      .isEmpty
+                                                  ? const Center(
+                                                          child: Text(
+                                                              "No Time Slot"))
+                                                      .paddingOnly(
+                                                          top: height * 0.02)
                                                   : GridView.builder(
-                                                      padding: EdgeInsets.only(top: height * 0.02),
+                                                      padding: EdgeInsets.only(
+                                                          top: height * 0.02),
                                                       shrinkWrap: true,
-                                                      physics: const NeverScrollableScrollPhysics(),
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
                                                       itemCount: controller
-                                                          .busTimeTableData.first.daySlot![index].timeSlot?.length,
-                                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                          crossAxisCount: 3, mainAxisExtent: height * 0.065),
-                                                      itemBuilder: (context, iii) {
-                                                        DateTime time = DateFormat("HH:mm").parse(controller
-                                                            .busTimeTableData.first.daySlot![index].timeSlot![iii].time
-                                                            .toString());
-                                                        String formattedTime = DateFormat("HH:mm").format(time);
+                                                          .busTimeTableData
+                                                          .first
+                                                          .daySlot![index]
+                                                          .timeSlot
+                                                          ?.length,
+                                                      gridDelegate:
+                                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                                              crossAxisCount: 3,
+                                                              mainAxisExtent:
+                                                                  height *
+                                                                      0.065),
+                                                      itemBuilder:
+                                                          (context, iii) {
+                                                        DateTime time = DateFormat(
+                                                                "HH:mm")
+                                                            .parse(controller
+                                                                .busTimeTableData
+                                                                .first
+                                                                .daySlot![index]
+                                                                .timeSlot![iii]
+                                                                .time
+                                                                .toString());
+                                                        String formattedTime =
+                                                            DateFormat("HH:mm")
+                                                                .format(time);
 
                                                         return Padding(
-                                                          padding: const EdgeInsets.all(3.0),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(3.0),
                                                           child: Container(
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(8),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
                                                               boxShadow: [
                                                                 BoxShadow(
-                                                                    color: AppColors.blackColor.withOpacity(0.1),
-                                                                    blurRadius: 4,
-                                                                    offset: const Offset(0, 2))
+                                                                    color: AppColors
+                                                                        .blackColor
+                                                                        .withOpacity(
+                                                                            0.1),
+                                                                    blurRadius:
+                                                                        4,
+                                                                    offset:
+                                                                        const Offset(
+                                                                            0,
+                                                                            2))
                                                               ],
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                             ),
                                                             child: Center(
                                                               child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
                                                                 children: [
-                                                                  Icon(Icons.access_time_rounded,
-                                                                      color: AppColors.textGreyColor,
-                                                                      size: height * 0.027),
+                                                                  Icon(
+                                                                      Icons
+                                                                          .access_time_rounded,
+                                                                      color: AppColors
+                                                                          .textGreyColor,
+                                                                      size: height *
+                                                                          0.027),
                                                                   SizedBox(
-                                                                    width: width * 0.005,
+                                                                    width: width *
+                                                                        0.005,
                                                                   ),
                                                                   Text(
                                                                     formattedTime,
-                                                                    style: blackMedium14TextStyle,
+                                                                    style:
+                                                                        blackMedium14TextStyle,
                                                                   ),
                                                                 ],
                                                               ),
@@ -287,9 +381,12 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                     ),
                                   ],
                                 )
-                              : const Center(child: Text("No Time Table Data")).paddingOnly(top: height * 0.3);
+                              : const Center(child: Text("No Time Table Data"))
+                                  .paddingOnly(top: height * 0.3);
                         } else {
-                          return const Center(child: Text("Something Went Wrong")).paddingOnly(top: height * 0.3);
+                          return const Center(
+                                  child: Text("Something Went Wrong"))
+                              .paddingOnly(top: height * 0.3);
                         }
                       },
                     ),
@@ -300,7 +397,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
     });
   }
 
-  Future<void> buildShowModalBottomSheet(BuildContext context, double height, double width) {
+  Future<void> buildShowModalBottomSheet(
+      BuildContext context, double height, double width) {
     final config = CalendarDatePicker2WithActionButtonsConfig(
       dayBorderRadius: BorderRadius.circular(8),
       gapBetweenCalendarAndButtons: 0,
@@ -341,11 +439,14 @@ class _RountineTripManagementState extends State<BusTimeTable> {
             width: 298,
             margin: const EdgeInsets.symmetric(horizontal: 22),
             height: 48,
-            decoration: BoxDecoration(color: const Color(0xffB70013), borderRadius: BorderRadius.circular(7)),
+            decoration: BoxDecoration(
+                color: const Color(0xffB70013),
+                borderRadius: BorderRadius.circular(7)),
             child: const Center(
               child: Text(
                 "Submit",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -353,7 +454,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
           Container(
             height: 4,
             width: 140,
-            decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(
+                color: Colors.black, borderRadius: BorderRadius.circular(10)),
           ),
           const SizedBox(
             height: 3,
@@ -362,7 +464,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
       ),
       weekdayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       cancelButton: const SizedBox(),
-      dayTextStyle: const TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
+      dayTextStyle:
+          const TextStyle(color: Colors.black54, fontWeight: FontWeight.w600),
       calendarType: CalendarDatePicker2Type.single,
       selectedDayHighlightColor: Colors.red[800],
       closeDialogOnCancelTapped: true,
@@ -379,11 +482,14 @@ class _RountineTripManagementState extends State<BusTimeTable> {
       centerAlignModePicker: true,
       customModePickerIcon: const SizedBox(),
       selectedDayTextStyle:
-          const TextStyle(color: Color(0xffB70013), fontWeight: FontWeight.w700).copyWith(color: Colors.white),
+          const TextStyle(color: Color(0xffB70013), fontWeight: FontWeight.w700)
+              .copyWith(color: Colors.white),
       dayTextStylePredicate: ({required date}) {
         TextStyle? textStyle;
-        if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
-          textStyle = TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w600);
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday) {
+          textStyle =
+              TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w600);
         }
         if (DateUtils.isSameDay(date, DateTime(2021, 1, 25))) {
           textStyle = TextStyle(
@@ -408,7 +514,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                 child: IntrinsicHeight(
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         // mainAxisSize: MainAxisSize.min,
@@ -429,7 +536,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                             children: [
                               Text(
                                 AppStrings.byRoute,
-                                style: blackMedium14TextStyle.copyWith(fontWeight: FontWeight.w500),
+                                style: blackMedium14TextStyle.copyWith(
+                                    fontWeight: FontWeight.w500),
                               ),
                               SizedBox(
                                 height: height * 0.035,
@@ -451,7 +559,8 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                               ),
                               Text(
                                 AppStrings.byRoute,
-                                style: blackMedium14TextStyle.copyWith(fontWeight: FontWeight.w500),
+                                style: blackMedium14TextStyle.copyWith(
+                                    fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
@@ -473,87 +582,135 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                               onTap: () async {
                                 log("settingController.selectedRouteId1--------------> ${settingController.selectedRouteId}");
 
-                                if (settingController.busTimeTableData.isEmpty) {
+                                if (settingController
+                                    .busTimeTableData.isEmpty) {
                                   log('is empty----');
 
                                   bool isMatch = false;
                                   String id = "";
-                                  settingController.searchDataResults1.forEach((element) {
-                                    if ((element.routeNo == settingController.selectedRouteNo) &&
-                                        (element.direction.toString() == (settingController.isForward ? "0" : "1"))) {
+                                  settingController.searchDataResults1
+                                      .forEach((element) {
+                                    if ((element.routeNo ==
+                                            settingController
+                                                .selectedRouteNo) &&
+                                        (element.direction.toString() ==
+                                            (settingController.isForward
+                                                ? "0"
+                                                : "1"))) {
                                       isMatch = true;
                                       id = element.id!;
                                     }
                                   });
                                   if (isMatch == true) {
-                                    await settingController
-                                        .createTimeTable(body: {"route": id, "status": true}).then((value) async {
-                                      settingController.busTimeTableData.clear();
-                                      await settingController.busTimeTableViewModel(
-                                        routeId: settingController.searchDataResults
-                                            .where((element) => element.id == settingController.selectedRouteId)
+                                    await settingController.createTimeTable(
+                                        body: {
+                                          "route": id,
+                                          "status": true
+                                        }).then((value) async {
+                                      settingController.busTimeTableData
+                                          .clear();
+                                      await settingController
+                                          .busTimeTableViewModel(
+                                        routeId: settingController
+                                            .searchDataResults
+                                            .where((element) =>
+                                                element.id ==
+                                                settingController
+                                                    .selectedRouteId)
                                             .first
                                             .routeNo
                                             .toString()
                                             .replaceAll(" ", "%20"),
-                                        direction: settingController.isForward ? "0" : "1",
+                                        direction: settingController.isForward
+                                            ? "0"
+                                            : "1",
                                       );
-                                      await settingController.createBusDaySlotViewModel(
+                                      await settingController
+                                          .createBusDaySlotViewModel(
                                         body: {
-                                          "timetable": "${settingController.busTimeTableData.first.id}",
-                                          "day": DateFormat("EEEE").format(selectedDate.first!),
+                                          "timetable":
+                                              "${settingController.busTimeTableData.first.id}",
+                                          "day": DateFormat("EEEE")
+                                              .format(selectedDate.first!),
                                           "status": false
                                         },
                                       );
-                                      if (settingController.busTimeTableData.isNotEmpty) {
-                                        bool? value = settingController.busTimeTableData.first.daySlot?.any(
+                                      if (settingController
+                                          .busTimeTableData.isNotEmpty) {
+                                        bool? value = settingController
+                                            .busTimeTableData.first.daySlot
+                                            ?.any(
                                           (element) =>
-                                              element.day.toString().toLowerCase() ==
-                                              DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
+                                              element.day
+                                                  .toString()
+                                                  .toLowerCase() ==
+                                              DateFormat("EEEE")
+                                                  .format(selectedDate.first!)
+                                                  .toString()
+                                                  .toLowerCase(),
                                         );
 
                                         if (value == true) {
                                           commonSnackBar(
-                                              message: "Selected Day already exist. Please try with another one.");
+                                              "Selected Day already exist. Please try with another one.");
                                           return;
                                         }
                                       }
 
                                       Navigator.pop(context);
 
-                                      settingController.busTimeTableData.clear();
-                                      await settingController.busTimeTableViewModel(
-                                        routeId: settingController.searchDataResults
-                                            .where((element) => element.id == settingController.selectedRouteId)
+                                      settingController.busTimeTableData
+                                          .clear();
+                                      await settingController
+                                          .busTimeTableViewModel(
+                                        routeId: settingController
+                                            .searchDataResults
+                                            .where((element) =>
+                                                element.id ==
+                                                settingController
+                                                    .selectedRouteId)
                                             .first
                                             .routeNo
                                             .toString()
                                             .replaceAll(" ", "%20"),
-                                        direction: settingController.isForward ? "0" : "1",
+                                        direction: settingController.isForward
+                                            ? "0"
+                                            : "1",
                                       );
                                     });
                                   } else {
-                                    commonSnackBar(message: "Route direction not found");
+                                    commonSnackBar("Route direction not found");
                                   }
                                 } else {
                                   log('not empty----');
-                                  await settingController.createBusDaySlotViewModel(
+                                  await settingController
+                                      .createBusDaySlotViewModel(
                                     body: {
-                                      "timetable": "${settingController.busTimeTableData.first.id}",
-                                      "day": DateFormat("EEEE").format(selectedDate.first!),
+                                      "timetable":
+                                          "${settingController.busTimeTableData.first.id}",
+                                      "day": DateFormat("EEEE")
+                                          .format(selectedDate.first!),
                                       "status": false
                                     },
                                   );
-                                  if (settingController.busTimeTableData.isNotEmpty) {
-                                    bool? value = settingController.busTimeTableData.first.daySlot?.any(
+                                  if (settingController
+                                      .busTimeTableData.isNotEmpty) {
+                                    bool? value = settingController
+                                        .busTimeTableData.first.daySlot
+                                        ?.any(
                                       (element) =>
-                                          element.day.toString().toLowerCase() ==
-                                          DateFormat("EEEE").format(selectedDate.first!).toString().toLowerCase(),
+                                          element.day
+                                              .toString()
+                                              .toLowerCase() ==
+                                          DateFormat("EEEE")
+                                              .format(selectedDate.first!)
+                                              .toString()
+                                              .toLowerCase(),
                                     );
 
                                     if (value == true) {
                                       commonSnackBar(
-                                          message: "Selected Day already exist. Please try with another one.");
+                                          "Selected Day already exist. Please try with another one.");
                                       return;
                                     }
                                   }
@@ -563,12 +720,15 @@ class _RountineTripManagementState extends State<BusTimeTable> {
                                   settingController.busTimeTableData.clear();
                                   await settingController.busTimeTableViewModel(
                                     routeId: settingController.searchDataResults
-                                        .where((element) => element.id == settingController.selectedRouteId)
+                                        .where((element) =>
+                                            element.id ==
+                                            settingController.selectedRouteId)
                                         .first
                                         .routeNo
                                         .toString()
                                         .replaceAll(" ", "%20"),
-                                    direction: settingController.isForward ? "0" : "1",
+                                    direction:
+                                        settingController.isForward ? "0" : "1",
                                   );
                                 }
                               },
@@ -630,7 +790,9 @@ class _RountineTripManagementState extends State<BusTimeTable> {
       helpText: title ?? "Select time",
       builder: (context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(colorScheme: const ColorScheme.light(primary: AppColors.primaryColor)),
+          data: ThemeData.light().copyWith(
+              colorScheme:
+                  const ColorScheme.light(primary: AppColors.primaryColor)),
           child: MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
             child: child!,

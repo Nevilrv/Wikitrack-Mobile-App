@@ -10,7 +10,7 @@ import 'package:wikitrack/Services/base_service.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/response_model/dailt_route_trip_Response_model.dart';
 import 'package:wikitrack/response_model/get_route_list_res_model.dart';
-import 'package:wikitrack/utils/AppColors.dart';
+import 'package:wikitrack/utils/app_colors.dart';
 
 class ReportController extends GetxController {
   bool isForward = false;
@@ -26,7 +26,8 @@ class ReportController extends GetxController {
   List<RouteResult> searchDataResults = [];
   List<RouteResult> searchDataResultsAll = [];
   List<RouteResult> tempList = [];
-  ApiResponse _getRouteListResponse = ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getRouteListResponse =
+      ApiResponse.initial(message: 'Initialization');
   ApiResponse get getRouteListResponse => _getRouteListResponse;
 
   String selRouteId = "";
@@ -39,13 +40,15 @@ class ReportController extends GetxController {
 
     update();
     try {
-      GetRouteListResModel response = await SettingRepo().getRouteList('${ApiRouts.routeList}');
+      GetRouteListResModel response =
+          await SettingRepo().getRouteList('${ApiRouts.routeList}');
       // searchDataResults.addAll(response.results!);
       // tempList.addAll(response.results!);
 
       response.results!.forEach((element) {
         // searchDataResults.add(element);
-        bool hasThreeID = searchDataResults.any((mapTested) => mapTested.routeNo == element.routeNo);
+        bool hasThreeID = searchDataResults
+            .any((mapTested) => mapTested.routeNo == element.routeNo);
         if (hasThreeID == true) {
         } else {
           searchDataResults.add(element);
@@ -73,7 +76,10 @@ class ReportController extends GetxController {
     } else {
       searchDataResults = [];
       for (var element in tempList) {
-        if (element.routeNo.toString().toLowerCase().contains(value.toString().toLowerCase())) {
+        if (element.routeNo
+            .toString()
+            .toLowerCase()
+            .contains(value.toString().toLowerCase())) {
           searchDataResults.add(element);
         }
       }
@@ -127,12 +133,12 @@ class ReportController extends GetxController {
         if (selectedRouteId != "") {
           getRoutesSchedules();
         } else {
-          commonSnackBar(message: "Please select route");
+          commonSnackBar("Please select route");
         }
       }
       update();
     } else {
-      commonSnackBar(message: "Please select route");
+      commonSnackBar("Please select route");
     }
   }
 
@@ -146,25 +152,28 @@ class ReportController extends GetxController {
     stopIndex = 0;
     selectedSlot = 0;
     try {
-      DailyRouteTripResponseModel dailyRouteTripResponseModel = await HistoryRepo().dailyTripManagementRepo(
+      DailyRouteTripResponseModel dailyRouteTripResponseModel =
+          await HistoryRepo().dailyTripManagementRepo(
         url:
             "${ApiRouts.dailyRouteTripList}?route_no=${selectedRouteId}&direction=${isForward == true ? '0' : '1'}&date=${toDateController.text}",
       );
 
       if (dailyRouteTripResponseModel.results!.isEmpty) {
-        commonSnackBar(message: "No routes found");
+        commonSnackBar("No routes found");
         if (isDialog == true) {
           Get.back();
         }
       } else {
         if (dailyRouteTripResponseModel.results![0].daySlot!.isEmpty) {
-          commonSnackBar(message: "No routes found");
+          commonSnackBar("No routes found");
           if (isDialog == true) {
             Get.back();
           }
         } else {
-          if (dailyRouteTripResponseModel.results![0].daySlot![0].timeSlot!.isNotEmpty) {
-            timeSlot.addAll(dailyRouteTripResponseModel.results![0].daySlot![0].timeSlot!);
+          if (dailyRouteTripResponseModel
+              .results![0].daySlot![0].timeSlot!.isNotEmpty) {
+            timeSlot.addAll(
+                dailyRouteTripResponseModel.results![0].daySlot![0].timeSlot!);
             update();
             showStopsData(0);
           } else {
@@ -194,7 +203,8 @@ class ReportController extends GetxController {
             String time = timeSlot[index].time!;
             String actualTime = element.time!;
             if (element.time == "00") {
-              estimatedTime = "${date.add(Duration(minutes: int.parse(element.time!)))}";
+              estimatedTime =
+                  "${date.add(Duration(minutes: int.parse(element.time!)))}";
             } else {
               estimatedTime =
                   "${date.add(Duration(hours: int.parse(time.split(":")[0]), minutes: int.parse(time.split(":")[1]), seconds: int.parse(time.split(":")[2])))}";
@@ -219,7 +229,8 @@ class ReportController extends GetxController {
             log("time--------------> ${time}");
             log("estimatedTime--------------> ${estimatedTime}");
 
-            estimatedTime = "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
+            estimatedTime =
+                "${DateTime.parse(estimatedTime).add(Duration(minutes: int.parse(time)))}";
             log("estimatedTime-----dsede---------> ${estimatedTime}");
             DateTime actualFinalTime = date.add(Duration(
                 hours: int.parse(actualTime.split(":")[0]),
@@ -236,10 +247,10 @@ class ReportController extends GetxController {
         });
         update();
       } else {
-        commonSnackBar(message: "No actual time found ");
+        commonSnackBar("No actual time found ");
       }
     } else {
-      commonSnackBar(message: "No routes found");
+      commonSnackBar("No routes found");
     }
     update();
   }

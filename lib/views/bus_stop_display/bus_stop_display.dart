@@ -3,9 +3,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/bus_stop_display/controller/bus_stop_display_controller.dart';
 
 import '../../common/commontextfield.dart';
@@ -58,7 +58,8 @@ class _BusStopDisplayScreenState extends State<BusStopDisplayScreen> {
                         controller.tempStopResult.clear();
                         controller.tempStopResult.addAll(controller.stopResult);
                         controller.update();
-                        TextEditingController searchController = TextEditingController();
+                        TextEditingController searchController =
+                            TextEditingController();
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -70,63 +71,90 @@ class _BusStopDisplayScreenState extends State<BusStopDisplayScreen> {
                                       Radius.circular(20.0),
                                     ),
                                   ),
-                                  contentPadding: const EdgeInsets.only(top: 10.0),
+                                  contentPadding:
+                                      const EdgeInsets.only(top: 10.0),
                                   title: const Text(
                                     AppStrings.selectStop,
                                     style: TextStyle(fontSize: 24.0),
                                   ),
                                   content: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
                                     child: SingleChildScrollView(
                                       child: SizedBox(
-                                        height: MediaQuery.of(context).size.height * 0.5,
-                                        width: MediaQuery.of(context).size.width * 0.9,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             commonTextField(
                                               onChanged: (p0) {
-                                                controller.searchResult(p0, setState123);
+                                                controller.searchResult(
+                                                    p0, setState123);
                                               },
                                               controller: searchController,
                                               textColor: AppColors.blackColor,
                                               color: AppColors.iconGreyColor,
-                                              prefixIcon: const Icon(Icons.search),
+                                              prefixIcon:
+                                                  const Icon(Icons.search),
                                             ),
                                             const SizedBox(height: 10),
                                             Expanded(
                                               child: ListView.separated(
-                                                separatorBuilder: (context, index) {
-                                                  return const Divider(height: 0);
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return const Divider(
+                                                      height: 0);
                                                 },
-                                                itemCount: controller.tempStopResult.length,
+                                                itemCount: controller
+                                                    .tempStopResult.length,
                                                 shrinkWrap: true,
                                                 itemBuilder: (context, index) {
                                                   return ListTile(
                                                     onTap: () {
-                                                      controller.getRouteList(controller.tempStopResult[index].stopNo);
+                                                      controller.getRouteList(
+                                                          controller
+                                                              .tempStopResult[
+                                                                  index]
+                                                              .stopNo);
                                                       // Get.back();
                                                     },
                                                     title: Builder(
                                                       builder: (context) {
                                                         return Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
                                                           children: [
                                                             Flexible(
                                                               child: Text(
-                                                                (controller.tempStopResult[index].name
+                                                                (controller
+                                                                            .tempStopResult[
+                                                                                index]
+                                                                            .name
                                                                             .toString()
                                                                             .isEmpty
                                                                         ? "NA"
-                                                                        : controller.tempStopResult[index].name)
+                                                                        : controller
+                                                                            .tempStopResult[index]
+                                                                            .name)
                                                                     .toString()
                                                                     .capitalizeFirst
                                                                     .toString(),
                                                               ),
                                                             ),
-                                                            const SizedBox(width: 5),
+                                                            const SizedBox(
+                                                                width: 5),
                                                             // Container(
                                                             //   height: 17,
                                                             //   width: 17,
@@ -237,14 +265,17 @@ class _BusStopDisplayScreenState extends State<BusStopDisplayScreen> {
                                       color: Colors.white,
                                     ),
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(vertical: h * 0.012),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: h * 0.012),
                                       child: Row(
                                         children: [
                                           SizedBox(
                                             width: w * 0.02,
                                           ),
                                           Text(
-                                            controller.routeList[index].routeNo! ?? "N/A",
+                                            controller.routeList[index]
+                                                    .routeNo! ??
+                                                "N/A",
                                             style: blackMedium14TextStyle,
                                           ),
                                           SizedBox(

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:wikitrack/preference_manager/preference_Manager.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppImages.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_images.dart';
 import 'package:wikitrack/views/home/home_screen.dart';
 import 'package:wikitrack/views/login/login_screen.dart';
 
@@ -21,7 +21,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       const Duration(seconds: 3),
       () {
-        Get.offAll(PreferenceManager.getLogin() == true || PreferenceManager.getRegister() == true
+        Get.offAll(PreferenceManager.getLogin() == true ||
+                PreferenceManager.getRegister() == true
             ? () => const HomeScreen()
             : () => const LoginScreen());
         // Get.toNamed(Routes.loginScreen);

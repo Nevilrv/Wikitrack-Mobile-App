@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wikitrack/socket/controller/socket_controller.dart';
-import 'package:wikitrack/utils/AppRoutes.dart';
+import 'package:wikitrack/utils/app_routes.dart';
 import 'package:wikitrack/views/bus_display/controller/bus_display_controller.dart';
 import 'package:wikitrack/views/bus_stop_display/controller/bus_stop_display_controller.dart';
 import 'package:wikitrack/views/forgotPassword/controller/forgot_password_controller.dart';

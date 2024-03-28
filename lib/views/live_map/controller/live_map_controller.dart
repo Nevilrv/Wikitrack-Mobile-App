@@ -14,7 +14,6 @@ import 'package:wikitrack/Repo/livemap_repo.dart';
 import 'package:wikitrack/Repo/setting_repo.dart';
 import 'package:wikitrack/Services/base_service.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/response_model/create_stop_time_res_model.dart';
 import 'package:wikitrack/response_model/get_daily_route_trip_res_model.dart';
 import 'package:wikitrack/response_model/get_imeiToReg_res_model.dart';
 import 'package:wikitrack/response_model/get_route_list_res_model.dart';
@@ -24,8 +23,8 @@ import 'package:wikitrack/response_model/get_stop_time_by_route_no_res_model.dar
 import 'package:wikitrack/socket/socket_service.dart';
 import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
     as VehicleList;
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppImages.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_images.dart';
 import 'package:http/http.dart' as http;
 
 class LiveMapController extends GetxController {
@@ -104,10 +103,63 @@ class LiveMapController extends GetxController {
             [lng.latitude, lng.longitude]);
         // transition([allImeiList[ind].lat, allImeiList[ind].lng], [lng.latitude, lng.longitude], ind);
         update();
-        log("allImeiList--------------> a ${allImeiList}");
+        log("allImeiList--------------> a ${jsonEncode(allImeiList)}");
 
-        if (stopSequence.isNotEmpty && selectedRouteId.isNotEmpty) {
-          await getDailyRouteTripViewModel();
+        if (stopSequence.isNotEmpty &&
+            selectedRouteId.isNotEmpty &&
+            selRouteId.isNotEmpty) {
+          print("LIVE DATA UPDATE");
+
+          stopSequence.forEach((element) async {
+            log("element1>>>${jsonEncode(element)}");
+
+            log("double.parse(element1.stopId!.location!.split(',')[0]--------------> ${double.parse(element.stopId!.location!.split(',')[0])}");
+            log("double.parse(element1.stopId!.location!.split(',')[2]--------------> ${double.parse(element.stopId!.location!.split(',')[1])}");
+
+            print("LIVE DATA UPDATE 2");
+
+            double distanceInMeters = Geolocator.distanceBetween(
+                allImeiList[ind].lat,
+                allImeiList[ind].lng,
+                double.parse(element.stopId!.location!.split(',')[0]),
+                double.parse(element.stopId!.location!.split(',')[1]));
+
+            log("LIVE DATA distanceInMeters--------------> $distanceInMeters");
+
+            debugPrint('allImeiList[ind]===>>>${jsonEncode(allImeiList[ind])}');
+
+            if (distanceInMeters <= 50) {
+              DateTime current = DateTime.now();
+
+              Map<String, dynamic> createLiveStopBody = {
+                "vehicle": allImeiList[ind].id,
+                "route_id": selRouteId,
+                "stop_id": element.stopId?.id,
+                "current_date":
+                    "${current.year}-${current.month}-${current.day}T${current.hour}:${current.minute}:${current.second}",
+              };
+
+              debugPrint('createLiveStopBody===>>>${createLiveStopBody}');
+
+              await createStopTimeViewModel(body: createLiveStopBody);
+
+              Map<String, dynamic> createLiveRouteBody = {
+                "daily_route_trip": dailyRouteTripId,
+                "stop_seq": element.id,
+                "time": "${current.hour}:${current.minute}:${current.second}",
+              };
+
+              debugPrint('createLiveRouteBody===>>>${createLiveRouteBody}');
+
+              await createDailyRouteTripViewModel(body: createLiveRouteBody);
+
+              print("LIVE DATA UPDATE SUCCESS");
+            }
+
+            print("LIVE DATA UPDATE 3");
+            // log("distanceInMeters--------------> ${distanceInMeters}");
+            // value.add(distanceInMeters.round());
+          });
         }
       }
       //
@@ -343,6 +395,8 @@ class LiveMapController extends GetxController {
     update();
   }
 
+  String dailyRouteTripId = "";
+
   ///getDaily route trip
   GetDailyRouteTripResModel? getDailyRouteTripResModel;
   ApiResponse _getDailyRouteTripResponse =
@@ -350,10 +404,11 @@ class LiveMapController extends GetxController {
 
   ApiResponse get getDailyRouteTripResponse => _getDailyRouteTripResponse;
   bool isLoading1 = false;
-  Future getDailyRouteTripViewModel({StateSetter? setter}) async {
-    setter!(() {
+  Future getDailyRouteTripViewModel(StateSetter setter) async {
+    setter(() {
       isLoading1 = true;
     });
+
     update();
     _getDailyRouteTripResponse = ApiResponse.loading(message: 'Loading');
     update();
@@ -375,6 +430,8 @@ class LiveMapController extends GetxController {
                 for (var element2 in element1.timeSlot) {
                   if (element2.dailyrouteTimeslot.isNotEmpty) {
                     for (var element3 in element2.dailyrouteTimeslot) {
+                      dailyRouteTripId = element3.id;
+                      update();
                       vehicleIMEIList.add(element3.vehicle.gpsDevice.imei);
                     }
                   }
@@ -396,7 +453,7 @@ class LiveMapController extends GetxController {
     update();
     getImeitoRegResModel = await LiveMapRepo().getImeiToReg(body: body);
     if (getImeitoRegResModel?.data == null) {
-      commonSnackBar(message: "No vehicle found");
+      commonSnackBar("No vehicle found");
 
       update();
     } else {
@@ -408,6 +465,7 @@ class LiveMapController extends GetxController {
       List<int> value = [];
       busData.clear();
       bool isDistanceMatch = false;
+
       for (var element in allImeiList) {
         log("element>>>${jsonEncode(element)}");
 
@@ -440,13 +498,28 @@ class LiveMapController extends GetxController {
 
             DateTime current = DateTime.now();
 
-            await createStopTimeViewModel(body: {
+            Map<String, dynamic> createStopBody = {
               "vehicle": vehicleId,
               "route_id": selRouteId,
               "stop_id": element1.stopId?.id,
               "current_date":
-                  "${current.year}-${current.month}-${current.day}T${current.hour}:${current.minute}:${current.second}"
-            });
+                  "${current.year}-${current.month}-${current.day}T${current.hour}:${current.minute}:${current.second}",
+            };
+
+            debugPrint('createStopBody===>>>${createStopBody}');
+
+            await createStopTimeViewModel(body: createStopBody);
+
+            Map<String, dynamic> createRouteBody = {
+              "daily_route_trip": dailyRouteTripId,
+              "stop_seq": element1.id,
+              "time": "${current.hour}:${current.minute}:${current.second}",
+            };
+
+            debugPrint('createRouteBody===>>>${createRouteBody}');
+
+            await createDailyRouteTripViewModel(body: createRouteBody);
+
             log("selectedRouteId--------------> $selectedRouteId");
           }
           // log("distanceInMeters--------------> ${distanceInMeters}");
@@ -457,7 +530,6 @@ class LiveMapController extends GetxController {
         // value.clear();
       }
       if (isDistanceMatch == true) {
-        print("IN HERE");
         await getStopTimeByRouteNo(routeNo: selectedRouteId);
       }
       update();
@@ -612,6 +684,7 @@ class LiveMapController extends GetxController {
       if (response.results![0].stopSequence!.isNotEmpty) {
         stopSequence.addAll(response.results![0].stopSequence!);
       }
+
       // searchDataResults.addAll(response.results!);
       // tempList.addAll(response.results!);
     } catch (e) {}
@@ -750,16 +823,17 @@ class LiveMapController extends GetxController {
         } else {
           loading3 = false;
           update();
-          commonSnackBar(message: "Routes not found");
+          commonSnackBar("Routes not found");
         }
       }
     }
+
     if (stopSequence.isEmpty) {
       loading3 = false;
       setState1(() {});
 
       update();
-      commonSnackBar(message: "Stop not found");
+      commonSnackBar("Stop not found");
     } else {
       filterByVehicle = true;
       loadMarkers();
@@ -882,7 +956,7 @@ class LiveMapController extends GetxController {
     //
     // serviceEnabled = await Geolocator.isLocationServiceEnabled();
     // if (!serviceEnabled) {
-    //   commonSnackBar(message: 'Location services are disabled. Please enable the services');
+    //   commonSnackBar( 'Location services are disabled. Please enable the services');
     //
     //   return false;
     // }
@@ -890,14 +964,13 @@ class LiveMapController extends GetxController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        commonSnackBar(message: 'Location permissions are denied');
+        commonSnackBar('Location permissions are denied');
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
       commonSnackBar(
-          message:
-              'Location permissions are permanently denied, we cannot request permissions.');
+          'Location permissions are permanently denied, we cannot request permissions.');
       return false;
     }
     return true;
@@ -974,17 +1047,28 @@ class LiveMapController extends GetxController {
 
   /// Create Actual Stop Time
   Future createStopTimeViewModel({required Map<String, dynamic> body}) async {
-    log('api call------------');
+    log('Create Actual Stop Time API CALL');
     http.Response response =
         await http.post(Uri.parse(ApiRouts.createStopTime), body: body);
 
-    log("response.statusCode--------------> ${response.statusCode}");
+    log("CREATE ACTUAL TIME response.statusCode--------------> ${response.statusCode}");
 
-    if (response.statusCode == 201) {
-      log("response-createStopTimeViewModel-------------> ${response.body}");
-    } else {
-      CreateStopTimeResModel responsee =
-          CreateStopTimeResModel.fromJson(jsonDecode(response.body));
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      log("CREATE ACTUAL TIME SUCCESS-------------> ${response.body}");
+    }
+  }
+
+  /// Create Daily Route Trip Actual Time
+  Future createDailyRouteTripViewModel(
+      {required Map<String, dynamic> body}) async {
+    log('Create Daily Route Trip Actual Time API CALL');
+    http.Response response =
+        await http.post(Uri.parse(ApiRouts.createDailyRouteTrip), body: body);
+
+    log("CREATE DAILY ROUTE TRIP ACTUAL TIME response.statusCode--------------> ${response.statusCode}");
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      log("CREATE DAILY ROUTE TRIP ACTUAL TIME SUCCESS-------------> ${response.body}");
     }
   }
 

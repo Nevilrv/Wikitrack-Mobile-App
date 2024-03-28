@@ -10,10 +10,10 @@ import 'package:intl/intl.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_images.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/trip_history/controller/trip_history_controller.dart';
 import 'package:wikitrack/response_model/get_vehicle_list_res_model.dart'
     as vehicle;
@@ -347,22 +347,19 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                       .dropdownValue ==
                                                                   null) {
                                                                 commonSnackBar(
-                                                                    message:
-                                                                        "Please select route");
+                                                                    "Please select route");
                                                               } else if (controller
                                                                   .fromDateController
                                                                   .text
                                                                   .isEmpty) {
                                                                 commonSnackBar(
-                                                                    message:
-                                                                        "Please select from date");
+                                                                    "Please select from date");
                                                               } else if (controller
                                                                   .toDateController
                                                                   .text
                                                                   .isEmpty) {
                                                                 commonSnackBar(
-                                                                    message:
-                                                                        "Please select to date");
+                                                                    "Please select to date");
                                                               } else {
                                                                 controller
                                                                     .changeIsForward1(
@@ -431,7 +428,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                             () async {
                                                                           if (controller.dropdownValue ==
                                                                               null) {
-                                                                            commonSnackBar(message: "Please select route");
+                                                                            commonSnackBar("Please select route");
                                                                           } else {
                                                                             count =
                                                                                 -1;
@@ -495,8 +492,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                               .dropdownValue ==
                                                                           null) {
                                                                         commonSnackBar(
-                                                                            message:
-                                                                                "Please select route");
+                                                                            "Please select route");
                                                                       } else {
                                                                         count =
                                                                             -1;
@@ -830,7 +826,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                             () async {
                                                                           if (controller.selectedVehicle ==
                                                                               null) {
-                                                                            commonSnackBar(message: "Please select vehicle");
+                                                                            commonSnackBar("Please select vehicle");
                                                                           } else {
                                                                             count =
                                                                                 -1;
@@ -894,8 +890,7 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                                                                               .selectedVehicle ==
                                                                           null) {
                                                                         commonSnackBar(
-                                                                            message:
-                                                                                "Please select vehicle");
+                                                                            "Please select vehicle");
                                                                       } else {
                                                                         count =
                                                                             -1;

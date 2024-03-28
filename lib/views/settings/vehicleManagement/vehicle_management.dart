@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:wikitrack/Apis/api_response.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/settings/controller/setting_controller.dart';
 import '../../../common/commontextfield.dart';
 
@@ -71,7 +71,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
           );
         } else if (controller.getVehicleListResponse.status == Status.ERROR) {
           return const Text('Something Went Wrong');
-        } else if (controller.getVehicleListResponse.status == Status.COMPLETE) {
+        } else if (controller.getVehicleListResponse.status ==
+            Status.COMPLETE) {
           // GetVehiclesListResModel response =
           //     controller.getVehicleListResponse.data;
           return controller.allData.isEmpty
@@ -87,7 +88,9 @@ class _VehicleManagementState extends State<VehicleManagement> {
                         CommonButton(
                             title: AppStrings.selectVehicle,
                             onTap: () {
-                              showDataAlertVehicle(context, text: AppStrings.selectVehicle, controller: controller);
+                              showDataAlertVehicle(context,
+                                  text: AppStrings.selectVehicle,
+                                  controller: controller);
                             }),
                         SizedBox(
                           height: height * 0.03,
@@ -183,7 +186,9 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    border: Border.all(color: AppColors.iconGreyColor), shape: BoxShape.circle),
+                                    border: Border.all(
+                                        color: AppColors.iconGreyColor),
+                                    shape: BoxShape.circle),
                                 child: const Center(
                                   child: Padding(
                                     padding: EdgeInsets.all(2.0),
@@ -215,9 +220,11 @@ class _VehicleManagementState extends State<VehicleManagement> {
                                   (index) => ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
                                     child: Image.network(
-                                      controller.allData[selector].vehicleImg == null
+                                      controller.allData[selector].vehicleImg ==
+                                              null
                                           ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo1kplxuW3G9gRB4FmZCrRSQX4L4eGgGCehg&usqp=CAU'
-                                          : controller.allData[selector].vehicleImg!,
+                                          : controller
+                                              .allData[selector].vehicleImg!,
                                       fit: BoxFit.fill,
                                     ),
                                   ),
@@ -226,7 +233,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                if ((controller.response?.count)! > selector + 1) {
+                                if ((controller.response?.count)! >
+                                    selector + 1) {
                                   _pageController1.nextPage(
                                     duration: const Duration(milliseconds: 350),
                                     curve: Curves.easeIn,
@@ -235,7 +243,9 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    border: Border.all(color: AppColors.iconGreyColor), shape: BoxShape.circle),
+                                    border: Border.all(
+                                        color: AppColors.iconGreyColor),
+                                    shape: BoxShape.circle),
                                 child: const Center(
                                   child: Padding(
                                     padding: EdgeInsets.all(2.0),
@@ -254,31 +264,45 @@ class _VehicleManagementState extends State<VehicleManagement> {
                           height: height * 0.03,
                         ),
                         // commonBorderButton(title: AppStrings.chassisID),
-                        commonBorderButton(title: controller.allData[selector].chassisNo ?? AppStrings.chassisID),
+                        commonBorderButton(
+                            title: controller.allData[selector].chassisNo ??
+                                AppStrings.chassisID),
                         SizedBox(
                           height: height * 0.02,
                         ),
-                        commonBorderButton(title: controller.allData[selector].regNo ?? AppStrings.regNo),
+                        commonBorderButton(
+                            title: controller.allData[selector].regNo ??
+                                AppStrings.regNo),
                         SizedBox(
                           height: height * 0.02,
                         ),
                         GestureDetector(
                           onTap: () {
                             showBusDisplayList(context,
-                                title: '', controller: controller, index: selector, isFrom: 'displaySection');
+                                title: '',
+                                controller: controller,
+                                index: selector,
+                                isFrom: 'displaySection');
                           },
                           child: commonBorderButton(
-                              title: controller.allData[selector].busDisplay?.imei ?? AppStrings.selectBus),
+                              title: controller
+                                      .allData[selector].busDisplay?.imei ??
+                                  AppStrings.selectBus),
                         ),
                         SizedBox(
                           height: height * 0.02,
                         ),
                         GestureDetector(
                           onTap: () {
-                            showGpsDeviceList(context, title: '', controller: controller, isFrom: 'displaySection');
+                            showGpsDeviceList(context,
+                                title: '',
+                                controller: controller,
+                                isFrom: 'displaySection');
                           },
                           child: commonBorderButton(
-                              title: controller.allData[selector].gpsDevice?.imei ?? AppStrings.selectGPS),
+                              title: controller
+                                      .allData[selector].gpsDevice?.imei ??
+                                  AppStrings.selectGPS),
                         ),
                         SizedBox(
                           height: height * 0.02,
@@ -322,7 +346,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                 style: const TextStyle(fontSize: 24.0),
               ),
               content: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -354,15 +379,19 @@ class _VehicleManagementState extends State<VehicleManagement> {
                             itemBuilder: (context, index) {
                               return ListTile(
                                 onTap: () {
-                                  controller.searchId = controller.searchData[index].id ?? '';
+                                  controller.searchId =
+                                      controller.searchData[index].id ?? '';
 
-                                  selector = controller.searchData
-                                      .indexWhere((element) => element.id == controller.searchData[index].id);
+                                  selector = controller.searchData.indexWhere(
+                                      (element) =>
+                                          element.id ==
+                                          controller.searchData[index].id);
 
                                   setState(() {});
                                   Get.back();
                                 },
-                                title: Text(controller.searchData[index].regNo ?? ''),
+                                title: Text(
+                                    controller.searchData[index].regNo ?? ''),
                               );
                             },
                           ),
@@ -474,7 +503,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
               ),
               contentPadding: const EdgeInsets.only(top: 0.0),
               content: Padding(
-                padding: const EdgeInsets.only(right: 15, left: 15, top: 20, bottom: 10),
+                padding: const EdgeInsets.only(
+                    right: 15, left: 15, top: 20, bottom: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -505,16 +535,24 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               return ListTile(
                                 onTap: () {
                                   if (isFrom == 'createSection') {
-                                    controller.busDisplayDeviceId = controller.busResult[index].id;
-                                    controller.imeiId.text = controller.busResult[index].imei;
+                                    controller.busDisplayDeviceId =
+                                        controller.busResult[index].id;
+                                    controller.imeiId.text =
+                                        controller.busResult[index].imei;
                                     Get.back();
                                   } else {
                                     Map<String, String> body = {
                                       "id": controller.busResult[index].id,
-                                      "chassis_no": controller.allData[index].chassisNo.toString(),
-                                      "reg_no": controller.allData[index].regNo.toString(),
-                                      "bus_display": controller.busResult[index].id,
-                                      "gps_device": controller.allData[index].gpsDevice?.id ?? '',
+                                      "chassis_no": controller
+                                          .allData[index].chassisNo
+                                          .toString(),
+                                      "reg_no": controller.allData[index].regNo
+                                          .toString(),
+                                      "bus_display":
+                                          controller.busResult[index].id,
+                                      "gps_device": controller
+                                              .allData[index].gpsDevice?.id ??
+                                          '',
                                       "status": 'true'
                                     };
                                     log("controller.allData[index].vehicleImg--------------> ${controller.allData[index].vehicleImg}");
@@ -522,15 +560,22 @@ class _VehicleManagementState extends State<VehicleManagement> {
 
                                     controller.updateVehicleRouteViewModel(
                                         body: body,
-                                        uuid: controller.response?.results?[index].id ?? '',
-                                        vehicleImage: controller.allData[index].vehicleImg == null
+                                        uuid: controller
+                                                .response?.results?[index].id ??
+                                            '',
+                                        vehicleImage: controller.allData[index]
+                                                    .vehicleImg ==
+                                                null
                                             ? ""
-                                            : controller.allData[index].vehicleImg!);
+                                            : controller
+                                                .allData[index].vehicleImg!);
                                     Get.back();
                                   }
                                 },
                                 title: Text(
-                                  (controller.busResult[index].imei.toString().isEmpty
+                                  (controller.busResult[index].imei
+                                              .toString()
+                                              .isEmpty
                                           ? "NA"
                                           : controller.busResult[index].imei)
                                       .toString()
@@ -656,7 +701,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
               //   style: const TextStyle(fontSize: 24.0),
               // ),
               content: Padding(
-                padding: const EdgeInsets.only(right: 15, left: 15, top: 20, bottom: 10),
+                padding: const EdgeInsets.only(
+                    right: 15, left: 15, top: 20, bottom: 10),
                 child: SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -687,16 +733,25 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               return ListTile(
                                 onTap: () {
                                   if (isFrom == 'createSection') {
-                                    controller.gpsDeviceId = controller.gpsDeviceResult[index].id;
-                                    controller.gpsId.text = controller.gpsDeviceResult[index].imei;
+                                    controller.gpsDeviceId =
+                                        controller.gpsDeviceResult[index].id;
+                                    controller.gpsId.text =
+                                        controller.gpsDeviceResult[index].imei;
                                     Get.back();
                                   } else {
                                     Map<String, String> body = {
-                                      "id": controller.gpsDeviceResult[index].id,
-                                      "chassis_no": controller.allData[index].chassisNo.toString(),
-                                      "reg_no": controller.allData[index].regNo.toString(),
-                                      "bus_display": controller.allData[index].busDisplay?.id ?? "",
-                                      "gps_device": controller.gpsDeviceResult[index].id,
+                                      "id":
+                                          controller.gpsDeviceResult[index].id,
+                                      "chassis_no": controller
+                                          .allData[index].chassisNo
+                                          .toString(),
+                                      "reg_no": controller.allData[index].regNo
+                                          .toString(),
+                                      "bus_display": controller
+                                              .allData[index].busDisplay?.id ??
+                                          "",
+                                      "gps_device":
+                                          controller.gpsDeviceResult[index].id,
                                       "status": 'true'
                                     };
                                     log("controller.allData[index].vehicleImg--------------> ${controller.allData[index].vehicleImg}");
@@ -705,16 +760,24 @@ class _VehicleManagementState extends State<VehicleManagement> {
                                     Get.back();
                                     controller.updateVehicleRouteViewModel(
                                         body: body,
-                                        uuid: controller.response?.results?[index].id ?? '',
-                                        vehicleImage: controller.allData[index].vehicleImg == null
+                                        uuid: controller
+                                                .response?.results?[index].id ??
+                                            '',
+                                        vehicleImage: controller.allData[index]
+                                                    .vehicleImg ==
+                                                null
                                             ? ""
-                                            : controller.allData[index].vehicleImg!);
+                                            : controller
+                                                .allData[index].vehicleImg!);
                                   }
                                 },
                                 title: Text(
-                                  (controller.gpsDeviceResult[index].imei.toString().isEmpty
+                                  (controller.gpsDeviceResult[index].imei
+                                              .toString()
+                                              .isEmpty
                                           ? "NA"
-                                          : controller.gpsDeviceResult[index].imei)
+                                          : controller
+                                              .gpsDeviceResult[index].imei)
                                       .toString()
                                       .capitalizeFirst
                                       .toString(),
@@ -735,7 +798,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
     );
   }
 
-  Future<void> addNewVehicleBottomSheet(BuildContext context, double height, double width) {
+  Future<void> addNewVehicleBottomSheet(
+      BuildContext context, double height, double width) {
     return showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
@@ -756,7 +820,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                     // height: height * 0.4,
                     child: Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           // mainAxisSize: MainAxisSize.min,
@@ -766,7 +831,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                                 height: height * 0.01,
                                 width: width * 0.09,
                                 decoration: BoxDecoration(
-                                    color: AppColors.grey2Color.withOpacity(0.5),
+                                    color:
+                                        AppColors.grey2Color.withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(100)),
                               ),
                             ),
@@ -787,7 +853,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               style: grey1Medium12TextStyle,
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: height * 0.01, bottom: height * 0.02),
+                              padding: EdgeInsets.only(
+                                  top: height * 0.01, bottom: height * 0.02),
                               child: commonTextField(
                                 controller: controller.chasisId,
                                 validator: (p0) {
@@ -802,7 +869,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               style: grey1Medium12TextStyle,
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: height * 0.01, bottom: height * 0.02),
+                              padding: EdgeInsets.only(
+                                  top: height * 0.01, bottom: height * 0.02),
                               child: commonTextField(
                                 controller: controller.regNo,
                                 validator: (p0) {
@@ -817,7 +885,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               style: grey1Medium12TextStyle,
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: height * 0.01, bottom: height * 0.02),
+                              padding: EdgeInsets.only(
+                                  top: height * 0.01, bottom: height * 0.02),
                               child: commonTextField(
                                 readOnly: true,
                                 controller: controller.imeiId,
@@ -848,7 +917,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                             //   ),
                             // ),
                             Padding(
-                              padding: EdgeInsets.only(top: height * 0.01, bottom: height * 0.02),
+                              padding: EdgeInsets.only(
+                                  top: height * 0.01, bottom: height * 0.02),
                               child: commonTextField(
                                 readOnly: true,
                                 controller: controller.gpsId,
@@ -856,7 +926,9 @@ class _VehicleManagementState extends State<VehicleManagement> {
                                   return null;
                                 },
                                 onTap: () {
-                                  showGpsDeviceList(context, controller: controller, isFrom: 'createSection');
+                                  showGpsDeviceList(context,
+                                      controller: controller,
+                                      isFrom: 'createSection');
                                 },
                               ),
                             ),
@@ -873,7 +945,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                               child: Container(
                                 height: height * 0.1,
                                 width: width * 0.3,
-                                margin: EdgeInsets.only(top: height * 0.01, bottom: height * 0.05),
+                                margin: EdgeInsets.only(
+                                    top: height * 0.01, bottom: height * 0.05),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
@@ -883,7 +956,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                                 child: controller.pickedImage == null
                                     ? const Icon(Icons.camera_alt)
                                     : Image.file(
-                                        File(controller.pickedImage?.path ?? ''),
+                                        File(
+                                            controller.pickedImage?.path ?? ''),
                                       ),
                               ),
                             ),
@@ -892,7 +966,8 @@ class _VehicleManagementState extends State<VehicleManagement> {
                                   Map<String, String> body = {
                                     "chassis_no": controller.chasisId.text,
                                     "reg_no": controller.regNo.text,
-                                    "bus_display": controller.busDisplayDeviceId,
+                                    "bus_display":
+                                        controller.busDisplayDeviceId,
                                     "gps_device": controller.gpsDeviceId,
                                     "status": 'false'
                                   };

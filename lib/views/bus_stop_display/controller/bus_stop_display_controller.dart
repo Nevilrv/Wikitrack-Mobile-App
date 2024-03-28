@@ -16,7 +16,8 @@ class BusStopDisplayController extends GetxController {
   List<StopResult> stopResult = [];
   List<StopResult> tempStopResult = [];
 
-  ApiResponse _getStopListResponse = ApiResponse.initial(message: 'Initialization');
+  ApiResponse _getStopListResponse =
+      ApiResponse.initial(message: 'Initialization');
 
   ApiResponse get getStopListResponse => _getStopListResponse;
   Future getStopListViewModel() async {
@@ -50,7 +51,10 @@ class BusStopDisplayController extends GetxController {
     } else {
       tempStopResult = [];
       for (var element in stopResult) {
-        if (element.name.toString().toLowerCase().contains(value.toString().toLowerCase())) {
+        if (element.name
+            .toString()
+            .toLowerCase()
+            .contains(value.toString().toLowerCase())) {
           tempStopResult.add(element);
         }
       }
@@ -70,13 +74,14 @@ class BusStopDisplayController extends GetxController {
     isLoading = true;
     routeList.clear();
     update();
-    GetRouteListResModel? getRouteListResModel = await BusDisplayRepo().getRouteList(stopNo, '1');
+    GetRouteListResModel? getRouteListResModel =
+        await BusDisplayRepo().getRouteList(stopNo, '1');
 
     if (getRouteListResModel!.results!.isEmpty) {
       isLoading = false;
 
       update();
-      commonSnackBar(message: "No routes found");
+      commonSnackBar("No routes found");
     } else {
       log("getRouteListResModel.results--------------> ${getRouteListResModel.results}");
 

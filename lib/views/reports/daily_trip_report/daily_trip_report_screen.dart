@@ -8,11 +8,11 @@ import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/common/commontextfield.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppImages.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
-import 'package:wikitrack/utils/FontSize.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_images.dart';
+import 'package:wikitrack/utils/app_strings.dart';
+import 'package:wikitrack/utils/font_size.dart';
 import 'package:wikitrack/views/reports/controller/report_controller.dart';
 
 class DailyTripReportScreen extends StatefulWidget {
@@ -241,8 +241,7 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                                         .selectedRouteId ==
                                                     "") {
                                                   commonSnackBar(
-                                                      message:
-                                                          'Please select route');
+                                                      'Please select route');
                                                 } else {
                                                   if (controller
                                                       .toDateController
@@ -337,12 +336,10 @@ class _DailyTripReportScreenState extends State<DailyTripReportScreen> {
                                     value: controller.isForward,
                                     onChanged: (_) async {
                                       if (controller.selectedRouteId == "") {
-                                        commonSnackBar(
-                                            message: "Please select route");
+                                        commonSnackBar("Please select route");
                                       } else if (controller
                                           .toDateController.text.isEmpty) {
-                                        commonSnackBar(
-                                            message: "Please select date");
+                                        commonSnackBar("Please select date");
                                       } else {
                                         controller.changeIsForward();
                                         controller.getRoutesSchedules();

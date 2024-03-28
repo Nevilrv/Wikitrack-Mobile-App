@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,10 +13,10 @@ import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/common/commontextfield.dart';
 import 'package:wikitrack/response_model/get_route_list_res_model.dart';
 import 'package:wikitrack/response_model/get_stop_display_list_res_model.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppDialog.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_dialog.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/settings/controller/setting_controller.dart';
 import 'package:wikitrack/views/settings/routeManagement/map.dart';
 
@@ -53,7 +54,8 @@ class _RouteManagementState extends State<RouteManagement> {
           Get.back();
         },
       ),
-      floatingActionButton: GetBuilder<SettingController>(builder: (controller) {
+      floatingActionButton:
+          GetBuilder<SettingController>(builder: (controller) {
         return GestureDetector(
           onTap: () {
             addNewRouteFloating(context, height, width, controller: controller);
@@ -84,7 +86,8 @@ class _RouteManagementState extends State<RouteManagement> {
               var d = controller.searchDataResults1
                   .where((ele) =>
                       ele.id.toString() ==
-                      (controller.selectedRouteId ?? controller.searchDataResults1[0].id.toString()))
+                      (controller.selectedRouteId ??
+                          controller.searchDataResults1[0].id.toString()))
                   .first
                   .routeNo;
 
@@ -106,7 +109,8 @@ class _RouteManagementState extends State<RouteManagement> {
           return Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -131,7 +135,9 @@ class _RouteManagementState extends State<RouteManagement> {
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: AppColors.primaryColor, width: 1.5)),
+                                  border: Border.all(
+                                      color: AppColors.primaryColor,
+                                      width: 1.5)),
                               child: const Padding(
                                 padding: EdgeInsets.symmetric(
                                   vertical: 10,
@@ -147,7 +153,9 @@ class _RouteManagementState extends State<RouteManagement> {
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: AppColors.primaryColor, width: 1.5)),
+                                  border: Border.all(
+                                      color: AppColors.primaryColor,
+                                      width: 1.5)),
                               child: const Padding(
                                 padding: EdgeInsets.symmetric(
                                   vertical: 10,
@@ -172,32 +180,42 @@ class _RouteManagementState extends State<RouteManagement> {
                                     child: Text('No Routes'),
                                   ),
                                 )
-                              : (results.isNotEmpty && results[0].stopSequence!.isNotEmpty)
+                              : (results.isNotEmpty &&
+                                      results[0].stopSequence!.isNotEmpty)
                                   ? Expanded(
                                       child: ListView.separated(
                                         separatorBuilder: (context, index) {
                                           return Align(
                                             alignment: Alignment.centerLeft,
                                             child: Padding(
-                                              padding: EdgeInsets.only(left: width * 0.03),
+                                              padding: EdgeInsets.only(
+                                                  left: width * 0.03),
                                               child: const Dash(
                                                   direction: Axis.vertical,
                                                   length: 50,
                                                   dashLength: 8,
-                                                  dashColor: AppColors.textGreyColor,
+                                                  dashColor:
+                                                      AppColors.textGreyColor,
                                                   dashGap: 4),
                                             ),
                                           );
                                         },
-                                        itemCount: results[0].stopSequence!.length + 1,
+                                        itemCount:
+                                            results[0].stopSequence!.length + 1,
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, index) {
-                                          return (index == results[0].stopSequence!.length)
+                                          return (index ==
+                                                  results[0]
+                                                      .stopSequence!
+                                                      .length)
                                               ? GestureDetector(
                                                   onTap: () async {
-                                                    await settingController.getStopListViewModel();
-                                                    await settingController.getStopDisplayListViewModel();
+                                                    await settingController
+                                                        .getStopListViewModel();
+                                                    await settingController
+                                                        .getStopDisplayListViewModel();
                                                     if (!mounted) return;
                                                     addNewStop(
                                                       priority: index,
@@ -205,41 +223,58 @@ class _RouteManagementState extends State<RouteManagement> {
                                                       height: height,
                                                       width: width,
                                                       controller: controller,
-                                                      direction: results[0].direction.toString(),
-                                                      routId: results[0].id.toString(),
+                                                      direction: results[0]
+                                                          .direction
+                                                          .toString(),
+                                                      routId: results[0]
+                                                          .id
+                                                          .toString(),
                                                     );
                                                   },
                                                   child: Row(
                                                     children: [
                                                       const Icon(
-                                                        Icons.add_circle_outline_sharp,
-                                                        color: AppColors.primaryColor,
+                                                        Icons
+                                                            .add_circle_outline_sharp,
+                                                        color: AppColors
+                                                            .primaryColor,
                                                       ),
                                                       SizedBox(
                                                         width: Get.width * 0.02,
                                                       ),
                                                       Text(
                                                         AppStrings.addStop,
-                                                        style: blackMedium16TextStyle,
+                                                        style:
+                                                            blackMedium16TextStyle,
                                                       )
                                                     ],
                                                   ),
                                                 )
                                               : Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Row(
                                                       children: [
                                                         const Icon(
                                                           Icons.circle_outlined,
-                                                          color: AppColors.primaryColor,
+                                                          color: AppColors
+                                                              .primaryColor,
                                                         ),
                                                         SizedBox(
-                                                          width: Get.width * 0.02,
+                                                          width:
+                                                              Get.width * 0.02,
                                                         ),
-                                                        Text(
-                                                          "${results[0].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
-                                                          style: blackMedium16TextStyle,
+                                                        Expanded(
+                                                          child: Text(
+                                                            "${results[0].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style:
+                                                                blackMedium16TextStyle,
+                                                          ),
                                                         )
                                                       ],
                                                     ),
@@ -250,21 +285,26 @@ class _RouteManagementState extends State<RouteManagement> {
                                     )
                                   : Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(left: width * 0.03),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.03),
                                             child: const Dash(
                                                 direction: Axis.vertical,
                                                 length: 50,
                                                 dashLength: 8,
-                                                dashColor: AppColors.textGreyColor,
+                                                dashColor:
+                                                    AppColors.textGreyColor,
                                                 dashGap: 4),
                                           ),
                                           GestureDetector(
                                             onTap: () async {
-                                              await settingController.getStopListViewModel();
-                                              await settingController.getStopDisplayListViewModel();
+                                              await settingController
+                                                  .getStopListViewModel();
+                                              await settingController
+                                                  .getStopDisplayListViewModel();
 
                                               if (!mounted) return;
 
@@ -274,14 +314,18 @@ class _RouteManagementState extends State<RouteManagement> {
                                                 height: height,
                                                 width: width,
                                                 controller: controller,
-                                                direction: results[0].direction.toString(),
-                                                routId: results[0].id.toString(),
+                                                direction: results[0]
+                                                    .direction
+                                                    .toString(),
+                                                routId:
+                                                    results[0].id.toString(),
                                               );
                                             },
                                             child: Row(
                                               children: [
                                                 const Icon(
-                                                  Icons.add_circle_outline_sharp,
+                                                  Icons
+                                                      .add_circle_outline_sharp,
                                                   color: AppColors.primaryColor,
                                                 ),
                                                 SizedBox(
@@ -303,32 +347,42 @@ class _RouteManagementState extends State<RouteManagement> {
                                     child: Text('No Routes'),
                                   ),
                                 )
-                              : (results.length >= 2 && results[1].stopSequence!.isNotEmpty)
+                              : (results.length >= 2 &&
+                                      results[1].stopSequence!.isNotEmpty)
                                   ? Expanded(
                                       child: ListView.separated(
                                         separatorBuilder: (context, index) {
                                           return Align(
                                             alignment: Alignment.centerLeft,
                                             child: Padding(
-                                              padding: EdgeInsets.only(left: width * 0.03),
+                                              padding: EdgeInsets.only(
+                                                  left: width * 0.03),
                                               child: const Dash(
                                                   direction: Axis.vertical,
                                                   length: 50,
                                                   dashLength: 8,
-                                                  dashColor: AppColors.textGreyColor,
+                                                  dashColor:
+                                                      AppColors.textGreyColor,
                                                   dashGap: 4),
                                             ),
                                           );
                                         },
-                                        itemCount: results[1].stopSequence!.length + 1,
+                                        itemCount:
+                                            results[1].stopSequence!.length + 1,
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, index) {
-                                          return (index == results[1].stopSequence!.length)
+                                          return (index ==
+                                                  results[1]
+                                                      .stopSequence!
+                                                      .length)
                                               ? GestureDetector(
                                                   onTap: () async {
-                                                    await settingController.getStopListViewModel();
-                                                    await settingController.getStopDisplayListViewModel();
+                                                    await settingController
+                                                        .getStopListViewModel();
+                                                    await settingController
+                                                        .getStopDisplayListViewModel();
 
                                                     if (!mounted) return;
 
@@ -338,41 +392,58 @@ class _RouteManagementState extends State<RouteManagement> {
                                                       height: height,
                                                       width: width,
                                                       controller: controller,
-                                                      direction: results[1].direction.toString(),
-                                                      routId: results[1].id.toString(),
+                                                      direction: results[1]
+                                                          .direction
+                                                          .toString(),
+                                                      routId: results[1]
+                                                          .id
+                                                          .toString(),
                                                     );
                                                   },
                                                   child: Row(
                                                     children: [
                                                       const Icon(
-                                                        Icons.add_circle_outline_sharp,
-                                                        color: AppColors.primaryColor,
+                                                        Icons
+                                                            .add_circle_outline_sharp,
+                                                        color: AppColors
+                                                            .primaryColor,
                                                       ),
                                                       SizedBox(
                                                         width: Get.width * 0.02,
                                                       ),
                                                       Text(
                                                         AppStrings.addStop,
-                                                        style: blackMedium16TextStyle,
+                                                        style:
+                                                            blackMedium16TextStyle,
                                                       )
                                                     ],
                                                   ),
                                                 )
                                               : Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Row(
                                                       children: [
                                                         const Icon(
                                                           Icons.circle_outlined,
-                                                          color: AppColors.primaryColor,
+                                                          color: AppColors
+                                                              .primaryColor,
                                                         ),
                                                         SizedBox(
-                                                          width: Get.width * 0.02,
+                                                          width:
+                                                              Get.width * 0.02,
                                                         ),
-                                                        Text(
-                                                          "${results[1].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
-                                                          style: blackMedium16TextStyle,
+                                                        Expanded(
+                                                          child: Text(
+                                                            "${results[1].stopSequence?[index].stopId?.name.toString().capitalizeFirst}",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style:
+                                                                blackMedium16TextStyle,
+                                                          ),
                                                         )
                                                       ],
                                                     ),
@@ -390,21 +461,26 @@ class _RouteManagementState extends State<RouteManagement> {
                                   : */
                                   Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(left: width * 0.03),
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.03),
                                             child: const Dash(
                                                 direction: Axis.vertical,
                                                 length: 50,
                                                 dashLength: 8,
-                                                dashColor: AppColors.textGreyColor,
+                                                dashColor:
+                                                    AppColors.textGreyColor,
                                                 dashGap: 4),
                                           ),
                                           GestureDetector(
                                             onTap: () async {
-                                              await settingController.getStopListViewModel();
-                                              await settingController.getStopDisplayListViewModel();
+                                              await settingController
+                                                  .getStopListViewModel();
+                                              await settingController
+                                                  .getStopDisplayListViewModel();
 
                                               if (!mounted) return;
 
@@ -414,14 +490,18 @@ class _RouteManagementState extends State<RouteManagement> {
                                                 height: height,
                                                 width: width,
                                                 controller: controller,
-                                                direction: results[1].direction.toString(),
-                                                routId: results[1].id.toString(),
+                                                direction: results[1]
+                                                    .direction
+                                                    .toString(),
+                                                routId:
+                                                    results[1].id.toString(),
                                               );
                                             },
                                             child: Row(
                                               children: [
                                                 const Icon(
-                                                  Icons.add_circle_outline_sharp,
+                                                  Icons
+                                                      .add_circle_outline_sharp,
                                                   color: AppColors.primaryColor,
                                                 ),
                                                 SizedBox(
@@ -480,7 +560,8 @@ class _RouteManagementState extends State<RouteManagement> {
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          GetStopDisplayListResModel stopData = controller.getStopDisplayListResponse.data;
+          GetStopDisplayListResModel stopData =
+              controller.getStopDisplayListResponse.data;
           log('stopData===>>>${jsonEncode(stopData)}');
 
           return Padding(
@@ -491,7 +572,8 @@ class _RouteManagementState extends State<RouteManagement> {
               // height: height * 0.7,
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // mainAxisSize: MainAxisSize.min,
@@ -501,7 +583,8 @@ class _RouteManagementState extends State<RouteManagement> {
                           height: height * 0.01,
                           width: width * 0.09,
                           decoration: BoxDecoration(
-                              color: AppColors.grey2Color.withOpacity(0.5), borderRadius: BorderRadius.circular(100)),
+                              color: AppColors.grey2Color.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(100)),
                         ),
                       ),
                       SizedBox(
@@ -523,7 +606,8 @@ class _RouteManagementState extends State<RouteManagement> {
                       ),
                       commonTextField(
                         onTap: () {
-                          AppDialog().selectStopDialog(context, title: 'Select Stop', controller: controller);
+                          AppDialog().selectStopDialog(context,
+                              title: 'Select Stop', controller: controller);
                         },
                         hintMsg: 'Select Stop',
                         textColor: AppColors.blackColor,
@@ -542,7 +626,8 @@ class _RouteManagementState extends State<RouteManagement> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () async {
-                              addNewRouteFromAddStop(context, height, width, controller: controller);
+                              addNewRouteFromAddStop(context, height, width,
+                                  controller: controller);
                             },
                             child: Text(
                               AppStrings.addNewRoute,
@@ -567,7 +652,292 @@ class _RouteManagementState extends State<RouteManagement> {
                         textColor: AppColors.blackColor,
                         controller: controller.travelTime,
                         onTap: () {
-                          controller.selectTime(context);
+                          controller.travelTimeHour.clear();
+                          controller.travelTimeMin.clear();
+                          controller.travelTimeSec.clear();
+                          controller.update();
+
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20.0),
+                                  ),
+                                ),
+                                scrollable: true,
+                                backgroundColor: Colors.white,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                content: IntrinsicHeight(
+                                  child: SizedBox(
+                                    width: width * 0.9,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Select Time",
+                                          style: blackMedium16TextStyle,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Row(
+                                          children: [
+                                            const SizedBox(width: 15),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Hours",
+                                                    style:
+                                                        greyMedium12TextStyle,
+                                                  ),
+                                                  TextField(
+                                                    controller: controller
+                                                        .travelTimeHour,
+                                                    textAlign: TextAlign.center,
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    maxLength: 2,
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      _TimeInputFormatter()
+                                                    ],
+                                                    style: blackBold20TextStyle,
+                                                    decoration: InputDecoration(
+                                                      hintText: "00",
+                                                      hintStyle:
+                                                          greyMedium20TextStyle,
+                                                      counterText: "",
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Minutes",
+                                                    style:
+                                                        greyMedium12TextStyle,
+                                                  ),
+                                                  TextField(
+                                                    controller: controller
+                                                        .travelTimeMin,
+                                                    textAlign: TextAlign.center,
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    maxLength: 2,
+                                                    style: blackBold20TextStyle,
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      _TimeInputFormatter()
+                                                    ],
+                                                    decoration: InputDecoration(
+                                                      hintText: "00",
+                                                      hintStyle:
+                                                          greyMedium20TextStyle,
+                                                      counterText: "",
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Seconds",
+                                                    style:
+                                                        greyMedium12TextStyle,
+                                                  ),
+                                                  TextField(
+                                                    controller: controller
+                                                        .travelTimeSec,
+                                                    textAlign: TextAlign.center,
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    maxLength: 2,
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      _TimeInputFormatter()
+                                                    ],
+                                                    style: blackBold20TextStyle,
+                                                    decoration: InputDecoration(
+                                                      hintText: "00",
+                                                      hintStyle:
+                                                          greyMedium20TextStyle,
+                                                      counterText: "",
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 1.5,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(width: 15),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: CommonButton(
+                                                onTap: () {
+                                                  Get.back();
+                                                },
+                                                title: "Cancel",
+                                                height: Get.height * 0.05,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            Expanded(
+                                              child: CommonButton(
+                                                onTap: () {
+                                                  String hour = controller
+                                                      .travelTimeHour.text
+                                                      .padLeft(2, "0");
+                                                  String min = controller
+                                                      .travelTimeMin.text
+                                                      .padLeft(2, "0");
+                                                  String sec = controller
+                                                      .travelTimeSec.text
+                                                      .padLeft(2, "0");
+
+                                                  controller.travelTime.text =
+                                                      "$hour:$min:$sec";
+                                                  controller.update();
+                                                  Get.back();
+                                                },
+                                                title: "Save",
+                                                height: Get.height * 0.05,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                         },
                       ),
                       /* SizedBox(
@@ -605,21 +975,24 @@ class _RouteManagementState extends State<RouteManagement> {
                                 if (controller.stopId == "" ||
                                     controller.stop.text.isEmpty ||
                                     controller.travelTime.text.isEmpty) {
-                                  commonSnackBar(message: "Please enter all the details");
+                                  commonSnackBar(
+                                      "Please enter all the details");
                                   return;
                                 }
 
                                 var body = {
                                   "route": "$routId",
                                   "priority": (priority ?? 0) + 1,
-                                  "traval_time": controller.travelTime.text.toString(),
+                                  "traval_time":
+                                      controller.travelTime.text.toString(),
                                   "stop_id": controller.stopId.toString(),
                                   "status": true,
                                   "direction": "$direction"
                                 };
                                 log('body===body>>>$body');
 
-                                await controller.createStopSeqViewModel(body: body);
+                                await controller.createStopSeqViewModel(
+                                    body: body);
                                 controller.clearAddStopSeq();
                                 Get.back();
                                 getData();
@@ -640,10 +1013,12 @@ class _RouteManagementState extends State<RouteManagement> {
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          if (settingController.getStopDisplayListResponse.status == Status.LOADING) {
+          if (settingController.getStopDisplayListResponse.status ==
+              Status.LOADING) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (settingController.getStopDisplayListResponse.status == Status.COMPLETE) {
+          if (settingController.getStopDisplayListResponse.status ==
+              Status.COMPLETE) {
             var data = settingController.getStopDisplayListResponse.data;
             log('data::::::::::::::::::::==========>>>>>>>>>>>$data');
             return Padding(
@@ -655,7 +1030,8 @@ class _RouteManagementState extends State<RouteManagement> {
                   maxHeight: height * 0.75,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -666,7 +1042,8 @@ class _RouteManagementState extends State<RouteManagement> {
                             height: height * 0.01,
                             width: width * 0.09,
                             decoration: BoxDecoration(
-                                color: AppColors.grey2Color.withOpacity(0.5), borderRadius: BorderRadius.circular(100)),
+                                color: AppColors.grey2Color.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(100)),
                           ),
                         ),
                         SizedBox(
@@ -692,8 +1069,9 @@ class _RouteManagementState extends State<RouteManagement> {
                           readOnly: true,
                           hintMsg: 'Select Stop Display',
                           onTap: () {
-                            AppDialog()
-                                .selectStopDisplayDialog(context, title: 'Select Stop Display', controller: controller);
+                            AppDialog().selectStopDisplayDialog(context,
+                                title: 'Select Stop Display',
+                                controller: controller);
                           },
                         ),
                         SizedBox(
@@ -743,7 +1121,8 @@ class _RouteManagementState extends State<RouteManagement> {
                             Get.to(() => const MapScreen())?.then((value) {
                               if (value != null) {
                                 LatLng data = value;
-                                controller.latLangController.text = "${data.latitude},${data.longitude}";
+                                controller.latLangController.text =
+                                    "${data.latitude},${data.longitude}";
                               }
                               return;
                             });
@@ -761,13 +1140,16 @@ class _RouteManagementState extends State<RouteManagement> {
                               )
                             : CommonButton(
                                 onTap: () async {
-                                  print('controller.stopDisplayId == ""===>>>${controller.stopDisplayId == ""}');
+                                  print(
+                                      'controller.stopDisplayId == ""===>>>${controller.stopDisplayId == ""}');
 
                                   if (controller.stopDisplayId == "" ||
                                       controller.stopNo.text.isEmpty ||
                                       controller.stopName.text.isEmpty ||
-                                      controller.latLangController.text.isEmpty) {
-                                    commonSnackBar(message: "Please enter all the details");
+                                      controller
+                                          .latLangController.text.isEmpty) {
+                                    commonSnackBar(
+                                        "Please enter all the details");
                                     return;
                                   }
 
@@ -775,12 +1157,14 @@ class _RouteManagementState extends State<RouteManagement> {
                                     "stop_no": controller.stopNo.text,
                                     "name": controller.stopName.text,
                                     "stop_display": controller.stopDisplayId,
-                                    "location": controller.latLangController.text,
+                                    "location":
+                                        controller.latLangController.text,
                                     "status": false
                                   };
                                   log('body===body>>>$body');
 
-                                  await controller.createStopViewModel(body: body);
+                                  await controller.createStopViewModel(
+                                      body: body);
                                   controller.clearAddNewStop();
                                   Get.back();
                                   getData();
@@ -797,7 +1181,8 @@ class _RouteManagementState extends State<RouteManagement> {
         }).then((value) => controller.clearAddNewStop());
   }
 
-  Future<void> addNewRouteFloating(BuildContext context, double height, double width,
+  Future<void> addNewRouteFloating(
+      BuildContext context, double height, double width,
       {required SettingController controller}) {
     return showModalBottomSheet<void>(
       context: context,
@@ -814,146 +1199,151 @@ class _RouteManagementState extends State<RouteManagement> {
                 // height: height * 0.4,
                 child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        // mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Center(
-                            child: Container(
-                              height: height * 0.01,
-                              width: width * 0.09,
-                              decoration: BoxDecoration(
-                                  color: AppColors.grey2Color.withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(100)),
-                            ),
-                          ),
-                          SizedBox(
-                            height: height * 0.05,
-                          ),
-                          Text(
-                            AppStrings.addNewRoute,
-                            style: blackMedium16TextStyle,
-                          ),
-                          SizedBox(
-                            height: height * 0.03,
-                          ),
-                          Text(
-                            AppStrings.routeno,
-                            style: grey1Medium12TextStyle,
-                          ),
-                          SizedBox(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: ListView(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Center(
+                          child: Container(
                             height: height * 0.01,
+                            width: width * 0.09,
+                            decoration: BoxDecoration(
+                                color: AppColors.grey2Color.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(100)),
                           ),
-                          commonTextField(
-                            keyboardType: TextInputType.number,
-                            controller: controller.routeNo,
-                            textColor: Colors.black,
-                          ),
-                          SizedBox(
-                            height: height * 0.03,
-                          ),
-                          Text(
-                            AppStrings.routeName,
-                            style: grey1Medium12TextStyle,
-                          ),
-                          SizedBox(
-                            height: height * 0.01,
-                          ),
-                          commonTextField(
-                            textColor: Colors.black,
-                            controller: controller.routeName,
-                          ),
-                          SizedBox(
-                            height: height * 0.03,
-                          ),
-                          Text(
-                            AppStrings.direction,
-                            style: grey1Medium12TextStyle,
-                          ),
-                          SizedBox(
-                            height: height * 0.01,
-                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.05,
+                        ),
+                        Text(
+                          AppStrings.addNewRoute,
+                          style: blackMedium16TextStyle,
+                        ),
+                        SizedBox(
+                          height: height * 0.03,
+                        ),
+                        Text(
+                          AppStrings.routeno,
+                          style: grey1Medium12TextStyle,
+                        ),
+                        SizedBox(
+                          height: height * 0.01,
+                        ),
+                        commonTextField(
+                          keyboardType: TextInputType.number,
+                          controller: controller.routeNo,
+                          textColor: Colors.black,
+                        ),
+                        SizedBox(
+                          height: height * 0.03,
+                        ),
+                        Text(
+                          AppStrings.routeName,
+                          style: grey1Medium12TextStyle,
+                        ),
+                        SizedBox(
+                          height: height * 0.01,
+                        ),
+                        commonTextField(
+                          textColor: Colors.black,
+                          controller: controller.routeName,
+                        ),
+                        SizedBox(
+                          height: height * 0.03,
+                        ),
+                        Text(
+                          AppStrings.direction,
+                          style: grey1Medium12TextStyle,
+                        ),
+                        SizedBox(
+                          height: height * 0.01,
+                        ),
 
-                          Row(
-                            children: [
-                              Text(
-                                "Forward",
-                                style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: height * 0.04,
-                                width: width * 0.13,
-                                child: FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: CupertinoSwitch(
-                                    activeColor: AppColors.iconBlueColor,
-                                    thumbColor: AppColors.whiteColor,
-                                    trackColor: AppColors.iconBlueColor,
-                                    value: controller.isForward1,
-                                    onChanged: (value) async {
-                                      await controller.changeIsForward1();
-                                      setState(() {});
-                                    },
-                                  ),
+                        Row(
+                          children: [
+                            Text(
+                              "Forward",
+                              style: blackMedium16TextStyle.copyWith(
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: height * 0.04,
+                              width: width * 0.13,
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: CupertinoSwitch(
+                                  activeColor: AppColors.iconBlueColor,
+                                  thumbColor: AppColors.whiteColor,
+                                  trackColor: AppColors.iconBlueColor,
+                                  value: controller.isForward1,
+                                  onChanged: (value) async {
+                                    await controller.changeIsForward1();
+                                    setState(() {});
+                                  },
                                 ),
                               ),
-                              Text(
-                                "Reverse",
-                                style: blackMedium16TextStyle.copyWith(fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              "Reverse",
+                              style: blackMedium16TextStyle.copyWith(
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
 
-                          // commonTextField(
-                          //   textColor: Colors.black,
-                          //   controller: controller.direction,
-                          // ),
-                          SizedBox(
-                            height: height * 0.05,
-                          ),
-                          CommonButton(
-                              onTap: () async {
-                                String v = controller.isForward1 ? "0" : "1";
-                                bool value = controller.searchDataResults.any((element) =>
-                                    element.routeNo.toString() == controller.routeNo.text &&
-                                    (element.direction.toString() == v));
-                                // log("element.direction--------------> ${element.direction}");
+                        // commonTextField(
+                        //   textColor: Colors.black,
+                        //   controller: controller.direction,
+                        // ),
+                        SizedBox(
+                          height: height * 0.05,
+                        ),
+                        CommonButton(
+                            onTap: () async {
+                              String v = controller.isForward1 ? "0" : "1";
+                              bool value = controller.searchDataResults.any(
+                                  (element) =>
+                                      element.routeNo.toString() ==
+                                          controller.routeNo.text &&
+                                      (element.direction.toString() == v));
+                              // log("element.direction--------------> ${element.direction}");
 
-                                // String v = controller.isForward1 ? "0" : "1";
-                                // bool value1 =
-                                //     controller.searchDataResults.any((element) => element.direction.toString() == v);
+                              // String v = controller.isForward1 ? "0" : "1";
+                              // bool value1 =
+                              //     controller.searchDataResults.any((element) => element.direction.toString() == v);
 
-                                if (controller.routeNo.text.isEmpty || controller.routeName.text.isEmpty) {
-                                  commonSnackBar(message: "Please enter all the details");
-                                  return;
-                                }
+                              if (controller.routeNo.text.isEmpty ||
+                                  controller.routeName.text.isEmpty) {
+                                commonSnackBar("Please enter all the details");
+                                return;
+                              }
 
-                                log("value--------------> ${value}");
+                              log("value--------------> ${value}");
 
-                                if (value == true) {
-                                  commonSnackBar(
-                                      message:
-                                          "Route number or direction already exist. Please try with another route no or direction");
-                                  return;
-                                } else {
-                                  var body = {
-                                    "route_no": controller.routeNo.text,
-                                    "name": controller.routeName.text,
-                                    "direction": controller.isForward1 ? "0" : "1",
-                                    "status": false
-                                  };
+                              if (value == true) {
+                                commonSnackBar(
+                                    "Route number or direction already exist. Please try with another route no or direction");
+                                return;
+                              } else {
+                                var body = {
+                                  "route_no": controller.routeNo.text,
+                                  "name": controller.routeName.text,
+                                  "direction":
+                                      controller.isForward1 ? "0" : "1",
+                                  "status": false
+                                };
 
-                                  await controller.createRouteViewModel(body: body);
-                                  await controller.clearRoute();
-                                  Get.back();
-                                  getData();
-                                }
-                              },
-                              title: AppStrings.submit),
-                        ],
-                      ),
+                                await controller.createRouteViewModel(
+                                    body: body);
+                                await controller.clearRoute();
+                                Get.back();
+                                getData();
+                              }
+                            },
+                            title: AppStrings.submit),
+                      ],
                     ),
                   ),
                 ),
@@ -962,6 +1352,35 @@ class _RouteManagementState extends State<RouteManagement> {
           },
         );
       },
+    );
+  }
+}
+
+class _TimeInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isEmpty) {
+      return const TextEditingValue();
+    }
+
+    int seconds = int.tryParse(newValue.text) ?? 0;
+
+    if (newValue.text.length == 1 && seconds > 6) {
+      return const TextEditingValue(text: '');
+    }
+
+    if (newValue.text.length == 3) {
+      return TextEditingValue(text: '${newValue.text[0]}${newValue.text[1]}');
+    }
+
+    if (seconds > 60) {
+      return TextEditingValue(text: newValue.text[0]);
+    }
+
+    return TextEditingValue(
+      text: seconds.toString(),
+      selection: TextSelection.collapsed(offset: seconds.toString().length),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/commontextfield.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 
 showDataAlert(
   context, {

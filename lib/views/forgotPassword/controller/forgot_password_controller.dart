@@ -8,7 +8,7 @@ import 'package:wikitrack/response_model/add_password_responseModel.dart';
 import 'package:wikitrack/response_model/forgot_password_res_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:wikitrack/response_model/resend_otp_responseModel.dart';
-import 'package:wikitrack/utils/AppRoutes.dart';
+import 'package:wikitrack/utils/app_routes.dart';
 
 class ForgotController extends GetxController {
   bool isVisible1 = false;
@@ -78,7 +78,7 @@ class ForgotController extends GetxController {
           ForgotPasswordResModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
-      commonSnackBar(message: responsee.detail);
+      commonSnackBar(responsee.detail);
       Get.offAllNamed(Routes.otpForgot, arguments: arguments);
       log("response--------------> ${response.body}");
     } else {
@@ -87,7 +87,7 @@ class ForgotController extends GetxController {
           ForgotPasswordResModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
-      commonSnackBar(message: responsee.detail);
+      commonSnackBar(responsee.detail);
     }
   }
 
@@ -103,7 +103,7 @@ class ForgotController extends GetxController {
           AddPasswordResponseModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
-      commonSnackBar(message: responsee.detail);
+      commonSnackBar(responsee.detail);
       Get.offAllNamed(Routes.loginScreen);
       log("commonSnackBar--------------> ${response.body}");
     } else {
@@ -112,7 +112,7 @@ class ForgotController extends GetxController {
           ForgotPasswordResModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
-      commonSnackBar(message: responsee.detail);
+      commonSnackBar(responsee.detail);
     }
   }
 
@@ -127,7 +127,7 @@ class ForgotController extends GetxController {
           ResendOtpResponseModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
-      commonSnackBar(message: "${responsee.status}");
+      commonSnackBar("${responsee.status}");
       log("ResendOtpResponseModel--------------> ${response.body}");
     } else {
       log("ResendOtpResponseModel---e-----------> ${response.body}");
@@ -135,7 +135,7 @@ class ForgotController extends GetxController {
           ResendOtpResponseModel.fromJson(jsonDecode(response.body));
       isLoading = false;
       update();
-      commonSnackBar(message: "${responsee.status}");
+      commonSnackBar("${responsee.status}");
     }
   }
 }

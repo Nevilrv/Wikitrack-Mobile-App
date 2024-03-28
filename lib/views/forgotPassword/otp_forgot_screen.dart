@@ -6,10 +6,10 @@ import 'package:pinput/pinput.dart';
 import 'package:wikitrack/common/appbar.dart';
 import 'package:wikitrack/common/button.dart';
 import 'package:wikitrack/common/common_snackbar.dart';
-import 'package:wikitrack/utils/AppColors.dart';
-import 'package:wikitrack/utils/AppFontStyle.dart';
-import 'package:wikitrack/utils/AppRoutes.dart';
-import 'package:wikitrack/utils/AppStrings.dart';
+import 'package:wikitrack/utils/app_colors.dart';
+import 'package:wikitrack/utils/app_font_style.dart';
+import 'package:wikitrack/utils/app_routes.dart';
+import 'package:wikitrack/utils/app_strings.dart';
 import 'package:wikitrack/views/forgotPassword/controller/forgot_password_controller.dart';
 
 class OTPForgotScreen extends StatefulWidget {
@@ -189,7 +189,7 @@ class _OTPForgotScreenState extends State<OTPForgotScreen> {
                     : CommonButton(
                         onTap: () {
                           if (pinController.text.isEmpty) {
-                            commonSnackBar(message: "Please enter otp");
+                            commonSnackBar("Please enter otp");
                           } else {
                             // controller.second = 120;
                             // controller.timer!.cancel();

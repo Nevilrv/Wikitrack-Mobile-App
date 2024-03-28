@@ -7,7 +7,7 @@ import 'package:wikitrack/common/common_snackbar.dart';
 import 'package:wikitrack/preference_manager/preference_Manager.dart';
 
 import 'package:wikitrack/response_model/register_response_model.dart';
-import 'package:wikitrack/utils/AppRoutes.dart';
+import 'package:wikitrack/utils/app_routes.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterController extends GetxController {
@@ -54,8 +54,8 @@ class RegisterController extends GetxController {
       update();
       PreferenceManager.setLogin(true);
       PreferenceManager.setToken("${responsee.token}");
-      commonSnackBar(message: 'Register Successfully');
-      // commonSnackBar(message: 'Register Successfully');
+      commonSnackBar('Register Successfully');
+      // commonSnackBar( 'Register Successfully');
       // Get.toNamed(Routes.homeScreen);
       Get.toNamed(Routes.otpScreen, arguments: arguments);
       log("response--------------> ${response.body}");
@@ -73,15 +73,15 @@ class RegisterController extends GetxController {
             RegisterResponseModel.fromJson(jsonDecode(response.body));
         // PreferenceManager.setLogin(true);
         // PreferenceManager.setToken("${responsee.token}");
-        commonSnackBar(message: responsee.message);
+        commonSnackBar(responsee.message);
       } else {
         if (res['email'] == null) {
-          commonSnackBar(message: res['mobile'][0]);
+          commonSnackBar(res['mobile'][0]);
         } else {
-          commonSnackBar(message: res['email'][0]);
+          commonSnackBar(res['email'][0]);
         }
       }
-      // commonSnackBar(message: res['mobile'][0]);
+      // commonSnackBar( res['mobile'][0]);
     }
   }
 }
